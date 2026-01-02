@@ -1,0 +1,132 @@
+//     __  __                     __   ______ __  ___   _   __ __  ___
+//    / / / /__  __ ____   _____ / /  /_  __//  |/  /  / | / //  |/  /
+//   / /_/ // / / // __ \ / ___// /    / /  / /|_/ /  /  |/ // /|_/ / 
+//  / __  // /_/ // /_/ // /   / /___ / /  / /  / /  / /|  // /  / /  
+// /_/ /_/ \__, // .___//_/   /_____//_/  /_/  /_/  /_/ |_//_/  /_/   
+//        /____//_/                                                   
+
+// Copyright © 2025 Djalel Oukid (sniper1720)
+
+@theme "~/.config/rofi/themes/ltmnight.rasi"
+
+window {
+    background-color: @background;
+    border: 2px;
+    border-color: @primary-fixed;
+    padding: 0;
+    border-radius: 10px;
+    width: 50%;
+    location: 0;
+    x-offset: 0;
+    y-offset: 0;
+    transparency: "real";
+}
+
+mainbox {
+    enabled: true;
+    spacing: 0em;
+    padding: 10px;
+    orientation: vertical;
+    children: [ inputbar, listview ];
+    background-color: transparent;
+}
+
+inputbar {
+    enabled: true;
+    spacing: 0.5em;
+    padding: 8px 15px;
+    margin: 0 0 10px 0;
+    background-color: @selection;
+    border: 0px 0px 2px 0px;
+    border-color: @primary-fixed;
+    border-radius: 8px;
+}
+
+prompt {
+    enabled: true;
+    expand: false;
+    text-color: @prompt;
+    padding: 0px 5px;
+    background-color: transparent;
+    str: "";
+}
+
+entry {
+    enabled: true;
+    background-color: transparent;
+    text-color: @on-primary-fixed;
+    caret-color: @ltmnight8;
+    placeholder: "";
+    placeholder-color: @placeholder;
+    expand: true;
+}
+
+listview {
+    background-color: transparent;
+    border: 0;
+    padding: 5px;
+    cycle: true;
+    layout: vertical;
+    spacing: 2px;
+    scrollbar: false;
+    columns: 1;
+    dynamic: true;
+    fixed-height:false;
+}
+
+element {
+    enabled: true;
+    padding: 5px 10px;
+    margin: 2px 0;
+    background-color: transparent;
+    text-color: @foreground;
+    border: 0;
+    border-radius: 5px;
+    orientation: horizontal;
+    children: [ element-text ];
+    vertical-align: 0.5;
+}
+
+element-icon {
+    background-color: transparent;
+    size: 0px;
+    margin: 0px;
+    enabled: false;
+}
+
+element-text {
+    background-color: transparent;
+    text-color: inherit;
+    highlight-color: @ltmnight6;
+    expand: true;
+    vertical-align: 0.5;
+    format: "{text}";
+}
+
+element selected {
+    background-color: @selection;
+    text-color: @on-selection;
+    border-radius: 5px;
+}
+
+element urgent {
+    background-color: @error;
+    text-color: @on-error;
+}
+
+element active {
+    background-color: @primary;
+    text-color: @on-primary;
+}
+
+scrollbar {
+    handle-color: @ltmnight8;
+    background-color: @primary-fixed;
+    width: 4px;
+    padding: 0;
+    border-radius: 0px;
+}
+
+case-indicator {
+    enabled: false;
+}

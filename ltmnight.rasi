@@ -1,0 +1,46 @@
+// ltmnight Palette for Rofi
+
+* {
+    ltmnight0: #282a36; /* Background */
+    ltmnight1: #44475a; /* Current Line / Secondary Background */
+    ltmnight2: #f8f8f2; /* Foreground Text */
+    ltmnight3: #6272a4; /* Comment / Faded Foreground */
+    ltmnight4: #ff5555; /* Red / Errors */
+    ltmnight5: #ffb86c; /* Orange / Warnings */
+    ltmnight6: #f1fa8c; /* Yellow / Warnings */
+    ltmnight7: #50fa7b; /* Green / Success */
+    ltmnight8: #8be9fd; /* Cyan / Info */
+    ltmnight9: #bd93f9; /* Purple / Accents */
+    ltmnight10: #ff79c6; /* Pink / Accents */
+    ltmnight11: #787C99; /* Gray / Placeholders */
+
+
+
+    // Rofi Color Mappings to ltmnight Palette
+    background: rgba(40, 42, 54, 0.9);
+    foreground: @ltmnight2;
+
+    primary: @ltmnight9;
+    accent:  @ltmnight10;
+    on-primary: @ltmnight2;
+
+    primary-fixed: @ltmnight1;
+    on-primary-fixed: @ltmnight2;
+
+    selection: rgba(68, 71, 90, 0.5);
+    on-selection: @ltmnight2;
+
+    error: @ltmnight4;
+    on-error: @ltmnight2;
+
+    surface: rgba(40, 42, 54, 0.9);
+    on-surface: @ltmnight2;
+
+    outline: @ltmnight3;
+    shadow: rgba(0, 0, 0, 0.5);
+
+    highlight: @ltmnight6;
+
+    prompt: @ltmnight11;
+    placeholder: @ltmnight11;
+}
