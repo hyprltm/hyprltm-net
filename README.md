@@ -9,14 +9,14 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/hyprltm/hyprltm-net/stargazers"><img alt="GitHub Stars" src="https://img.shields.io/github/stars/hyprltm/hyprltm-net?style=for-the-badge&logo=starship&color=bd93f9&logoColor=f8f8f2&labelColor=282a36"/></a>
-  <a href="https://github.com/hyprltm/hyprltm-net/commits/main"><img alt="Last Commit" src="https://img.shields.io/github/last-commit/hyprltm/hyprltm-net?style=for-the-badge&logo=github&color=50fa7b&logoColor=f8f8f2&labelColor=282a36"/></a>
-  <a href="https://github.com/hyprltm/hyprltm-net/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/hyprltm/hyprltm-net?style=for-the-badge&logo=gnu&color=ff79c6&logoColor=f8f8f2&labelColor=282a36"/></a>
-  <a href="https://github.com/hyprltm/hyprltm-net"><img alt="Repo Size" src="https://img.shields.io/github/repo-size/hyprltm/hyprltm-net?style=for-the-badge&logo=files&color=8be9fd&logoColor=f8f8f2&labelColor=282a36"/></a>
+  <a href="https://github.com/hyprltm/hyprltm-net/stargazers"><img alt="GitHub Stars" src="https://img.shields.io/github/stars/hyprltm/hyprltm-net?style=for-the-badge&color=bd93f9&labelColor=282a36"/></a>
+  <a href="https://github.com/hyprltm/hyprltm-net/commits/main"><img alt="Last Commit" src="https://img.shields.io/github/last-commit/hyprltm/hyprltm-net?style=for-the-badge&color=50fa7b&labelColor=282a36"/></a>
+  <a href="https://github.com/hyprltm/hyprltm-net/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/hyprltm/hyprltm-net?style=for-the-badge&color=ff79c6&labelColor=282a36"/></a>
+  <a href="https://github.com/hyprltm/hyprltm-net"><img alt="Repo Size" src="https://img.shields.io/github/repo-size/hyprltm/hyprltm-net?style=for-the-badge&color=8be9fd&labelColor=282a36"/></a>
 </p>
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/7da1d5b8-d8a1-47f4-8809-e82efc078ab2" alt="Demo" width="700"/>
+  <video src="https://github.com/user-attachments/assets/7da1d5b8-d8a1-47f4-8809-e82efc078ab2" controls="controls" style="max-width: 700px;"></video>
 </p>
 
 ---
@@ -123,8 +123,8 @@ HyprLTM-Net uses the **LTMNight** color palette. Customize appearance by editing
 
 If you find this tool helpful, consider supporting its development!
 
-<a href="https://www.buymeacoffee.com/linuxtechmore">
-  <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=linuxtechmore&button_colour=bd93f9&font_colour=f8f8f2&font_family=Cookie&outline_colour=f8f8f2&coffee_colour=ffdd00" alt="Buy Me A Coffee" height="40"/>
+<a href="https://www.buymeacoffee.com/linuxtechmore" target="_blank">
+    <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" >
 </a>
 
 ---
