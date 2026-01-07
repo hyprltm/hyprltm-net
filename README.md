@@ -17,6 +17,8 @@
 
 https://github.com/user-attachments/assets/7da1d5b8-d8a1-47f4-8809-e82efc078ab2
 
+<p align="center"><em>HyprLTM-Net Demo</em></p>
+
 ---
 
 ## ✨ Features
