@@ -19,7 +19,7 @@ https://github.com/user-attachments/assets/7da1d5b8-d8a1-47f4-8809-e82efc078ab2
 
 <p align="center"><em>HyprLTM-Net Demo</em></p>
 
----
+![Gradient](assets/gradient.svg)
 
 ## ✨ Features
 
@@ -61,7 +61,7 @@ https://github.com/user-attachments/assets/7da1d5b8-d8a1-47f4-8809-e82efc078ab2
 </tr>
 </table>
 
----
+![Gradient](assets/gradient.svg)
 
 ## 🛠️ Prerequisites
 
@@ -74,7 +74,7 @@ https://github.com/user-attachments/assets/7da1d5b8-d8a1-47f4-8809-e82efc078ab2
 | `imv` or `feh` | *(Optional)* Displaying QR codes |
 | `libnotify` | *(Optional)* Desktop notifications |
 
----
+![Gradient](assets/gradient.svg)
 
 ## 🚀 Installation
 
@@ -117,7 +117,7 @@ bind = SUPER, N, exec, hyprltm-net
 ```
 </details>
 
----
+![Gradient](assets/gradient.svg)
 
 ## 🎨 Theming
 
@@ -130,7 +130,7 @@ HyprLTM-Net uses the **LTMNight** color palette. Customize appearance by editing
 | `@ltmnight2` | Foreground | `#f8f8f2` |
 | `@ltmnight7` | Success (Green) | `#50fa7b` |
 
----
+![Gradient](assets/gradient.svg)
 
 ## ☕ Support the Project
 
@@ -141,7 +141,7 @@ If you find this tool helpful and want to support its development and the **Hypr
 
 Every bit of support helps keep the project alive and ensures I can spend more time developing open source tools for the Linux community!
 
----
+![Gradient](assets/gradient.svg)
 
 ## 📄 License
 
