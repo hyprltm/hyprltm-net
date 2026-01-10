@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-#     __  __                     __   ______ __  ___   _   __ __  ___
-#    / / / /__  __ ____   _____ / /  /_  __//  |/  /  / | / //  |/  /
-#   / /_/ // / / // __ \ / ___// /    / /  / /|_/ /  /  |/ // /|_/ / 
-#  / __  // /_/ // /_/ // /   / /___ / /  / /  / /  / /|  // /  / /  
-# /_/ /_/ \__, // .___//_/   /_____//_/  /_/  /_/  /_/ |_//_/  /_/   
-#        /____//_/                                                   
+#    __  __                 __   ________  ___       _   __    __ 
+#   / / / /_  ______  _____/ /  /_  __/  |/  /      / | / /___/ /_
+#  / /_/ / / / / __ \/ ___/ /    / / / /|_/ /_____ /  |/ / _  / __/
+# / __  / /_/ / /_/ / /  / /___ / / / /  / /_____ / /|  /  __/ /_  
+#/_/ /_/\__, / .___/_/  /_____//_/ /_/  /_/      /_/ |_/\___/\__/  
+#      /____/_/                                                   
 #
 
 # Copyright © 2025 Djalel Oukid (sniper1720)
@@ -25,58 +25,75 @@ fi
 ROFI_NETWORK_MANAGER_THEME="$HOME/.config/rofi/themes/hyprltm-net.rasi"
 
 # --- Icon Variables (Nerd Fonts - Minimalist & Beautiful) ---
-icon_wireguard="${icon_wireguard:-"󰖆"}"
-icon_config="${icon_config:-""}"
-icon_close="${icon_close:-""}" # Changed to 'Back' or 'Exit' in menus
+# --- Icons: General UI ---
+icon_search="${icon_search:-""}"
+icon_close="${icon_close:-""}"
 icon_check="${icon_check:-""}"
-icon_eye="${icon_eye:-"󰛐"}" # Original eye icon
-icon_eye_closed="${icon_eye_closed:-"󰛑"}"
-icon_saved="${icon_saved:-"󰋋"}" # Original saved icon
-icon_automatic="${icon_automatic:-"󰑘"}"
-icon_wifi_enable="${icon_wifi_enable:-"󰖩"}"
-icon_wifi_disable="${icon_wifi_disable:-"󰖪"}"
+icon_on="${icon_on:-""}"
+icon_off="${icon_off:-""}"
+icon_info="${icon_info:-"󰖐"}"
+icon_refresh="${icon_refresh:-"󰑐"}"
+icon_config="${icon_config:-""}"
+
+# --- Icons: Network Types ---
+icon_network="${icon_network:-"󱂇"}"
+icon_wifi_prompt="${icon_wifi_prompt:-"󱚾"}"
+icon_ethernet="${icon_ethernet:-"󰈀"}"
+icon_vpn="${icon_vpn:-"󰖃"}"
+icon_wireguard="${icon_wireguard:-"󰖆"}"
+icon_hotspot="${icon_hotspot:-"󱄙"}"
+icon_airplane="${icon_airplane:-"󰀝"}"
+
+# --- Icons: Wi-Fi Signal ---
 icon_wifi_full="${icon_wifi_full:-"󰤨"}"
 icon_wifi_good="${icon_wifi_good:-"󰤥"}"
 icon_wifi_medium="${icon_wifi_medium:-"󰤢"}"
 icon_wifi_low="${icon_wifi_low:-"󰤯"}"
 icon_wifi_disconnected="${icon_wifi_disconnected:-"󰤫"}"
-icon_wifi_secure="${icon_wifi_secure:-"󰤪"}"
+icon_wifi_enable="${icon_wifi_enable:-"󰖩"}"
+icon_wifi_disable="${icon_wifi_disable:-"󰖪"}"
+
+# --- Icons: Security & Status ---
+icon_wifi_secure="${icon_wifi_secure:-""}"
 icon_wifi_open="${icon_wifi_open:-"󰤠"}"
-icon_interface="${icon_interface:-"󰛨"}"
-icon_ipv4_config="${icon_ipv4_config:-"󰒓"}"
-icon_ipv4_dns="${icon_ipv4_dns:-"󰒍"}"
-tr_ipv6_config_message='IPv6 Configuration' # Ensure this is defined
-icon_ipv6_config="${icon_ipv6_config:-"󰒓"}"
-icon_ipv6_dns="${icon_ipv6_dns:-"󰒍"}"
-icon_plug="${icon_plug:-"󱘖"}"
+icon_unlock="${icon_unlock:-""}"
+icon_password="${icon_password:-""}"
+icon_eye="${icon_eye:-"󰛐"}"
+icon_eye_closed="${icon_eye_closed:-"󰛑"}"
+icon_bookmark_saved="${icon_bookmark_saved:-"󰢭"}"
+icon_saved="${icon_saved:-"󰋋"}"
+
+# --- Icons: Menus & Actions ---
+icon_connect="${icon_connect:-"󰚫"}"
+icon_disconnect="${icon_disconnect:-"qa"}"
+icon_vpn_disconnect="${icon_vpn_disconnect:-"󰖂"}"
 icon_trash="${icon_trash:-""}"
 icon_pen="${icon_pen:-"󰑕"}"
-icon_wireless="${icon_wireless:-"󰑩"}"
-icon_auto_ip="${icon_auto_ip:-"󰑘"}"
-icon_gateway="${icon_gateway:-"󰞡"}"
-icon_address="${icon_address:-"󰒓"}"
-icon_auto_dns="${icon_auto_dns:-"󰒍"}"
-icon_unlock="${icon_unlock:-""}"
-icon_on="${icon_on:-""}"
-icon_off="${icon_off:-""}"
-icon_ethernet="${icon_ethernet:-"󰈀"}"
-icon_vpn="${icon_vpn:-"󰖃"}" # Original VPN icon, kept for internal use if needed
-icon_vpn_disconnect="${icon_vpn_disconnect:-"󰖂"}" # Disconnect icon, now main VPN icon
-icon_info="${icon_info:-"󰖐"}"
+icon_import="${icon_import:-"󰋺"}"
+icon_qrcode="${icon_qrcode:-"󰐲"}"
+
+# --- Icons: Details & Config ---
+icon_active_details="${icon_active_details:-"󰋼"}"
+icon_status_chart="${icon_status_chart:-"󱖫"}"
+icon_interface="${icon_interface:-"󰛨"}"
 icon_devices="${icon_devices:-"󰋽"}"
-icon_refresh="${icon_refresh:-"󰑐"}" # New icon for refresh
-icon_disconnect="${icon_disconnect:-"qa"}" # Icon for disconnect
-icon_connect="${icon_connect:-"󰚫"}" # Icon for connect
-icon_search="${icon_search:-""}" # Nerd Font: nf-fa-search or nf-md-magnify
-icon_network="${icon_network:-"󱂇"}" # Nerd Font: nf-md-wifi_strength_4 or similar general network icon
-icon_wifi_prompt="${icon_wifi_prompt:-"󱚾"}" # Specific Wi-Fi icon for prompt
-icon_bookmark_saved="${icon_bookmark_saved:-"󰢭"}" # FIX: Changed to 󰢭 for Known Connections
-icon_status_chart="${icon_status_chart:-"󱖫"}" # NEW: Icon for Status (User provided)
-icon_hidden_network="${icon_hidden_network:-"󰲊"}" # NEW: Icon for Connect to a hidden network
-icon_connect_wired="${icon_connect_wired:-"󱂇"}" # NEW: Icon for Connect to Wired Connection
-icon_wired_status="${icon_wired_status:-"󰈁"}" # NEW: Icon for Wired Status
-icon_import="${icon_import:-"󰋺"}" # NEW: Icon for Import VPN
-icon_active_details="${icon_active_details:-"󰋼"}" # NEW: Icon for Active Connection Details
+icon_chip="${icon_chip:-"󰢮"}"
+icon_ipv4_config="${icon_ipv4_config:-"󰒓"}"
+icon_ipv4_dns="${icon_ipv4_dns:-"󰒍"}"
+icon_ipv6_config="${icon_ipv6_config:-"󰒓"}" # Reuse
+icon_ipv6_dns="${icon_ipv6_dns:-"󰒍"}"    # Reuse
+icon_auto_ip="${icon_auto_ip:-"󰑘"}"
+icon_auto_dns="${icon_auto_dns:-"󰒍"}"
+icon_address="${icon_address:-"󰒓"}"
+icon_gateway="${icon_gateway:-"󰞡"}"
+icon_plug="${icon_plug:-"󱘖"}"
+icon_wireless="${icon_wireless:-"󰑩"}"
+icon_automatic="${icon_automatic:-"󰑘"}"
+
+# --- Icons: Miscellaneous ---
+icon_hidden_network="${icon_hidden_network:-"󰲊"}"
+icon_connect_wired="${icon_connect_wired:-"󱂇"}"
+icon_wired_status="${icon_wired_status:-"󰈁"}"
 
 # --- Translatable / Customizable Messages ---
 tr_checking_wifi_status='Checking Wi-Fi status... Please be patient.'
@@ -92,8 +109,17 @@ tr_available_networks_message='Available Networks'
 tr_available_vpn_profiles_message='Available VPN Profiles'
 tr_autoconnect_message='Autoconnect'
 tr_ipv4_config_message='IPv4 Configuration'
+tr_ipv6_config_message='IPv6 Configuration'
 tr_dns4_message='DNS IPv4'
 tr_dns6_message='DNS IPv6'
+tr_connection_details_message='Connection Details' # New Header
+tr_ip_addr='IP Address'
+tr_gateway='Gateway'
+tr_signal_strength='Signal Strength'
+tr_speed='Link Speed'
+tr_frequency='Frequency'
+tr_mac_addr='MAC Address'
+tr_device='Interface'
 tr_autoip_message='Automatic IP'
 tr_autodns_message='Automatic DNS'
 tr_address_message='Addresses'
@@ -120,12 +146,39 @@ tr_status_message='Status:'
 tr_status_connected_to='Connected to'
 tr_status_connected='Connected'
 tr_status_disconnected='Disconnected'
+
 tr_status_disabled='Disabled'
+tr_connect_now_message='Connect Now'
+tr_disconnect_message='Disconnect Now'
 tr_notice_import_success_summary='VPN Imported'
 tr_notice_import_success_body='Successfully imported VPN connection.'
 tr_notice_import_error_summary='Import Error'
 tr_notice_import_error_body='Failed to import VPN connection.'
 tr_notice_file_not_found_body='File not found at specified path.'
+
+# Airplane Mode
+tr_airplane_mode_message='Airplane Mode'
+tr_airplane_on='Airplane Mode Enabled'
+tr_airplane_off='Airplane Mode Disabled'
+
+# QR Code
+tr_edit_password_message='Edit Password' # New translation
+tr_password_prompt='Enter password for'
+tr_password_updated='Password Updated'
+tr_password_update_failed='Failed to update password'
+tr_connection_failed_retry='Connection failed. Update password?'
+tr_qrcode_message='Share via QR Code'
+tr_qrcode_generating='Generating QR Code...'
+tr_qrcode_error='Could not generate QR code. Is qrencode installed?'
+tr_qrcode_no_password='Cannot share network without saved password.'
+
+# Hotspot
+tr_hotspot_message='Create Hotspot'
+tr_hotspot_ssid_prompt='Enter Hotspot SSID:'
+tr_hotspot_password_prompt='Enter Hotspot Password (min 8 chars):'
+tr_hotspot_creating='Creating Hotspot...'
+tr_hotspot_success='Hotspot created successfully!'
+tr_hotspot_error='Failed to create hotspot.'
 tr_notice_unknown_vpn_type_body='Unknown VPN file type. Use .conf or .ovpn.'
 
 # Main menu prompt now includes network and search icons
@@ -250,10 +303,18 @@ kill_loading_notification() {
 }
 
 # Shows a final, blocking Rofi message for results (Success, Error, etc.).
+# Optionally sends a system notification if notify-send is available.
 send_notification() {
     local summary="$1"
     local body="$2"
-    show_message "$body" "$summary"
+    
+    # Try system notification first (non-blocking)
+    if command -v notify-send &> /dev/null; then
+        notify-send -a "HyprLTM-Net" -i "network-wireless" "$summary" "$body"
+    else
+        # Fallback to Rofi message
+        show_message "$body" "$summary"
+    fi
 }
 
 
@@ -285,7 +346,6 @@ display_info_message() {
     fi
 }
 
-# ask_password
 # Handles password input with a dynamic, interactive menu for showing, hiding, and editing.
 ask_password() {
     local password_input
@@ -296,7 +356,7 @@ ask_password() {
     
     # If user cancels the initial prompt (presses Esc or enters nothing), return empty.
     if [ -z "$password_input" ]; then
-        return ""
+        return 1
     fi
 
     # Step 2: Interactive action menu loop
@@ -325,7 +385,7 @@ ask_password() {
         # Handle user's choice
         if [ -z "$action_choice" ] || [[ "$action_choice" =~ ^"$icon_close Back" ]]; then
             # User cancelled at action menu
-            return ""
+            return 1
         fi
 
         case "$action_choice" in
@@ -358,10 +418,61 @@ ask_password() {
 }
 
 
+# Show details for the active connection
+show_connection_details() {
+    local active_ssid="$1"
+    local device="$2"
+    
+    show_loading_notification "Gathering details..."
+    
+    # Get details using nmcli device show
+    # We grep for specific fields
+    local info=$(nmcli -t -f GENERAL,IP4,IP6 device show "$device")
+    
+    # Extract fields (hacky but effective for standard nmcli output)
+    # MAC often contains colons, so we strip the field name "GENERAL.HWADDR:"
+    local ipv4=$(echo "$info" | grep "IP4.ADDRESS\[1\]" | cut -d':' -f2)
+    local gateway=$(echo "$info" | grep "IP4.GATEWAY" | cut -d':' -f2)
+    local hwaddr=$(echo "$info" | grep "GENERAL.HWADDR" | sed 's/^GENERAL.HWADDR://')
+    local state=$(echo "$info" | grep "GENERAL.STATE" | cut -d':' -f2)
+    
+    # Wifi specific details
+    local wifi_info=$(nmcli -t -f IN-USE,SSID,MODE,CHAN,RATE,SIGNAL,BARS,SECURITY device wifi list | grep "^\*")
+    # Format: *:SSID:Infra:Chan:Rate:Signal:Bars:Sec
+    local chan=$(echo "$wifi_info" | cut -d':' -f4)
+    local rate=$(echo "$wifi_info" | cut -d':' -f5)
+    local signal=$(echo "$wifi_info" | cut -d':' -f6)
+    local bars=$(echo "$wifi_info" | cut -d':' -f7)
+    local freq=""
+    
+    # Determine frequency band roughly by channel
+    if [ "$chan" -gt 14 ]; then freq="5 GHz"; else freq="2.4 GHz"; fi
+
+    kill_loading_notification
+
+    local details=""
+    details+="$icon_address $tr_ip_addr: $ipv4\n"
+    details+="$icon_gateway $tr_gateway: $gateway\n"
+    details+="$icon_wifi_full $tr_signal_strength: $signal% ($bars)\n"
+    details+="$icon_on $tr_speed: $rate\n"
+    details+="$icon_wireless $tr_frequency: $freq (Ch $chan)\n"
+    details+="$icon_devices $tr_mac_addr: $hwaddr\n"
+    details+="$icon_chip $tr_device: $device"
+
+    display_info_message "$details" "$tr_connection_details_message"
+}
+
 # --- Dedicated Wi-Fi Scan Function ---
 perform_wifi_scan() {
     show_loading_notification "$tr_scanning_networks"
-    local scan_output=$(nmcli --colors no --get-values SECURITY,SIGNAL,SSID,IN-USE device wifi list --rescan auto ifname "$interface_to_use" | awk -F ':' \
+    
+    # Get list of known SSIDs, delimited by |
+    # We use tr to replace newline with |
+    local known_ssids=$(nmcli -t -f 802-11-wireless.ssid connection show | tr '\n' '|')
+    # Add leading/trailing pipe for exact matching
+    known_ssids="|$known_ssids"
+
+    local scan_output=$(nmcli --colors no --get-values SECURITY,SIGNAL,SSID,IN-USE device wifi list --rescan auto | awk -F ':' \
         -v icon_wifi_secure="$icon_wifi_secure" \
         -v icon_wifi_open="$icon_wifi_open" \
         -v icon_wifi_full="$icon_wifi_full" \
@@ -369,24 +480,41 @@ perform_wifi_scan() {
         -v icon_wifi_medium="$icon_wifi_medium" \
         -v icon_wifi_low="$icon_wifi_low" \
         -v icon_check="$icon_check" \
+        -v icon_unlock="$icon_unlock" \
+        -v known_ssids="$known_ssids" \
     '
     BEGIN { x = 1 }
     {
+        # 1. First Icon: Signal Strength (Always shown)
         wifi_signal_icon = icon_wifi_low;
         if ($2 > 75) wifi_signal_icon = icon_wifi_full;
         else if ($2 > 50) wifi_signal_icon = icon_wifi_good;
         else if ($2 > 25) wifi_signal_icon = icon_wifi_medium;
 
-        security_icon = icon_wifi_open;
-        if ($1 ~ /^WPA/) security_icon = icon_wifi_secure;
-
         ssid = $3;
         if (ssid == "") ssid = "<hidden>";
-
-        formatted_entry = wifi_signal_icon " " security_icon " " ssid " (" $2 "%)";
+        
+        # 2. Second Icon: Status (Priority: Active > Secure > Open/Known)
+        # User Logic: 
+        # - Active -> Checkmark
+        # - Secure (Even if known) -> Lock
+        # - Open -> Unlock
+        
+        status_icon = icon_unlock; # Default to Unlock (Open)
 
         if ($4 == "*") {
-            networks[0] = icon_check "  " formatted_entry;
+             status_icon = icon_check; # Active -> Check
+        } else if ($1 ~ /^WPA/) {
+             status_icon = icon_wifi_secure; # Secure -> Lock
+        } 
+        # Else remains Unlock (Open)
+        
+        # Layout: [Signal] [Status] SSID (Sig%)
+        # Note: We purposely put two icons on the left as requested.
+        formatted_entry = wifi_signal_icon " " status_icon " " ssid " (" $2 "%)";
+
+        if ($4 == "*") {
+            networks[0] = formatted_entry;
         } else {
             networks[x++] = formatted_entry;
         }
@@ -472,6 +600,7 @@ menu_wifi() {
         
         local full_options="$status_line\n"
         full_options+="$options"
+        full_options+="$icon_hotspot  $tr_hotspot_message\n" # NEW: Create Hotspot
         full_options+="$icon_bookmark_saved  $tr_known_connections_message\n" # FIX: Using icon_bookmark_saved
         full_options+="$icon_hidden_network  $tr_hidden_message\n" # FIX: Using icon_hidden_network
         full_options+="$icon_close Back" # Always at the bottom
@@ -494,7 +623,14 @@ menu_wifi() {
             "$icon_wireless  $tr_available_networks_message") menu_available_wifi_networks ;;
 			*"$tr_known_connections_message"*) menu_known_connections "wifi" ;;
 			*"$tr_hidden_message"*) connect_hidden ;;
-            *"$tr_status_message"*) # Do nothing if status line is selected
+            *"$tr_hotspot_message"*) create_hotspot ;;
+            *"$tr_status_message"*) 
+                # Show details if connected
+                if [ -n "$active_connection_info" ]; then
+                    local active_ssid=$(echo "$active_connection_info" | cut -d':' -f1)
+                    local active_device=$(echo "$active_connection_info" | cut -d':' -f2)
+                    show_connection_details "$active_ssid" "$active_device"
+                fi
                 ;;
 			*)
                 show_message "Invalid option selected: $chosen"
@@ -503,7 +639,7 @@ menu_wifi() {
 	done
 }
 
-# Select Wi-Fi Interface
+
 select_interface() {
 	local chosen_interface=$( (for (( i = 0; i < ${#interfaces[@]}; i++ )); do echo "$icon_interface  ${interfaces[$i]}" ; done; echo "$icon_close Back") | display_menu 1 "$tr_select_interface_prompt" "") # Pass "" for prompt_icon
 
@@ -545,15 +681,64 @@ connect_hidden() {
 # Connect to a visible Wi-Fi network
 connect_wifi() {
 	local chosen_entry="$1"
-	local wifi_ssid=$(echo "$chosen_entry" | sed -E 's/^.*(󰤪|󰤠) //; s/ \([0-9]{1,3}%\)$//')
-	local is_secure=$(echo "$chosen_entry" | grep -q "󰤪" && echo "yes" || echo "no")
+    
+    if [[ "$chosen_entry" == *"$icon_check"* ]]; then
+        local ssid_from_active=$(nmcli -t -f active,ssid dev wifi | grep "^yes" | cut -d':' -f2)
+        local active_uuid=$(nmcli -t -f UUID,TYPE,ACTIVE connection show | grep ":802-11-wireless:yes" | cut -d':' -f1 | head -n1)
+        
+        if [ -n "$active_uuid" ]; then
+             if [ -z "$ssid_from_active" ]; then
+                local temp_ssid=$(echo "$chosen_entry" | sed -E 's/ \([0-9]+%\).*$//')
+                ssid_from_active=$(echo "$temp_ssid" | sed -E 's/^(󰄬 |󰤫 |󰤪 |󰤩 |󰤨 |󰤧 |󰤦 |󰤥 |󰤤 |󰤣 |󰤢 |󰤡 |󰤠 )+//' | xargs)
+             fi
+             menu_connection "$ssid_from_active" "$active_uuid"
+             return
+        fi
+    fi
 
+    local temp_ssid=$(echo "$chosen_entry" | sed -E 's/ \([0-9]+%\).*$//')
+    local wifi_ssid=$(echo "$temp_ssid" | sed -E 's/^(󰤨 |󰤥 |󰤢 |󰤯 |󰤫 |󰤪 | | | )+//' | xargs)
+
+	local is_secure=$(echo "$chosen_entry" | grep -q "$icon_wifi_secure" && echo "yes" || echo "no")
+
+    # 1. Check if already connected
 	local active_ssid=$(nmcli -t -f active,ssid dev wifi | grep "^yes" | cut -d':' -f2)
 	if [ "$wifi_ssid" = "$active_ssid" ]; then
+        local active_uuid=$(nmcli -t -f UUID,TYPE,ACTIVE connection show | grep ":802-11-wireless:yes" | cut -d':' -f1 | head -n1)
+        if [ -n "$active_uuid" ]; then
+             menu_connection "$wifi_ssid" "$active_uuid"
+             return
+        fi
 		show_message "Already connected to $wifi_ssid."
 		return
 	fi
 
+    # 2. Check if we have a saved connection (even if not active)
+    local saved_uuid=""
+    # Use standard fields (UUID, TYPE) that are guaranteed to exist
+    local saved_list=$(nmcli -t -f UUID,TYPE connection show)
+    
+    while IFS=: read -r uuid type; do
+        # Check against both known Wi-Fi type strings
+        if [[ "$type" == "802-11-wireless" || "$type" == "wifi" ]]; then
+            # Get the SSID for this connection specifically
+            local ssid_check=$(nmcli -t -f 802-11-wireless.ssid connection show "$uuid" 2>/dev/null)
+            # FIX: output is '802-11-wireless.ssid:SSID', we must strip the prefix
+            ssid_check="${ssid_check#*:}"
+
+            if [ "$ssid_check" = "$wifi_ssid" ]; then
+                saved_uuid="$uuid"
+                break
+            fi
+        fi
+    done <<< "$saved_list"
+
+    if [ -n "$saved_uuid" ]; then
+        menu_connection "$wifi_ssid" "$saved_uuid"
+        return
+    fi
+     
+    # 3. New Connection: Ask for password if secure
     local connection_result
 	if [ "$is_secure" = "yes" ]; then
 		local wifi_password=$(ask_password)
@@ -561,6 +746,7 @@ connect_wifi() {
 			show_message "Connection cancelled. No password provided."
 			return
 		fi
+        
         
         show_loading_notification "$tr_connecting_to"
 		nmcli --wait 15 device wifi connect "$wifi_ssid" ifname "$interface_to_use" password "$wifi_password"
@@ -638,25 +824,30 @@ menu_ip_config() {
 		local current_gateway=$(nmcli --get-values ipv${ipv}.gateway connection show "$connection_uuid")
 		local current_addresses=$(nmcli --get-values ipv${ipv}.addresses connection show "$connection_uuid" | sed 's/,/\n/g')
 
-		local ip_config_options=""
-		ip_config_options+="$icon_auto_ip  $tr_autoip_message  $autoip_state\n"
+		local options=""
+		options+="$icon_auto_ip  $tr_autoip_message  $autoip_state\n"
 
 		if [ "$autoip_state" = "$icon_on" ]; then
 			autodns_state="$([ "$(nmcli --get-values ipv${ipv}.ignore-auto-dns connection show "$connection_uuid")" = "no" ] && echo "$icon_on" || echo "$icon_off")"
-			ip_config_options+="$icon_auto_dns  $tr_autodns_message  $autodns_state\n"
+			options+="$icon_auto_dns  $tr_autodns_message  $autodns_state\n"
 		else
-			ip_config_options+="$icon_address  $tr_address_message: ${current_addresses:-N/A}\n"
-			ip_config_options+="$icon_gateway  $tr_gateway_message ${current_gateway:-N/A}\n"
+			options+="$icon_address  $tr_address_message: ${current_addresses:-N/A}\n"
+			options+="$icon_gateway  $tr_gateway_message ${current_gateway:-N/A}\n"
+			options+="$icon_gateway  $tr_gateway_message ${current_gateway:-N/A}\n"
 		fi
-		ip_config_options+="$icon_close Back"
+		options+="$icon_ipv4_dns  DNS Configuration\n"
+		options+="$icon_close Back"
 
-		chosen=$(echo -e "$options" | display_menu 1 "$chosen_connection_name ($ipv)" "") # Pass "" for prompt_icon
+		chosen=$(echo -e "$options" | display_menu 1 "$chosen_connection_name (IPv$ipv)" "") # Pass "" for prompt_icon
 
 		if [ -z "$chosen" ] || [[ "$chosen" =~ ^"$icon_close Back" ]]; then
             return # User cancelled or pressed back
         fi
 
 		case "$chosen" in
+			*"DNS Configuration"*)
+				menu_dns "$connection_uuid" "$ipv"
+				;;
 			*"$tr_autoip_message"*)
 				if [ "$autoip_state" = "$icon_on" ]; then
 					nmcli connection modify uuid "$connection_uuid" ipv${ipv}.method manual
@@ -722,7 +913,7 @@ menu_dns() {
 	done
 }
 
-# Delete a saved connection profile
+
 forget_connection() {
 	local chosen_connection_name="$1"
 	local connection_uuid="$2"
@@ -736,7 +927,7 @@ forget_connection() {
 	return 1
 }
 
-# Rename a saved connection profile
+
 rename_connection() {
 	local connection_uuid="$1"
 	local new_name=$(echo "" | display_menu 5 "$tr_rename_connection_prompt" "") # Pass "" for prompt_icon
@@ -747,21 +938,55 @@ rename_connection() {
 	return $?
 }
 
+
+edit_connection_password() {
+    local connection_uuid="$1"
+    local connection_name="$2"
+    
+    # Prompt for new password
+    local pass=$(ask_password "$connection_name")
+    
+    if [ -z "$pass" ]; then return 1; fi # Cancelled
+    
+    # Update the connection
+    if nmcli connection modify uuid "$connection_uuid" wifi-sec.psk "$pass"; then
+        send_notification "$tr_password_updated" "$tr_notice_connected_body '$connection_name'"
+        return 0
+    else
+        send_notification "$tr_password_update_failed" "$tr_notice_error_body '$connection_name'"
+        return 1
+    fi
+}
+
 # Menu for individual connection settings (Wi-Fi)
 menu_connection() {
 	local chosen_connection_name="$1"
 	local connection_uuid="$2"
 	local autoconnect_state chosen
 
-	while true; do
+    while true; do
 		autoconnect_state="$([ "$(nmcli --get-values connection.autoconnect connection show "$connection_uuid")" = "yes" ] && echo "$icon_on" || echo "$icon_off")"
-		local options="$icon_automatic  $tr_autoconnect_message  $autoconnect_state\n"
+
+        # Check if this connection is currently active
+        local is_active=$(nmcli -t -f UUID connection show --active | grep -q "$connection_uuid" && echo "yes" || echo "no")
+        
+        local options="$icon_automatic  $tr_autoconnect_message  $autoconnect_state\n"
+        
+        if [ "$is_active" = "yes" ]; then
+             options+="$icon_wifi_disconnected  $tr_disconnect_message\n"
+        else
+             options+="$icon_connect  $tr_connect_now_message\n"
+        fi
+
 		options+="$icon_ipv4_config  $tr_ipv4_config_message\n"
-		options+="$icon_ipv4_dns  $tr_dns4_message\n"
 		options+="$icon_ipv6_config  $tr_ipv6_config_message\n"
-		options+="$icon_ipv6_dns  $tr_dns6_message\n"
 		options+="$icon_trash  $tr_forget_message\n"
 		options+="$icon_pen  $tr_rename_connection_message\n"
+        options+="$icon_password  $tr_edit_password_message\n" # NEW: Edit Password option
+        # Only show QR code for Wi-Fi connections
+        if [ "$(nmcli -g connection.type connection show "$connection_uuid")" = "802-11-wireless" ]; then
+             options+="$icon_qrcode  $tr_qrcode_message\n"
+        fi
 		options+="$icon_close Back"
 
 		chosen=$(echo -e "$options" | display_menu 1 "$chosen_connection_name" "") # Pass "" for prompt_icon
@@ -778,10 +1003,46 @@ menu_connection() {
 					nmcli connection modify uuid "$connection_uuid" autoconnect yes
 				fi
 				;;
+            "$icon_connect  $tr_connect_now_message")
+                show_loading_notification "$tr_connecting_to"
+                if nmcli connection up uuid "$connection_uuid"; then
+                    kill_loading_notification
+                    send_notification "$tr_notice_connected_summary" "$tr_notice_connected_body '$chosen_connection_name'"
+                    exit 0
+                else
+                    kill_loading_notification
+                    # Smart Recovery: Prompt to update password
+                    # Check if user wants to retry with new password
+                    local retry_choice=$(echo -e "$icon_check Yes\n$icon_close No" | display_menu 2 "$tr_connection_failed_retry" "")
+                    if [[ "$retry_choice" =~ ^"$icon_check" ]]; then
+                         if edit_connection_password "$connection_uuid" "$chosen_connection_name"; then
+                              # Retry connection
+                              show_loading_notification "$tr_connecting_to"
+                              if nmcli connection up uuid "$connection_uuid"; then
+                                   kill_loading_notification
+                                   send_notification "$tr_notice_connected_summary" "$tr_notice_connected_body '$chosen_connection_name'"
+                                   exit 0
+                              fi
+                              kill_loading_notification
+                         fi
+                    fi
+                    send_notification "$tr_notice_error_summary" "$tr_notice_error_body '$chosen_connection_name'"
+                fi
+                ;;
+            "$icon_wifi_disconnected  $tr_disconnect_message")
+                 # Disconnect logic
+                 show_loading_notification "Disconnecting..."
+                 if nmcli connection down uuid "$connection_uuid"; then
+                    kill_loading_notification
+                    send_notification "Disconnected" "Disconnected from '$chosen_connection_name'"
+                    return
+                 else
+                    kill_loading_notification
+                    show_message "Failed to disconnect."
+                 fi
+                 ;;
 			*"$tr_ipv4_config_message"*) menu_ip_config "$chosen_connection_name" "$connection_uuid" "4" ;;
-			*"$tr_dns4_message"*) menu_dns "$connection_uuid" "4" ;;
 			*"$tr_ipv6_config_message"*) menu_ip_config "$chosen_connection_name" "$connection_uuid" "6" ;;
-			*"$tr_dns6_message"*) menu_dns "$connection_uuid" "6" ;;
 			*"$tr_forget_message"*) forget_connection "$chosen_connection_name" "$connection_uuid" && return ;;
 			*"$tr_rename_connection_message"*)
 				if rename_connection "$connection_uuid"; then
@@ -791,6 +1052,15 @@ menu_connection() {
 					show_message "Failed to rename connection."
 				fi
 				;;
+            *"$tr_edit_password_message"*)
+                edit_connection_password "$connection_uuid" "$chosen_connection_name"
+                ;;
+            *"$tr_qrcode_message"*)
+                local ssid=$(nmcli -g 802-11-wireless.ssid connection show "$connection_uuid")
+                local security=$(nmcli -g 802-11-wireless-security.key-mgmt connection show "$connection_uuid" | sed 's/wpa-psk/WPA/; s/None/nopass/')
+                local password=$(nmcli -s -g 802-11-wireless-security.psk connection show "$connection_uuid")
+                show_qrcode "$ssid" "$security" "$password"
+                ;;
 		esac
 	done
 }
@@ -868,9 +1138,8 @@ menu_known_connections() {
 		"ethernet")
 			icon_for_type="$icon_ethernet"
 			menu_type_function="menu_connection"
-            # FIX: Broaden awk filter for ethernet connections
             profiles_list_raw=$(nmcli --colors no -t -f TYPE,UUID,NAME connection show | awk -F ':' -v icon="$icon_for_type" '$1 ~ /^(ethernet|802-3-ethernet).*/ {print $2 "\\0" icon "  " $3}')
-            prompt_to_use="$tr_manage_wired_connections" # Use descriptive text for prompt
+            prompt_to_use="$tr_manage_wired_connections"
 			;;
 		*) # All saved connections
 			icon_for_type="$icon_saved"
@@ -878,7 +1147,7 @@ menu_known_connections() {
             profiles_list_raw=$(nmcli --colors no -t -f TYPE,UUID,NAME connection show | awk -F ':' -v icon_saved="$icon_saved" -v icon_wireless="$icon_wireless" -v icon_ethernet="$icon_ethernet" -v icon_vpn_disconnect="$icon_vpn_disconnect" '{
                 icon_local = icon_saved;
                 if ($1 == "wifi" || $1 == "802-11-wireless") icon_local = icon_wireless;
-                else if ($1 == "ethernet" || $1 == "802-3-ethernet") icon_local = icon_ethernet; # FIX: Added 802-3-ethernet
+                else if ($1 == "ethernet" || $1 == "802-3-ethernet") icon_local = icon_ethernet;
                 else if ($1 == "vpn" || $1 == "wireguard") icon_local = icon_vpn_disconnect;
                 print $2 "\\0" icon_local "  " $3 " (" $1 ")"
             }')
@@ -926,7 +1195,7 @@ menu_connect_wired_connection() {
     fi
 
     local options=$(for i in "${profiles_list[@]}"; do echo -e "$i" | cut --delimiter $'\0' --fields 2; done)
-    options+="\n$icon_close Back" # FIX: Added newline before the Back entry
+    options+="\n$icon_close Back"
 
     # Prompt for this menu is just the search icon
     local chosen=$(echo -e "$options" | display_menu 1 "$tr_connect_wired_connection" "$icon_search")
@@ -1035,6 +1304,110 @@ status_menu() {
             ;;
     esac
 }
+
+# --- Airplane Mode ---
+toggle_airplane_mode() {
+    local wifi_state=$(nmcli radio wifi)
+    local wwan_state=$(nmcli radio wwan 2>/dev/null || echo "disabled") # WWAN may not exist
+
+    if [ "$wifi_state" = "enabled" ] || [ "$wwan_state" = "enabled" ]; then
+        # Disable all radios
+        nmcli radio wifi off
+        nmcli radio wwan off 2>/dev/null
+        show_message "$tr_airplane_on" "$tr_airplane_mode_message"
+    else
+        # Enable all radios
+        nmcli radio wifi on
+        nmcli radio wwan on 2>/dev/null
+        show_message "$tr_airplane_off" "$tr_airplane_mode_message"
+    fi
+}
+
+# --- QR Code Sharing ---
+show_qrcode() {
+    local ssid="$1"
+    local security="$2"
+    local password="$3"
+    
+    if ! command -v qrencode &> /dev/null; then
+        show_message "$tr_qrcode_error" "$tr_qrcode_message"
+        return
+    fi
+
+    if [ -z "$password" ]; then
+        show_message "$tr_qrcode_no_password" "$tr_qrcode_message"
+        return
+    fi
+
+    local qr_string="WIFI:T:${security};S:${ssid};P:${password};;"
+    local qr_file="/tmp/hyprltm-net-qr-${ssid}.png"
+    
+    show_loading_notification "$tr_qrcode_generating"
+    qrencode -o "$qr_file" -s 10 -m 2 "$qr_string"
+    kill_loading_notification
+
+    # Display QR code inside Rofi
+    # -i: Enable icons
+    # -theme-str: Override theme to show large icon and no text input
+    # Display QR code inside Rofi
+    # -i: Enable icons
+    # -show-icons: Required to show icons in dmenu mode
+    # -theme-str: Override theme to show large icon and no text input
+    
+    # We use the successful configuration from the test script
+    local rofi_override="
+        window { width: 500px; }
+        listview { lines: 1; scrollbar: false; }
+        element { orientation: vertical; padding: 20px; children: [ element-icon, element-text ]; }
+        element-icon { enabled: true; size: 300px; horizontal-align: 0.5; }
+        element-text { horizontal-align: 0.5; }
+        entry { enabled: false; } 
+        inputbar { enabled: false; }
+    "
+    
+    # We pass an entry with the icon set to the QR file path
+    # Format: Valid Text \0icon\x1f/path/to/image.png
+    # We use "Scan to Connect" as the text under the QR code
+    echo -e "Scan to Connect\0icon\x1f${qr_file}" | \
+    rofi -dmenu -i -show-icons -p "$tr_qrcode_message" -theme "$ROFI_NETWORK_MANAGER_THEME" \
+         -theme-str "$rofi_override" >/dev/null
+
+    # Cleanup after Rofi closes
+    rm -f "$qr_file" 2>/dev/null
+}
+
+# Get password for a known Wi-Fi connection
+get_wifi_password() {
+    local ssid="$1"
+    local uuid=$(nmcli -t -f NAME,UUID connection show | grep "^${ssid}:" | cut -d':' -f2)
+    if [ -n "$uuid" ]; then
+        nmcli -s -g 802-11-wireless-security.psk connection show "$uuid" 2>/dev/null
+    fi
+}
+
+# --- Hotspot Creation ---
+create_hotspot() {
+    local ssid=$(echo "" | display_menu 5 "$tr_hotspot_ssid_prompt" "")
+    if [ -z "$ssid" ]; then
+        return
+    fi
+
+    local password=$(echo "" | display_menu 3 "$tr_hotspot_password_prompt" "")
+    if [ -z "$password" ] || [ ${#password} -lt 8 ]; then
+        show_message "Password must be at least 8 characters." "$tr_hotspot_message"
+        return
+    fi
+
+    show_loading_notification "$tr_hotspot_creating"
+    if nmcli device wifi hotspot ifname "$interface_to_use" ssid "$ssid" password "$password"; then
+        kill_loading_notification
+        show_message "$tr_hotspot_success\nSSID: $ssid" "$tr_hotspot_message"
+    else
+        kill_loading_notification
+        show_message "$tr_hotspot_error" "$tr_hotspot_message"
+    fi
+}
+
 
 # --- VPN Functions ---
 
@@ -1157,13 +1530,14 @@ vpn_menu() {
 }
 
 
-# --- Main Menu ---
+
 main_menu() {
     local options="$icon_wifi_full  Wi-Fi\n"
     options+="$icon_ethernet  Wired\n"
-    options+="$icon_vpn_disconnect  VPN\n" # Changed to icon_vpn_disconnect
-    options+="$icon_bookmark_saved  Saved Connections\n" # Changed to icon_bookmark_saved
-    options+="$icon_status_chart  Status\n" # Changed to icon_status_chart
+    options+="$icon_vpn_disconnect  VPN\n"
+    options+="$icon_bookmark_saved  Saved Connections\n"
+    options+="$icon_status_chart  Status\n"
+    options+="$icon_airplane  $tr_airplane_mode_message\n"
     options+="$icon_close Exit"
 
     while true; do # Keep looping for the main menu
@@ -1191,9 +1565,12 @@ main_menu() {
             *"Status")
                 status_menu
                 ;;
+            *"$tr_airplane_mode_message")
+                toggle_airplane_mode
+                ;;
         esac
     done # End of main menu while loop
 }
 
-# --- Initial Call to Main Menu ---
+# --- Run ---
 main_menu
