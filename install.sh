@@ -28,18 +28,21 @@ fi
 echo -e "${CYAN}Detected Distribution:${NC} $DISTRO"
 
 # --- 1. Define Packages per Distro ---
+# --- 1. Define Packages per Distro ---
 # Required
-PKGS_ARCH_REQ="rofi-wayland networkmanager qrencode"
+PKGS_ARCH_REQ="rofi-wayland networkmanager qrencode ttf-jetbrains-mono-nerd"
 PKGS_FEDORA_REQ="rofi-wayland NetworkManager qrencode"
 PKGS_SUSE_REQ="rofi-wayland NetworkManager qrencode"
 
-# Optional
-PKGS_ARCH_OPT="imv libnotify ttf-jetbrains-mono-nerd"
-PKGS_FEDORA_OPT="imv libnotify" # Nerd fonts on Fedora often require COPR
-PKGS_SUSE_OPT="imv libnotify" # Nerd fonts on SUSE often need manual install
+# Optional (for notifications)
+PKGS_ARCH_OPT="libnotify"
+PKGS_FEDORA_OPT="libnotify"
+PKGS_SUSE_OPT="libnotify"
 
 # --- 2. Check Dependencies ---
 DEPENDENCIES=("rofi" "nmcli" "qrencode")
+# Check for a nerd font roughly by name if possible, or assume user knows.
+# Checking for fonts via script is tricky/unreliable. We'll trust the package manager or user validation.
 MISSING_DEPS=()
 
 echo ""
@@ -58,7 +61,7 @@ if [ ${#MISSING_DEPS[@]} -gt 0 ]; then
     echo ""
     if [ "$DISTRO" = "nixos" ]; then
         echo -e "${YELLOW}NixOS Detected.${NC} Please add the following to your configuration.nix:"
-        echo -e "  ${GREEN}environment.systemPackages = with pkgs; [ rofi-wayland networkmanager qrencode imv libnotify (nerdfonts.override { fonts = [ \"JetBrainsMono\" ]; }) ];${NC}"
+        echo -e "  ${GREEN}environment.systemPackages = with pkgs; [ rofi-wayland networkmanager qrencode libnotify (nerdfonts.override { fonts = [ \"JetBrainsMono\" ]; }) ];${NC}"
     elif [ "$DISTRO" != "unknown" ]; then
         read -p "Install missing dependencies using your package manager? [Y/n] " choice_install
         if [[ ! "$choice_install" =~ ^[Nn]$ ]]; then
@@ -69,26 +72,28 @@ if [ ${#MISSING_DEPS[@]} -gt 0 ]; then
                     ;;
                 fedora)
                     echo -e "${CYAN}Running: sudo dnf install $PKGS_FEDORA_REQ $PKGS_FEDORA_OPT${NC}"
-                    sudo dnf install $PKGS_FEDORA_REQ $PKGS_FEDORA_OPT
+                    if [ -n "$PKGS_FEDORA_OPT" ]; then
+                         sudo dnf install $PKGS_FEDORA_REQ $PKGS_FEDORA_OPT
+                    else
+                         sudo dnf install $PKGS_FEDORA_REQ
+                    fi
                     echo -e "${YELLOW}Note: For Nerd Fonts on Fedora, you may need to enable a COPR repo or install manually.${NC}"
                     ;;
                 suse)
                     echo -e "${CYAN}Running: sudo zypper install $PKGS_SUSE_REQ $PKGS_SUSE_OPT${NC}"
-                    sudo zypper install $PKGS_SUSE_REQ $PKGS_SUSE_OPT
+                    if [ -n "$PKGS_SUSE_OPT" ]; then
+                        sudo zypper install $PKGS_SUSE_REQ $PKGS_SUSE_OPT
+                    else
+                        sudo zypper install $PKGS_SUSE_REQ
+                    fi
                     echo -e "${YELLOW}Note: For Nerd Fonts on openSUSE, you may need to add a community repo or install manually.${NC}"
                     ;;
             esac
         fi
     else
         echo -e "${YELLOW}Could not detect your distribution.${NC}"
-        echo "Please install the following packages manually: rofi-wayland, networkmanager, qrencode, imv (or feh), libnotify, and a Nerd Font."
+        echo "Please install the following packages manually: rofi-wayland, networkmanager, qrencode, and a Nerd Font."
     fi
-fi
-
-# Optional Check for image viewers (for QR code)
-if ! command -v imv &> /dev/null && ! command -v feh &> /dev/null; then
-    echo -e "${YELLOW}Warning: Neither 'imv' nor 'feh' found.${NC}"
-    echo "One of these is recommended for displaying QR codes."
 fi
 
 # --- 4. Prepare Directories ---
