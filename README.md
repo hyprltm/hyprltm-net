@@ -44,9 +44,9 @@ https://github.com/user-attachments/assets/7da1d5b8-d8a1-47f4-8809-e82efc078ab2
 - Import `.conf` or `.ovpn` files directly
 
 ### ⚙️ Advanced Controls
-- **Airplane Mode** toggle
-- **QR Code Sharing** for Wi-Fi
-- **Hotspot** creation
+- **Airplane Mode** toggle ![New](https://img.shields.io/badge/NEW-%2350fa7b?style=flat-square&labelColor=282a36)
+- **QR Code Sharing** for Wi-Fi ![New](https://img.shields.io/badge/NEW-%2350fa7b?style=flat-square&labelColor=282a36)
+- **Hotspot** creation ![New](https://img.shields.io/badge/NEW-%2350fa7b?style=flat-square&labelColor=282a36)
 
 </td>
 </tr>
@@ -61,7 +61,66 @@ https://github.com/user-attachments/assets/7da1d5b8-d8a1-47f4-8809-e82efc078ab2
 </tr>
 </table>
 
-![Gradient](assets/gradient.svg)
+
+## 🧠 Menu Structure
+
+```
+Main Menu
+├── Wi-Fi
+│   ├── Status (Current Connection) -> View Details (IP, Signal, Mac...)
+│   ├── Toggle (Enable / Disable)
+│   ├── Available Networks (SSID List)
+│   │   ├── [New Secure Network]
+│   │   │   └── Enter Password
+│   │   │       └── Password Actions (Show/Hide/Edit/Confirm)
+│   │   └── [Saved Network]
+│   │       ├── Autoconnect (Toggle)
+│   │       ├── Connect / Disconnect Now
+│   │       ├── IPv4 Configuration
+│   │       ├── IPv6 Configuration
+│   │       ├── Forget Connection
+│   │       ├── Rename Connection
+│   │       ├── Edit Password
+│   │       └── Share via QR Code
+│   ├── Create Hotspot
+│   ├── Known Connections (Saved Profiles)
+│   │   └── [Saved Wi-Fi Profile]
+│   │       ├── Autoconnect (Toggle)
+│   │       ├── Connect / Disconnect Now
+│   │       ├── IPv4 Configuration
+│   │       ├── IPv6 Configuration
+│   │       ├── Forget Connection
+│   │       ├── Rename Connection
+│   │       ├── Edit Password
+│   │       └── Share via QR Code
+│   └── Connect to a hidden network
+├── Wired
+│   ├── [Available Interface] -> Connect
+│   └── [Saved Profile] -> (Same options as Wi-Fi)
+├── VPN
+│   ├── [VPN Profile]
+│   │   ├── Autoconnect (Toggle)
+│   │   ├── Connect / Disconnect
+│   │   ├── IPv4 / IPv6 Configuration
+│   │   ├── Forget Connection
+│   │   ├── Rename Connection
+│   │   └── Edit Password (if applicable)
+│   └── Import Configuration
+├── Saved Connections
+│   └── [List of All Profiles]
+│       ├── Autoconnect (Toggle)
+│       ├── Connect / Disconnect Now
+│       ├── IPv4 Configuration
+│       ├── IPv6 Configuration
+│       ├── Forget Connection
+│       ├── Rename Connection
+│       ├── Edit Password
+│       └── Share via QR Code
+├── Status
+│   ├── Active Connection Details (Popup)
+│   └── All Device Status (List)
+└── Airplane Mode (Toggle)
+```
 
 ## 🛠️ Prerequisites
 
@@ -71,8 +130,6 @@ https://github.com/user-attachments/assets/7da1d5b8-d8a1-47f4-8809-e82efc078ab2
 | `rofi-wayland` | The graphical menu engine |
 | `qrencode` | Generating Wi-Fi QR codes |
 | `Nerd Fonts` | Required for icons (e.g., *JetBrains Mono Nerd Font*) |
-| `imv` or `feh` | *(Optional)* Displaying QR codes |
-| `libnotify` | *(Optional)* Desktop notifications |
 
 ![Gradient](assets/gradient.svg)
 
