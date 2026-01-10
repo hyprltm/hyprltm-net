@@ -25,63 +25,75 @@ fi
 ROFI_NETWORK_MANAGER_THEME="$HOME/.config/rofi/themes/hyprltm-net.rasi"
 
 # --- Icon Variables (Nerd Fonts - Minimalist & Beautiful) ---
-icon_wireguard="${icon_wireguard:-"󰖆"}"
-icon_config="${icon_config:-""}"
-icon_close="${icon_close:-""}" # Changed to 'Back' or 'Exit' in menus
+# --- Icons: General UI ---
+icon_search="${icon_search:-""}"
+icon_close="${icon_close:-""}"
 icon_check="${icon_check:-""}"
-icon_eye="${icon_eye:-"󰛐"}" # Original eye icon
-icon_eye_closed="${icon_eye_closed:-"󰛑"}"
-icon_saved="${icon_saved:-"󰋋"}" # Original saved icon
-icon_automatic="${icon_automatic:-"󰑘"}"
-icon_wifi_enable="${icon_wifi_enable:-"󰖩"}"
-icon_wifi_disable="${icon_wifi_disable:-"󰖪"}"
+icon_on="${icon_on:-""}"
+icon_off="${icon_off:-""}"
+icon_info="${icon_info:-"󰖐"}"
+icon_refresh="${icon_refresh:-"󰑐"}"
+icon_config="${icon_config:-""}"
+
+# --- Icons: Network Types ---
+icon_network="${icon_network:-"󱂇"}"
+icon_wifi_prompt="${icon_wifi_prompt:-"󱚾"}"
+icon_ethernet="${icon_ethernet:-"󰈀"}"
+icon_vpn="${icon_vpn:-"󰖃"}"
+icon_wireguard="${icon_wireguard:-"󰖆"}"
+icon_hotspot="${icon_hotspot:-"󱄙"}"
+icon_airplane="${icon_airplane:-"󰀝"}"
+
+# --- Icons: Wi-Fi Signal ---
 icon_wifi_full="${icon_wifi_full:-"󰤨"}"
 icon_wifi_good="${icon_wifi_good:-"󰤥"}"
 icon_wifi_medium="${icon_wifi_medium:-"󰤢"}"
 icon_wifi_low="${icon_wifi_low:-"󰤯"}"
 icon_wifi_disconnected="${icon_wifi_disconnected:-"󰤫"}"
+icon_wifi_enable="${icon_wifi_enable:-"󰖩"}"
+icon_wifi_disable="${icon_wifi_disable:-"󰖪"}"
+
+# --- Icons: Security & Status ---
 icon_wifi_secure="${icon_wifi_secure:-""}"
 icon_wifi_open="${icon_wifi_open:-"󰤠"}"
-icon_interface="${icon_interface:-"󰛨"}"
-icon_ipv4_config="${icon_ipv4_config:-"󰒓"}"
-icon_ipv4_dns="${icon_ipv4_dns:-"󰒍"}"
-tr_ipv6_config_message='IPv6 Configuration' # Ensure this is defined
-icon_ipv6_config="${icon_ipv6_config:-"󰒓"}"
-icon_ipv6_dns="${icon_ipv6_dns:-"󰒍"}"
-icon_plug="${icon_plug:-"󱘖"}"
+icon_unlock="${icon_unlock:-""}"
+icon_password="${icon_password:-""}"
+icon_eye="${icon_eye:-"󰛐"}"
+icon_eye_closed="${icon_eye_closed:-"󰛑"}"
+icon_bookmark_saved="${icon_bookmark_saved:-"󰢭"}"
+icon_saved="${icon_saved:-"󰋋"}"
+
+# --- Icons: Menus & Actions ---
+icon_connect="${icon_connect:-"󰚫"}"
+icon_disconnect="${icon_disconnect:-"qa"}"
+icon_vpn_disconnect="${icon_vpn_disconnect:-"󰖂"}"
 icon_trash="${icon_trash:-""}"
 icon_pen="${icon_pen:-"󰑕"}"
-icon_wireless="${icon_wireless:-"󰑩"}"
-icon_auto_ip="${icon_auto_ip:-"󰑘"}"
-icon_gateway="${icon_gateway:-"󰞡"}"
-icon_address="${icon_address:-"󰒓"}"
-icon_auto_dns="${icon_auto_dns:-"󰒍"}"
-icon_unlock="${icon_unlock:-""}"
-icon_password="${icon_password:-""}" # New icon for password
-icon_on="${icon_on:-""}"
-icon_off="${icon_off:-""}"
-icon_ethernet="${icon_ethernet:-"󰈀"}"
-icon_vpn="${icon_vpn:-"󰖃"}" # Original VPN icon, kept for internal use if needed
-icon_vpn_disconnect="${icon_vpn_disconnect:-"󰖂"}" # Disconnect icon, now main VPN icon
-icon_info="${icon_info:-"󰖐"}"
+icon_import="${icon_import:-"󰋺"}"
+icon_qrcode="${icon_qrcode:-"󰐲"}"
+
+# --- Icons: Details & Config ---
+icon_active_details="${icon_active_details:-"󰋼"}"
+icon_status_chart="${icon_status_chart:-"󱖫"}"
+icon_interface="${icon_interface:-"󰛨"}"
 icon_devices="${icon_devices:-"󰋽"}"
-icon_refresh="${icon_refresh:-"󰑐"}" # New icon for refresh
-icon_disconnect="${icon_disconnect:-"qa"}" # Icon for disconnect
-icon_connect="${icon_connect:-"󰚫"}" # Icon for connect
-icon_search="${icon_search:-""}" # Nerd Font: nf-fa-search or nf-md-magnify
-icon_network="${icon_network:-"󱂇"}" # Nerd Font: nf-md-wifi_strength_4 or similar general network icon
-icon_wifi_prompt="${icon_wifi_prompt:-"󱚾"}" # Specific Wi-Fi icon for prompt
-icon_bookmark_saved="${icon_bookmark_saved:-"󰢭"}" # FIX: Changed to 󰢭 for Known Connections
-icon_status_chart="${icon_status_chart:-"󱖫"}" # NEW: Icon for Status (User provided)
-icon_hidden_network="${icon_hidden_network:-"󰲊"}" # NEW: Icon for Connect to a hidden network
-icon_connect_wired="${icon_connect_wired:-"󱂇"}" # NEW: Icon for Connect to Wired Connection
-icon_wired_status="${icon_wired_status:-"󰈁"}" # NEW: Icon for Wired Status
-icon_import="${icon_import:-"󰋺"}" # NEW: Icon for Import VPN
-icon_active_details="${icon_active_details:-"󰋼"}" # NEW: Icon for Active Connection Details
-icon_airplane="${icon_airplane:-"󰀝"}" # Icon for Airplane Mode
-icon_qrcode="${icon_qrcode:-"󰐲"}" # Icon for QR Code
-icon_hotspot="${icon_hotspot:-"󱄙"}" # Icon for Hotspot
-icon_chip="${icon_chip:-"󰢮"}" # Icon for Interface/Chip
+icon_chip="${icon_chip:-"󰢮"}"
+icon_ipv4_config="${icon_ipv4_config:-"󰒓"}"
+icon_ipv4_dns="${icon_ipv4_dns:-"󰒍"}"
+icon_ipv6_config="${icon_ipv6_config:-"󰒓"}" # Reuse
+icon_ipv6_dns="${icon_ipv6_dns:-"󰒍"}"    # Reuse
+icon_auto_ip="${icon_auto_ip:-"󰑘"}"
+icon_auto_dns="${icon_auto_dns:-"󰒍"}"
+icon_address="${icon_address:-"󰒓"}"
+icon_gateway="${icon_gateway:-"󰞡"}"
+icon_plug="${icon_plug:-"󱘖"}"
+icon_wireless="${icon_wireless:-"󰑩"}"
+icon_automatic="${icon_automatic:-"󰑘"}"
+
+# --- Icons: Miscellaneous ---
+icon_hidden_network="${icon_hidden_network:-"󰲊"}"
+icon_connect_wired="${icon_connect_wired:-"󱂇"}"
+icon_wired_status="${icon_wired_status:-"󰈁"}"
 
 # --- Translatable / Customizable Messages ---
 tr_checking_wifi_status='Checking Wi-Fi status... Please be patient.'
@@ -97,6 +109,7 @@ tr_available_networks_message='Available Networks'
 tr_available_vpn_profiles_message='Available VPN Profiles'
 tr_autoconnect_message='Autoconnect'
 tr_ipv4_config_message='IPv4 Configuration'
+tr_ipv6_config_message='IPv6 Configuration'
 tr_dns4_message='DNS IPv4'
 tr_dns6_message='DNS IPv6'
 tr_connection_details_message='Connection Details' # New Header
@@ -135,8 +148,8 @@ tr_status_connected='Connected'
 tr_status_disconnected='Disconnected'
 
 tr_status_disabled='Disabled'
-tr_connect_now_message='Connect Now' # NEW: Connect Now message
-tr_disconnect_message='Disconnect Now' # NEW: Disconnect message
+tr_connect_now_message='Connect Now'
+tr_disconnect_message='Disconnect Now'
 tr_notice_import_success_summary='VPN Imported'
 tr_notice_import_success_body='Successfully imported VPN connection.'
 tr_notice_import_error_summary='Import Error'
@@ -333,7 +346,6 @@ display_info_message() {
     fi
 }
 
-# ask_password
 # Handles password input with a dynamic, interactive menu for showing, hiding, and editing.
 ask_password() {
     local password_input
@@ -627,7 +639,7 @@ menu_wifi() {
 	done
 }
 
-# Select Wi-Fi Interface
+
 select_interface() {
 	local chosen_interface=$( (for (( i = 0; i < ${#interfaces[@]}; i++ )); do echo "$icon_interface  ${interfaces[$i]}" ; done; echo "$icon_close Back") | display_menu 1 "$tr_select_interface_prompt" "") # Pass "" for prompt_icon
 
@@ -670,22 +682,12 @@ connect_hidden() {
 connect_wifi() {
 	local chosen_entry="$1"
     
-    # 0. SHORTCUT: If this is the active network (marked with check icon), skip all checks.
-    # The check icon is unique to the active line.
     if [[ "$chosen_entry" == *"$icon_check"* ]]; then
-        # It is the active network.
-        # We need the SSID. Extract it cleanly.
         local ssid_from_active=$(nmcli -t -f active,ssid dev wifi | grep "^yes" | cut -d':' -f2)
-        # Fallback if nmcli fails? Use extraction.
-        
-        # Getting UUID for active
         local active_uuid=$(nmcli -t -f UUID,TYPE,ACTIVE connection show | grep ":802-11-wireless:yes" | cut -d':' -f1 | head -n1)
         
         if [ -n "$active_uuid" ]; then
-             # If we failed to get SSID from nmcli (rare), try extracting
              if [ -z "$ssid_from_active" ]; then
-                # Re-use extraction logic below or just open menu with current name?
-                # Extraction logic logic:
                 local temp_ssid=$(echo "$chosen_entry" | sed -E 's/ \([0-9]+%\).*$//')
                 ssid_from_active=$(echo "$temp_ssid" | sed -E 's/^(󰄬 |󰤫 |󰤪 |󰤩 |󰤨 |󰤧 |󰤦 |󰤥 |󰤤 |󰤣 |󰤢 |󰤡 |󰤠 )+//' | xargs)
              fi
@@ -694,47 +696,7 @@ connect_wifi() {
         fi
     fi
 
-    # FIX: Robust Generic SSID extraction
-    # ... existing logic ...
-    
-    # Regex 1: Remove signal percentage and trailing stuff: ` \([0-9]+%\).*$` -> empty
     local temp_ssid=$(echo "$chosen_entry" | sed -E 's/ \([0-9]+%\).*$//')
-    
-    # Regex 2: Remove leading icons.
-    # We assume icons are non-ASCII or specific characters followed by space.
-    # But simpler: The Active one has "Icon Icon SSID", others "Icon SSID".
-    # Let's count spaces or use a loop to strip until we hit text? Risky.
-    
-    # Better approach: We constructed the string as:
-    # Active: "$icon_check $wifi_signal_icon SSID"
-    # Normal: "$wifi_signal_icon SSID"
-    
-    # Let's rely on the icons we defined variables for.
-    # We strip `icon_check` and `icon_wifi_*` specifically? No variables are local.
-    
-    # Regex: Remove all non-ASCII characters from the start? SSID might be non-ASCII.
-    # Regex: Remove any sequence of (Non-Space + Space) that appears to be an icon.
-    # Assumption: Icons are single glyphs.
-    
-    # Let's try: `s/^[^[:alnum:][:punct:]]* //` ? No.
-    
-    # Current best effort:
-    # 1. Remove `(87%) ...` from end.
-    # 2. Iterate stripping known icons if possible, or just:
-    #    Strip everything up to the first character that is NOT an icon?
-    #    Let's use the specific unicode method we used before but expanded.
-    
-    # Actually, simpler:
-    # The SSID is between the Last Space of the prefix and " (".
-    # But SSID can contain " (" !
-    
-    # Regex: Remove leading icons.
-    # We now strictly used: SignalIcon + Space + StatusIcon + Space.
-    # Signal: 󰤨 󰤥 󰤢 󰤯 (also 󰤫)
-    # Status:  (Check),  (Lock),  (Unlock)
-    # The previous regex had incorrect check icon.
-    
-    # Updated Regex to matching ANY of these + space, repeated.
     local wifi_ssid=$(echo "$temp_ssid" | sed -E 's/^(󰤨 |󰤥 |󰤢 |󰤯 |󰤫 |󰤪 | | | )+//' | xargs)
 
 	local is_secure=$(echo "$chosen_entry" | grep -q "$icon_wifi_secure" && echo "yes" || echo "no")
@@ -951,7 +913,7 @@ menu_dns() {
 	done
 }
 
-# Delete a saved connection profile
+
 forget_connection() {
 	local chosen_connection_name="$1"
 	local connection_uuid="$2"
@@ -965,7 +927,7 @@ forget_connection() {
 	return 1
 }
 
-# Rename a saved connection profile
+
 rename_connection() {
 	local connection_uuid="$1"
 	local new_name=$(echo "" | display_menu 5 "$tr_rename_connection_prompt" "") # Pass "" for prompt_icon
@@ -976,7 +938,7 @@ rename_connection() {
 	return $?
 }
 
-# Edit password for a saved connection
+
 edit_connection_password() {
     local connection_uuid="$1"
     local connection_name="$2"
@@ -1021,8 +983,7 @@ menu_connection() {
 		options+="$icon_trash  $tr_forget_message\n"
 		options+="$icon_pen  $tr_rename_connection_message\n"
         options+="$icon_password  $tr_edit_password_message\n" # NEW: Edit Password option
-        # Only show QR code option if it's a Wi-Fi connection (rudimentary check, or just show for all and handle in function)
-        # Better: check if connection type is wifi. connection_uuid is available.
+        # Only show QR code for Wi-Fi connections
         if [ "$(nmcli -g connection.type connection show "$connection_uuid")" = "802-11-wireless" ]; then
              options+="$icon_qrcode  $tr_qrcode_message\n"
         fi
@@ -1177,9 +1138,8 @@ menu_known_connections() {
 		"ethernet")
 			icon_for_type="$icon_ethernet"
 			menu_type_function="menu_connection"
-            # FIX: Broaden awk filter for ethernet connections
             profiles_list_raw=$(nmcli --colors no -t -f TYPE,UUID,NAME connection show | awk -F ':' -v icon="$icon_for_type" '$1 ~ /^(ethernet|802-3-ethernet).*/ {print $2 "\\0" icon "  " $3}')
-            prompt_to_use="$tr_manage_wired_connections" # Use descriptive text for prompt
+            prompt_to_use="$tr_manage_wired_connections"
 			;;
 		*) # All saved connections
 			icon_for_type="$icon_saved"
@@ -1187,7 +1147,7 @@ menu_known_connections() {
             profiles_list_raw=$(nmcli --colors no -t -f TYPE,UUID,NAME connection show | awk -F ':' -v icon_saved="$icon_saved" -v icon_wireless="$icon_wireless" -v icon_ethernet="$icon_ethernet" -v icon_vpn_disconnect="$icon_vpn_disconnect" '{
                 icon_local = icon_saved;
                 if ($1 == "wifi" || $1 == "802-11-wireless") icon_local = icon_wireless;
-                else if ($1 == "ethernet" || $1 == "802-3-ethernet") icon_local = icon_ethernet; # FIX: Added 802-3-ethernet
+                else if ($1 == "ethernet" || $1 == "802-3-ethernet") icon_local = icon_ethernet;
                 else if ($1 == "vpn" || $1 == "wireguard") icon_local = icon_vpn_disconnect;
                 print $2 "\\0" icon_local "  " $3 " (" $1 ")"
             }')
@@ -1235,7 +1195,7 @@ menu_connect_wired_connection() {
     fi
 
     local options=$(for i in "${profiles_list[@]}"; do echo -e "$i" | cut --delimiter $'\0' --fields 2; done)
-    options+="\n$icon_close Back" # FIX: Added newline before the Back entry
+    options+="\n$icon_close Back"
 
     # Prompt for this menu is just the search icon
     local chosen=$(echo -e "$options" | display_menu 1 "$tr_connect_wired_connection" "$icon_search")
@@ -1570,14 +1530,14 @@ vpn_menu() {
 }
 
 
-# --- Main Menu ---
+
 main_menu() {
     local options="$icon_wifi_full  Wi-Fi\n"
     options+="$icon_ethernet  Wired\n"
-    options+="$icon_vpn_disconnect  VPN\n" # Changed to icon_vpn_disconnect
-    options+="$icon_bookmark_saved  Saved Connections\n" # Changed to icon_bookmark_saved
-    options+="$icon_status_chart  Status\n" # Changed to icon_status_chart
-    options+="$icon_airplane  $tr_airplane_mode_message\n" # NEW: Airplane Mode
+    options+="$icon_vpn_disconnect  VPN\n"
+    options+="$icon_bookmark_saved  Saved Connections\n"
+    options+="$icon_status_chart  Status\n"
+    options+="$icon_airplane  $tr_airplane_mode_message\n"
     options+="$icon_close Exit"
 
     while true; do # Keep looping for the main menu
@@ -1612,5 +1572,5 @@ main_menu() {
     done # End of main menu while loop
 }
 
-# --- Initial Call to Main Menu ---
+# --- Run ---
 main_menu
