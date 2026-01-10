@@ -62,7 +62,7 @@ https://github.com/user-attachments/assets/7da1d5b8-d8a1-47f4-8809-e82efc078ab2
 </table>
 
 
-## 🪾 Menu Structure
+## 🌳 Menu Structure
 
 ```
 Main Menu
