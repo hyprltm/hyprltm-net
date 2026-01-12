@@ -1479,8 +1479,8 @@ menu_available_vpns() {
 
         local options=""
         for i in "${vpn_list[@]}"; do
-            local uuid=$(echo -e "$i" | cut -d$'\0' -f1)
-            local name=$(echo -e "$i" | cut -d$'\0' -f2)
+            local uuid=$(echo -e "$i" | awk 'BEGIN{FS="\x00"}{print$1}')
+            local name=$(echo -e "$i" | awk 'BEGIN{FS="\x00"}{print$2}')
             local state=$(nmcli --get-values GENERAL.STATE connection show uuid "$uuid")
             local state_icon="$([ "$state" = "activated" ] && echo "$icon_on" || echo "$icon_off")"
             options+="$state_icon  $name\n"
@@ -1495,8 +1495,8 @@ menu_available_vpns() {
 
         local chosen_name=$(echo "$chosen" | sed -E 's/^(|)  //')
         for i in "${vpn_list[@]}"; do
-            local uuid=$(echo -e "$i" | cut -d$'\0' -f1)
-            local name=$(echo -e "$i" | cut -d$'\0' -f2)
+            local uuid=$(echo -e "$i" | awk 'BEGIN{FS="\x00"}{print$1}')
+            local name=$(echo -e "$i" | awk 'BEGIN{FS="\x00"}{print$2}')
             if [ "$name" = "$chosen_name" ]; then
                 local state=$(nmcli --get-values GENERAL.STATE connection show uuid "$uuid")
                 toggle_vpn_connection "$uuid" "$name" "$state"
