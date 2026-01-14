@@ -57,6 +57,18 @@ https://github.com/user-attachments/assets/7da1d5b8-d8a1-47f4-8809-e82efc078ab2
 - **Distro Detection**: Auto-installs dependencies (Arch, Fedora, openSUSE, NixOS)
 - **Desktop Entry**: Creates launcher menu entry & icon
 
+### 🛡️ Robust Feedback (v0.3.0)
+- **Universal Semantic Styling**: Red (Error), Orange (Warning), Green (Success).
+- **Blocking Dialogs**: Critical errors (e.g. Wrong Password) require user action.
+- **Fallback System**: Works even without a notification daemon.
+
+#### Feedback Gallery
+| Error (Red) | Warning (Orange) | Success (Green) | Info (Blue) |
+| :---: | :---: | :---: | :---: |
+| *Connection Failed* | *Missing Dependencies* | *Connected* | *Status Details* |
+| ![Error](assets/error_dialog.png) | ![Warning](assets/warning_dialog.png) | ![Success](assets/success_dialog.png) | ![Info](assets/info_dialog.png) |
+
+
 </td>
 </tr>
 </table>
@@ -130,6 +142,7 @@ Main Menu
 | `rofi-wayland` | The graphical menu engine |
 | `qrencode` | Generating Wi-Fi QR codes |
 | `Nerd Fonts` | Required for icons (e.g., *JetBrains Mono Nerd Font*) |
+| `libnotify` | **(Optional)** For desktop notifications via `notify-send` |
 
 ![Gradient](assets/gradient.svg)
 

@@ -2,7 +2,34 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.3.0] - 2026-01-13
+
+### Added
+-   **Robust Error Handling**: Connection failures (Wi-Fi, VPN, Wired) now trigger blocking Rofi dialogs with "Try Again" / "Edit Password" options, ensuring issues are never silent.
+-   **Universal Semantic Styling**: All Rofi dialogs now follow a strict color code:
+    -   🟥 **Error**: Red border/text (Connection failed).
+    -   🟧 **Warning**: Orange border/text.
+    -   🟦 **Info**: Blue/Cyan border/text.
+    -   🟩 **Success**: Green border/text.
+-   **Fallback Feedback**: If no system notification daemon (e.g., `dunst`) is running, the script automatically falls back to showing a Green Rofi Success dialog.
+-   **Explicit Notification Logic**: Refactored internal notification system to use explicit properties (`type="error"`) instead of fragile text parsing.
+
+### Changed
+-   **Info Dialogs**: Refactored informational messages (e.g., Airplane Mode status) to use a dedicated visual style (Blue Box) instead of generic lists.
+-   **Airplane Mode**: Now uses specific icons for Enabled (󱡻) and Disabled (󱢂) states.
+-   **Error Messages**: Added specific detection for "Network not found" (Router down/out of range) to distinguish it from generic "Refused" errors.
+-   **Dialog Layout**: Refined Error/Warning dialogs to remove unused input bars and prompts for a cleaner look.
+-   **UI Consistency**: Ensured 1px borders and consistent iconography across all message types.
+-   **Icons**: Fixed missing icons in Error dialogs and added distinct icons for "Network not found" (󰐷).
+
+### Fixed
+-   **Logic**: Fixed "Edit Password" incorrectly reporting "Successfully Connected" without attempting connection. Now correctly says "Password Updated".
+-   **Silent Failures**: Fixed bug where cancelling a connection or failing a VPN import would fail silently or show a confusing Green success message.
+-   **False Positives**: Resolved issue where "Failed to connect" messages were styled as Success (Green).
+---
+
 ## [v0.2.0] - 2026-01-10
+
 
 ### Added
 -   **In-Rofi QR Code Display**: Wi-Fi QR codes now appear directly inside the Rofi window as a large icon, eliminating the need for external image viewers.
