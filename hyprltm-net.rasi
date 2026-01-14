@@ -5,7 +5,7 @@
 // /_/ /_/\__, / .___/_/  /_____//_/ /_/  /_/      /_/ |_/\___/\__/  
 //       /____/_/                                                   
 
-// Copyright © 2025 Djalel Oukid (sniper1720)
+// Copyright © 2025-2026 Djalel Oukid (sniper1720)
 
 @theme "~/.config/rofi/themes/ltmnight.rasi"
 
@@ -27,7 +27,7 @@ mainbox {
     spacing: 0em;
     padding: 10px;
     orientation: vertical;
-    children: [ inputbar, listview ];
+    children: [ inputbar, message, listview ];
     background-color: transparent;
 }
 
@@ -130,3 +130,22 @@ scrollbar {
 case-indicator {
     enabled: false;
 }
+
+message {
+    enabled: true;
+    margin: 10px 0px 10px 0px;
+    padding: 10px;
+    border: 1px;
+    border-radius: 8px;
+    border-color: @message-border;
+    background-color: @message-background;
+    children: [ textbox ];
+}
+
+    textbox {
+        background-color: @message-background;
+        text-color: @message-text;
+        vertical-align: 0.5;
+        horizontal-align: 0.0;
+        highlight: none;
+    }

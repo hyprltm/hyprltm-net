@@ -7,9 +7,11 @@
 #      /____/_/                                                   
 #
 
-# Copyright © 2025 Djalel Oukid (sniper1720)
+# Copyright © 2025-2026 Djalel Oukid (sniper1720)
 
 
+# Version: 0.3.0
+# Description: A Rofi-based Network Manager for Hyprland (and others).
 # --- Dependencies Check ---
 if ! command -v rofi &> /dev/null; then
     echo "Error: rofi is not installed. Please install it to use this script." >&2
@@ -43,6 +45,8 @@ icon_vpn="${icon_vpn:-"󰖃"}"
 icon_wireguard="${icon_wireguard:-"󰖆"}"
 icon_hotspot="${icon_hotspot:-"󱄙"}"
 icon_airplane="${icon_airplane:-"󰀝"}"
+icon_airplane_on="${icon_airplane_on:-"󱡻"}"
+icon_airplane_off="${icon_airplane_off:-"󱢂"}"
 
 # --- Icons: Wi-Fi Signal ---
 icon_wifi_full="${icon_wifi_full:-"󰤨"}"
@@ -98,8 +102,9 @@ icon_wired_status="${icon_wired_status:-"󰈁"}"
 # --- Translatable / Customizable Messages ---
 tr_checking_wifi_status='Checking Wi-Fi status... Please be patient.'
 tr_scanning_networks='Scanning networks... Please be patient.'
-tr_connecting_to='Connecting... Please be patient.'
-tr_disconnecting_from='Disconnecting... Please be patient.'
+tr_connecting_to='Connecting to'
+tr_disconnecting_from='Disconnecting from'
+tr_please_wait='... Please be patient.'
 tr_submenu_message='More options'
 tr_disable_message='Disable Wi-Fi'
 tr_enable_message='Enable Wi-Fi'
@@ -219,6 +224,10 @@ tr_hide_password_message='Hide Password'
 tr_confirm_password_message='Confirm Password'
 tr_edit_password_message='Edit Password'
 tr_edit_password_prompt='Enter new password:'
+tr_password_updated_summary='Password Updated'
+tr_password_updated_body='Password updated successfully for'
+tr_password_update_failed_summary='Update Failed'
+tr_password_update_failed_body='Failed to update password for'
 
 
 # --- Global Variables ---
@@ -294,6 +303,89 @@ show_loading_notification() {
     LOADING_ROFI_PID=$!
 }
 
+# Cleans and formats error messages with icons and friendly text
+clean_error_message() {
+    local raw_msg="$1"
+    local clean_msg=""
+    local icon="❌" # Default error icon
+
+    # Remove the "Hint:" section and everything after it
+    raw_msg="${raw_msg%%Hint:*}"
+    
+    # Remove leading "Error: " prefix if present
+    raw_msg="${raw_msg#Error: }"
+    
+    # Trim whitespace
+    raw_msg="$(echo "$raw_msg" | xargs)"
+
+    # Match specific known errors for better UX
+    case "$raw_msg" in
+        *"Secrets were required"*)
+            icon=""
+            clean_msg="Incorrect password or missing credentials."
+            ;;
+        *"No network with SSID"*|*"network could not be found"*)
+            icon="󰐷"
+            clean_msg="Network not found. It may be out of range."
+            ;;
+        *"activation failed"*)
+             icon="⚠️"
+             clean_msg="Connection failed. The network refused the connection."
+             ;;
+        *"Timeout"*)
+             icon="⏳"
+             clean_msg="Connection timed out. The network is too slow or unreachable."
+             ;;
+        *"cancelled"*)
+             icon="🚫"
+             clean_msg="Operation cancelled."
+             ;;
+        *)
+            # Fallback: Just use the cleaned raw message
+            clean_msg="$raw_msg"
+            ;;
+    esac
+
+    echo "$icon $clean_msg"
+}
+
+# Show a blocking error dialog
+show_error_dialog() {
+    local raw_error="$1"
+    local clean_msg=$(clean_error_message "$raw_error")
+    # Options: Try Again, Edit Password, Cancel
+    local options="$icon_refresh Try Again\n$icon_password Edit Password\n$icon_close Cancel"
+    
+    # We use a custom prompt for the error
+    echo -e "$options" | rofi -dmenu -i -p "⚠️ Connection Failed" \
+        -theme "$ROFI_NETWORK_MANAGER_THEME" \
+        -mesg "$clean_msg" \
+        -theme-str 'listview { lines: 3; }' \
+        -theme-str 'mainbox { children: [inputbar, message, listview]; }' \
+        -theme-str 'message { border-color: @error-message; }' \
+        -theme-str 'textbox { text-color: @error-message; }'
+}
+
+# Show a blocking warning dialog (e.g., missing daemon)
+show_warning_dialog() {
+    local title="$1"
+    local message="$2"
+    local options="$icon_check Continue"
+    
+    # Combined message: Single line/paragraph as requested
+    local full_msg="$title: $message"
+
+    echo -e "$options" | rofi -dmenu -i \
+        -name "warning_dialog" \
+        -theme "$ROFI_NETWORK_MANAGER_THEME" \
+        -mesg "$full_msg" \
+        -theme-str 'listview { lines: 1; }' \
+        -theme-str 'mainbox { children: [message, listview]; }' \
+        -theme-str 'inputbar { enabled: false; }' \
+        -theme-str 'message { border-color: @warning-message; }' \
+        -theme-str 'textbox { text-color: @warning-message; }'
+}
+
 # Kills the loading notification Rofi window if it's running.
 kill_loading_notification() {
     if [ -n "$LOADING_ROFI_PID" ] && ps -p "$LOADING_ROFI_PID" > /dev/null; then
@@ -307,13 +399,23 @@ kill_loading_notification() {
 send_notification() {
     local summary="$1"
     local body="$2"
+    local type="${3:-normal}" # Default to "normal" (success/info)
     
-    # Try system notification first (non-blocking)
-    if command -v notify-send &> /dev/null; then
-        notify-send -a "HyprLTM-Net" -i "network-wireless" "$summary" "$body"
+    # Try system notification ONLY if daemon is running and detected
+    if is_notification_service_running && command -v notify-send &> /dev/null; then
+        local urgency="normal"
+        if [ "$type" = "error" ]; then
+             urgency="critical"
+        fi
+        notify-send -u "$urgency" -a "HyprLTM-Net" -i "network-wireless" "$summary" "$body"
     else
-        # Fallback to Rofi message
-        show_message "$body" "$summary"
+        # Fallback to Rofi dialog if daemon is missing
+        if [ "$type" = "error" ]; then
+             show_error_message "❌ $body"
+        else
+             # Green for success (default)
+             show_success_message "$icon_check $body"
+        fi
     fi
 }
 
@@ -336,14 +438,70 @@ show_message() {
 # Function to display an informational message with a "Back" button
 # Now accepts an optional custom_prompt
 display_info_message() {
-    local msg="$1"
+    local icon="${3:-$icon_info}" # Default to info icon if not provided
+    local msg="$icon $1"
     local custom_prompt="${2:-Info}" # Default to "Info" if no custom prompt is provided
-    local options="$msg\n$icon_close Back"
-    # Use form 4 to disable the input bar for these messages
-    local chosen=$(echo -e "$options" | display_menu 4 "$custom_prompt" "")
-    if [[ "$chosen" =~ ^"$icon_close Back" ]]; then
-        return
+    local options="$icon_close Back"
+    
+    # Use explicit rofi call to handle theme string correctly without shell splitting issues
+    echo -e "$options" | rofi -dmenu -i \
+        -p "$custom_prompt" \
+        -theme "$ROFI_NETWORK_MANAGER_THEME" \
+        -mesg "$msg" \
+        -theme-str 'listview { lines: 1; }' \
+        -theme-str 'mainbox { children: [message, listview]; }' \
+        -theme-str 'inputbar { enabled: false; }' \
+        -theme-str 'message { border-color: @info-message; }' \
+        -theme-str 'textbox { text-color: @info-message; }' 
+    
+    # We don't really process the output here as it's just info, but we can return
+    return 0
+} 
+
+
+
+# Checks if a notification service (dunst, mako, swaync) is running on D-Bus.
+# Returns 0 (true) if running, 1 (false) otherwise.
+is_notification_service_running() {
+    if busctl --user list | grep -qE "org.freedesktop.Notifications"; then
+        return 0
+    else
+        return 1
     fi
+}
+
+# Show a blocking success message (Green)
+show_success_message() {
+    local message="$1"
+    local options="$icon_check OK"
+    
+    echo -e "$options" | rofi -dmenu -i \
+        -name "success_dialog" \
+        -p "Success" \
+        -theme "$ROFI_NETWORK_MANAGER_THEME" \
+        -mesg "$message" \
+        -theme-str 'listview { lines: 1; }' \
+        -theme-str 'mainbox { children: [message, listview]; }' \
+        -theme-str 'inputbar { enabled: false; }' \
+        -theme-str 'message { border-color: @success-message; }' \
+        -theme-str 'textbox { text-color: @success-message; }'
+}
+
+# Show a blocking error message (Red) - similar to success but for errors preventing success
+show_error_message() {
+    local message="$1"
+    local options="$icon_close OK"
+    
+    echo -e "$options" | rofi -dmenu -i \
+        -name "error_dialog" \
+        -p "Error" \
+        -theme "$ROFI_NETWORK_MANAGER_THEME" \
+        -mesg "$message" \
+        -theme-str 'listview { lines: 1; }' \
+        -theme-str 'mainbox { children: [message, listview]; }' \
+        -theme-str 'inputbar { enabled: false; }' \
+        -theme-str 'message { border-color: @error-message; }' \
+        -theme-str 'textbox { text-color: @error-message; }'
 }
 
 # Handles password input with a dynamic, interactive menu for showing, hiding, and editing.
@@ -459,7 +617,8 @@ show_connection_details() {
     details+="$icon_devices $tr_mac_addr: $hwaddr\n"
     details+="$icon_chip $tr_device: $device"
 
-    display_info_message "$details" "$tr_connection_details_message"
+    # Was: display_info_message "$details" "$tr_connection_details_message"
+    echo -e "$details\n$icon_close Back" | display_menu 1 "$tr_connection_details_message" ""
 }
 
 # --- Dedicated Wi-Fi Scan Function ---
@@ -667,15 +826,32 @@ connect_hidden() {
 		return
 	fi
 
-	show_loading_notification "$tr_connecting_to"
-	if nmcli --wait 15 device wifi connect "$wifi_name" hidden yes password "$wifi_password"; then
-        kill_loading_notification
-		send_notification "$tr_notice_connected_summary" "$tr_notice_connected_body '$wifi_name'"
-        exit 0
-    else
-        kill_loading_notification
-		send_notification "$tr_notice_error_summary" "$tr_notice_error_body '$wifi_name'"
-    fi
+    while true; do
+        show_loading_notification "$tr_connecting_to '$wifi_name'$tr_please_wait"
+        output=$(nmcli --wait 15 device wifi connect "$wifi_name" hidden yes password "$wifi_password" 2>&1)
+        
+        if [ $? -eq 0 ]; then
+            kill_loading_notification
+            send_notification "$tr_notice_connected_summary" "$tr_notice_connected_body '$wifi_name'"
+            exit 0
+        else
+            kill_loading_notification
+            # Show blocking error dialog with options
+            local choice=$(show_error_dialog "$output")
+            case "$choice" in
+                *"Try Again") continue ;;
+                *"Edit Password")
+                     wifi_password=$(ask_password)
+                     if [ -z "$wifi_password" ]; then break; fi
+                     continue
+                     ;;
+                *) 
+                     send_notification "$tr_notice_error_summary" "$tr_notice_error_body '$wifi_name'"
+                     break 
+                     ;;
+            esac
+        fi
+    done
 }
 
 # Connect to a visible Wi-Fi network
@@ -746,24 +922,48 @@ connect_wifi() {
 			show_message "Connection cancelled. No password provided."
 			return
 		fi
+    fi
         
+    while true; do
+        show_loading_notification "$tr_connecting_to '$wifi_ssid'$tr_please_wait"
         
-        show_loading_notification "$tr_connecting_to"
-		nmcli --wait 15 device wifi connect "$wifi_ssid" ifname "$interface_to_use" password "$wifi_password"
-        connection_result=$?
-	else
-        show_loading_notification "$tr_connecting_to"
-		nmcli --wait 15 device wifi connect "$wifi_ssid" ifname "$interface_to_use"
-        connection_result=$?
-	fi
-    kill_loading_notification
+        local output
+        if [ "$is_secure" = "yes" ]; then
+            output=$(nmcli --wait 15 device wifi connect "$wifi_ssid" ifname "$interface_to_use" password "$wifi_password" 2>&1)
+            connection_result=$?
+        else
+            output=$(nmcli --wait 15 device wifi connect "$wifi_ssid" ifname "$interface_to_use" 2>&1)
+            connection_result=$?
+        fi
+        kill_loading_notification
 
-	if [ $connection_result -eq 0 ]; then
-		send_notification "$tr_notice_connected_summary" "$tr_notice_connected_body '$wifi_ssid'"
-        exit 0
-	else
-		send_notification "$tr_notice_error_summary" "$tr_notice_error_body '$wifi_ssid'"
-	fi
+        if [ $connection_result -eq 0 ]; then
+            send_notification "$tr_notice_connected_summary" "$tr_notice_connected_body '$wifi_ssid'"
+            exit 0
+        else
+            # Show blocking error dialog with options
+            local choice=$(show_error_dialog "$output")
+            case "$choice" in
+                *"Try Again") continue ;;
+                *"Edit Password")
+                    # Only makes sense if secure
+                    if [ "$is_secure" = "yes" ]; then
+                        wifi_password=$(ask_password)
+                        if [ -z "$wifi_password" ]; then break; fi
+                        continue
+                    else
+                        # If not secure, maybe they want to add a password? Unlikely for open networks failing.
+                        # Treat as Try Again
+                        continue
+                    fi
+                    ;;
+                *) 
+                    send_notification "$tr_notice_error_summary" "$tr_notice_error_body '$wifi_ssid'"
+                    break 
+                    ;;
+            esac
+        fi
+    done
 }
 
 # --- IP Configuration Menus ---
@@ -950,10 +1150,10 @@ edit_connection_password() {
     
     # Update the connection
     if nmcli connection modify uuid "$connection_uuid" wifi-sec.psk "$pass"; then
-        send_notification "$tr_password_updated" "$tr_notice_connected_body '$connection_name'"
+        send_notification "$tr_password_updated_summary" "$tr_password_updated_body '$connection_name'"
         return 0
     else
-        send_notification "$tr_password_update_failed" "$tr_notice_error_body '$connection_name'"
+        send_notification "$tr_password_update_failed_summary" "$tr_password_update_failed_body '$connection_name'" "error"
         return 1
     fi
 }
@@ -1004,30 +1204,31 @@ menu_connection() {
 				fi
 				;;
             "$icon_connect  $tr_connect_now_message")
-                show_loading_notification "$tr_connecting_to"
-                if nmcli connection up uuid "$connection_uuid"; then
-                    kill_loading_notification
-                    send_notification "$tr_notice_connected_summary" "$tr_notice_connected_body '$chosen_connection_name'"
-                    exit 0
-                else
-                    kill_loading_notification
-                    # Smart Recovery: Prompt to update password
-                    # Check if user wants to retry with new password
-                    local retry_choice=$(echo -e "$icon_check Yes\n$icon_close No" | display_menu 2 "$tr_connection_failed_retry" "")
-                    if [[ "$retry_choice" =~ ^"$icon_check" ]]; then
-                         if edit_connection_password "$connection_uuid" "$chosen_connection_name"; then
-                              # Retry connection
-                              show_loading_notification "$tr_connecting_to"
-                              if nmcli connection up uuid "$connection_uuid"; then
-                                   kill_loading_notification
-                                   send_notification "$tr_notice_connected_summary" "$tr_notice_connected_body '$chosen_connection_name'"
-                                   exit 0
-                              fi
-                              kill_loading_notification
-                         fi
+                while true; do
+                    show_loading_notification "$tr_connecting_to '$chosen_connection_name'$tr_please_wait"
+                    output=$(nmcli connection up uuid "$connection_uuid" 2>&1)
+                    if [ $? -eq 0 ]; then
+                        kill_loading_notification
+                        send_notification "$tr_notice_connected_summary" "$tr_notice_connected_body '$chosen_connection_name'"
+                        exit 0
+                    else
+                        kill_loading_notification
+                        # Show blocking error dialog with options
+                        local choice=$(show_error_dialog "$output")
+                        case "$choice" in
+                            *"Try Again") continue ;;
+                            *"Edit Password") 
+                                edit_connection_password "$connection_uuid" "$chosen_connection_name"
+                                continue 
+                                ;;
+                            *) 
+                                # Cancel or Escape
+                                send_notification "$tr_notice_error_summary" "$tr_notice_error_body '$chosen_connection_name'" "error"
+                                break
+                                ;;
+                        esac
                     fi
-                    send_notification "$tr_notice_error_summary" "$tr_notice_error_body '$chosen_connection_name'"
-                fi
+                done
                 ;;
             "$icon_wifi_disconnected  $tr_disconnect_message")
                  # Disconnect logic
@@ -1091,7 +1292,14 @@ menu_wireguard_connection(){
 				if [ "$state" = "$icon_on" ]; then
 					nmcli connection down uuid "$connection_uuid"
 				else
-					nmcli connection up uuid "$connection_uuid"
+					local output
+                    if output=$(nmcli connection up uuid "$connection_uuid" 2>&1); then
+                        # Success (optional: show notification or just refresh)
+                        :
+                    else
+                        # Failure
+                        show_error_dialog "$output"
+                    fi
 				fi
 				;;
 			*"$tr_autoconnect_message"*)
@@ -1223,7 +1431,7 @@ menu_connect_wired_connection() {
             exit 0
         else
             kill_loading_notification
-            send_notification "$tr_notice_error_summary" "$tr_notice_error_body '$conn_name_to_connect'"
+            send_notification "$tr_notice_error_summary" "$tr_notice_error_body '$conn_name_to_connect'" "error"
         fi
     else
         show_message "Could not find connection profile for $conn_name_to_connect." "$tr_connect_wired_connection" # Pass custom prompt
@@ -1300,7 +1508,8 @@ status_menu() {
             ;;
         *"All Device Status")
             local device_status=$(nmcli device status)
-            display_info_message "$device_status" "$tr_status_menu_prompt" # Pass custom prompt
+            # Was: display_info_message "$device_status" "$tr_status_menu_prompt" # Pass custom prompt
+            echo -e "$device_status\n$icon_close Back" | display_menu 1 "$tr_status_menu_prompt" ""
             ;;
     esac
 }
@@ -1314,12 +1523,12 @@ toggle_airplane_mode() {
         # Disable all radios
         nmcli radio wifi off
         nmcli radio wwan off 2>/dev/null
-        show_message "$tr_airplane_on" "$tr_airplane_mode_message"
+        display_info_message "$tr_airplane_on" "$tr_airplane_mode_message" "$icon_airplane_on"
     else
         # Enable all radios
         nmcli radio wifi on
         nmcli radio wwan on 2>/dev/null
-        show_message "$tr_airplane_off" "$tr_airplane_mode_message"
+        display_info_message "$tr_airplane_off" "$tr_airplane_mode_message" "$icon_airplane_off"
     fi
 }
 
@@ -1419,7 +1628,7 @@ import_vpn() {
     fi
 
     if [ ! -f "$vpn_file_path" ]; then
-        send_notification "$tr_notice_import_error_summary" "$tr_notice_file_not_found_body"
+        send_notification "$tr_notice_import_error_summary" "$tr_notice_file_not_found_body" "error"
         return
     fi
 
@@ -1428,7 +1637,7 @@ import_vpn() {
         *.conf) vpn_type="wireguard" ;;
         *.ovpn) vpn_type="openvpn" ;;
         *)
-            send_notification "$tr_notice_import_error_summary" "$tr_notice_unknown_vpn_type_body"
+            send_notification "$tr_notice_import_error_summary" "$tr_notice_unknown_vpn_type_body" "error"
             return
             ;;
     esac
@@ -1436,7 +1645,7 @@ import_vpn() {
     if nmcli connection import type "$vpn_type" file "$vpn_file_path"; then
         send_notification "$tr_notice_import_success_summary" "$tr_notice_import_success_body"
     else
-        send_notification "$tr_notice_import_error_summary" "$tr_notice_import_error_body"
+        send_notification "$tr_notice_import_error_summary" "$tr_notice_import_error_body" "error"
     fi
 }
 
@@ -1446,25 +1655,40 @@ toggle_vpn_connection() {
     local state="$3"
 
     if [ "$state" = "activated" ]; then
-        show_loading_notification "$tr_disconnecting_from '$name'..."
+        show_loading_notification "$tr_disconnecting_from '$name'$tr_please_wait"
         if nmcli connection down uuid "$uuid"; then
             kill_loading_notification
             send_notification "$tr_notice_disconnected_summary" "$tr_notice_disconnected_body '$name'"
             exit 0
         else
             kill_loading_notification
-            send_notification "$tr_notice_error_summary" "$tr_notice_error_disconnect_body '$name'"
+            send_notification "$tr_notice_error_summary" "$tr_notice_error_disconnect_body '$name'" "error"
         fi
     else
-        show_loading_notification "$tr_connecting_to"
-        if nmcli connection up uuid "$uuid"; then
-            kill_loading_notification
-            send_notification "$tr_notice_connected_summary" "$tr_notice_connected_body '$name'"
-            exit 0
-        else
-            kill_loading_notification
-            send_notification "$tr_notice_error_summary" "$tr_notice_error_body '$name'"
-        fi
+        while true; do
+            show_loading_notification "$tr_connecting_to '$name'$tr_please_wait"
+            output=$(nmcli connection up uuid "$uuid" 2>&1)
+            if [ $? -eq 0 ]; then
+                kill_loading_notification
+                send_notification "$tr_notice_connected_summary" "$tr_notice_connected_body '$name'"
+                exit 0
+            else
+                kill_loading_notification
+                # Show blocking error dialog with options
+                local choice=$(show_error_dialog "$output")
+                case "$choice" in
+                    *"Try Again") continue ;;
+                    *"Edit Password") 
+                        edit_connection_password "$uuid" "$name"
+                        continue 
+                        ;;
+                    *) 
+                        send_notification "$tr_notice_error_summary" "$tr_notice_error_body '$name'" "error"
+                        break 
+                        ;;
+                esac
+            fi
+        done
     fi
 }
 
@@ -1532,6 +1756,12 @@ vpn_menu() {
 
 
 main_menu() {
+    # Check for notification daemon
+    # Check for notification daemon
+    if ! is_notification_service_running; then
+        show_warning_dialog "⚠️ No Notification Service Found" "You can continue, but you won't receive desktop notifications."
+    fi
+
     local options="$icon_wifi_full  Wi-Fi\n"
     options+="$icon_ethernet  Wired\n"
     options+="$icon_vpn_disconnect  VPN\n"
