@@ -43,4 +43,13 @@
 
     prompt: @ltmnight11;
     placeholder: @ltmnight11;
+
+    message-background: transparent;
+    message-border: @ltmnight8;
+    message-text: @ltmnight8;
+
+    error-message: @ltmnight4;
+    warning-message: @ltmnight5;
+    success-message: @ltmnight7;
+    info-message: @ltmnight8;
 }
