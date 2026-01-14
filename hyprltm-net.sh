@@ -846,7 +846,7 @@ connect_hidden() {
                      continue
                      ;;
                 *) 
-                     send_notification "$tr_notice_error_summary" "$tr_notice_error_body '$wifi_name'"
+                     send_notification "$tr_notice_error_summary" "$tr_notice_error_body '$wifi_name'" "error"
                      break 
                      ;;
             esac
@@ -925,16 +925,62 @@ connect_wifi() {
     fi
         
     while true; do
+        # Robust Profile Lookup:
+        # Search for any profile matching our SSID (by property) OR by precise Name.
+        # This catches "Saved" profiles, "Broken" profiles, and "Duplicate" profiles.
+        local existing_uuid=""
+        
+        # We process line by line to handle spaces correctly. 
+        # Field order: UUID:NAME:SSID
+        nmcli -t -f UUID,NAME,802-11-wireless.ssid connection show | while IFS=: read -r uuid name ssid; do
+            # Check SSID property matches (Primary check)
+            if [ "$ssid" = "$wifi_ssid" ]; then
+                echo "$uuid" > /tmp/hyprltm_uuid_found
+                break
+            fi
+            # Check Name matches (Secondary check, handles broken profiles where SSID prop is empty)
+            if [ "$name" = "$wifi_ssid" ]; then
+                echo "$uuid" > /tmp/hyprltm_uuid_found
+                break
+            fi
+        done
+        
+        if [ -f /tmp/hyprltm_uuid_found ]; then
+            existing_uuid=$(cat /tmp/hyprltm_uuid_found)
+            rm /tmp/hyprltm_uuid_found
+        fi
+
         show_loading_notification "$tr_connecting_to '$wifi_ssid'$tr_please_wait"
         
         local output
-        if [ "$is_secure" = "yes" ]; then
-            output=$(nmcli --wait 15 device wifi connect "$wifi_ssid" ifname "$interface_to_use" password "$wifi_password" 2>&1)
+        local connection_result
+
+        if [ -n "$existing_uuid" ]; then
+            # Path A: Profile Exists (Valid or Broken) -> Use "Connection Up" (Robust)
+            # This mirrors the "Saved Connection > Connect Now" behavior which works.
+            output=$(nmcli connection up uuid "$existing_uuid" 2>&1)
             connection_result=$?
         else
-            output=$(nmcli --wait 15 device wifi connect "$wifi_ssid" ifname "$interface_to_use" 2>&1)
-            connection_result=$?
+            # Path B: No Profile Found -> Create Valid One Manually
+            if [ "$is_secure" = "yes" ]; then
+                # Clean slate (just in case)
+                nmcli connection delete id "$wifi_ssid" &>/dev/null
+                sleep 0.5
+                
+                # Add valid profile (WPA-PSK)
+                nmcli connection add type wifi con-name "$wifi_ssid" ssid "$wifi_ssid" ifname "$interface_to_use" wifi-sec.key-mgmt wpa-psk wifi-sec.psk "$wifi_password" &>/dev/null
+                
+                # Connect Up
+                output=$(nmcli connection up id "$wifi_ssid" 2>&1)
+                connection_result=$?
+            else
+                # Clean slate open
+                nmcli connection delete id "$wifi_ssid" &>/dev/null
+                output=$(nmcli --wait 15 device wifi connect "$wifi_ssid" ifname "$interface_to_use" 2>&1)
+                connection_result=$?
+            fi
         fi
+        
         kill_loading_notification
 
         if [ $connection_result -eq 0 ]; then
@@ -946,24 +992,28 @@ connect_wifi() {
             case "$choice" in
                 *"Try Again") continue ;;
                 *"Edit Password")
-                    # Only makes sense if secure
                     if [ "$is_secure" = "yes" ]; then
-                        wifi_password=$(ask_password)
-                        if [ -z "$wifi_password" ]; then break; fi
+                        if [ -n "$existing_uuid" ]; then
+                             # Use robust function to edit/fix profile
+                             edit_connection_password "$existing_uuid" "$wifi_ssid"
+                        else
+                             # Fallback: Just ask password (next loop will create profile via Path B)
+                             wifi_password=$(ask_password)
+                             if [ -z "$wifi_password" ]; then break; fi
+                        fi
                         continue
                     else
-                        # If not secure, maybe they want to add a password? Unlikely for open networks failing.
-                        # Treat as Try Again
                         continue
                     fi
                     ;;
                 *) 
-                    send_notification "$tr_notice_error_summary" "$tr_notice_error_body '$wifi_ssid'"
+                    send_notification "$tr_notice_error_summary" "$tr_notice_error_body '$wifi_ssid'" "error"
                     break 
                     ;;
             esac
         fi
     done
+
 }
 
 # --- IP Configuration Menus ---
