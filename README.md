@@ -50,27 +50,27 @@ https://github.com/user-attachments/assets/7da1d5b8-d8a1-47f4-8809-e82efc078ab2
 
 </td>
 </tr>
-<tr>
-<td colspan="2">
+</table>
 
 ### 📦 Smart Installation
 - **Distro Detection**: Auto-installs dependencies (Arch, Fedora, openSUSE, NixOS)
 - **Desktop Entry**: Creates launcher menu entry & icon
 
-### 🛡️ Robust Feedback (v0.3.0)
+### 🛡️ Robust Feedback
 - **Universal Semantic Styling**: Red (Error), Orange (Warning), Green (Success).
 - **Blocking Dialogs**: Critical errors (e.g. Wrong Password) require user action.
-- **Fallback System**: Works even without a notification daemon.
+- **Fallback System**: Works even without a notification service.
 
 #### Feedback Gallery
-| Error (Red) | Warning (Orange) | Success (Green) | Info (Blue) |
-| :---: | :---: | :---: | :---: |
-| *Connection Failed* | *Missing Dependencies* | *Connected* | *Status Details* |
-| ![Error](assets/error_dialog.png) | ![Warning](assets/warning_dialog.png) | ![Success](assets/success_dialog.png) | ![Info](assets/info_dialog.png) |
-
-
-</td>
-</tr>
+<table width="100%">
+  <tr>
+    <td align="center" width="50%"><strong>Error (Red)</strong><br><img src="assets/error_dialog.png" width="100%"></td>
+    <td align="center" width="50%"><strong>Warning (Orange)</strong><br><img src="assets/warning_dialog.png" width="100%"></td>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><strong>Success (Green)</strong><br><img src="assets/success_dialog.png" width="100%"></td>
+    <td align="center" width="50%"><strong>Info (Blue)</strong><br><img src="assets/info_dialog.png" width="100%"></td>
+  </tr>
 </table>
 
 
