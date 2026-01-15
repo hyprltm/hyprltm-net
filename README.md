@@ -57,19 +57,46 @@ https://github.com/user-attachments/assets/7da1d5b8-d8a1-47f4-8809-e82efc078ab2
 - **Desktop Entry**: Creates launcher menu entry & icon
 
 ### 1. Robust feedback & Fallback Notification System
-`hyprltm-net` now includes a complete visual feedback system. Every action (Connecting, Success, Failure) provides clear, styled notifications. Crucially, it includes a **Fallback Notification System**: if no notification daemon (like `dunst` or `swaync`) is running, the script automatically falls back to generating beautiful Rofi dialogs to ensure you never miss an error message.
+`hyprltm-net` now includes a complete visual feedback system. Every action (Connecting, Success, Failure) provides clear, styled notifications. Crucially, it includes a **Fallback Notification System**: if no notification service (like `dunst` or `swaync`) is running, the script automatically falls back to generating beautiful Rofi dialogs to ensure you never miss an error message.
 
 #### Feedback Gallery
-<table width="100%">
-  <tr>
-    <td align="center" width="50%"><strong>Error (Red)</strong><br><img src="assets/error_dialog.png" width="100%"></td>
-    <td align="center" width="50%"><strong>Warning (Orange)</strong><br><img src="assets/warning_dialog.png" width="100%"></td>
-  </tr>
-  <tr>
-    <td align="center" width="50%"><strong>Success (Green)</strong><br><img src="assets/success_dialog.png" width="100%"></td>
-    <td align="center" width="50%"><strong>Info (Blue)</strong><br><img src="assets/info_dialog.png" width="100%"></td>
-  </tr>
-</table>
+<div align="center">
+  <table width="80%">
+    <tr>
+      <td align="center">
+        <img src="assets/error_dialog.png" width="100%"><br>
+        <sub><b>Error (Red)</b>: Critical failures (like a wrong password or failed connection) trigger a blocking dialog. This ensures errors are never ignored silently.</sub>
+      </td>
+    </tr>
+  </table>
+  <br>
+  <table width="80%">
+    <tr>
+      <td align="center">
+        <img src="assets/warning_dialog.png" width="100%"><br>
+        <sub><b>Warning (Orange)</b>: Alerts the user to important states, such as "No Notification Service found," suggesting a fallback to Rofi dialogs.</sub>
+      </td>
+    </tr>
+  </table>
+  <br>
+  <table width="80%">
+    <tr>
+      <td align="center">
+        <img src="assets/success_dialog.png" width="100%"><br>
+        <sub><b>Success (Green)</b>: Immediate visual confirmation when a connection is successfully established.</sub>
+      </td>
+    </tr>
+  </table>
+  <br>
+  <table width="80%">
+    <tr>
+      <td align="center">
+        <img src="assets/info_dialog.png" width="100%"><br>
+        <sub><b>Info (Blue)</b>: Contextual information, such as confirming that "Airplane Mode" has been enabled.</sub>
+      </td>
+    </tr>
+  </table>
+</div>
 
 
 ## 🌳 Menu Structure
