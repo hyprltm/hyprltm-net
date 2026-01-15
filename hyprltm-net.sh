@@ -1100,7 +1100,15 @@ menu_ip_config() {
 				;;
 			*"$tr_autoip_message"*)
 				if [ "$autoip_state" = "$icon_on" ]; then
-					nmcli connection modify uuid "$connection_uuid" ipv${ipv}.method manual
+					# FIX: When disabling Auto IP, we MUST provide an address immediately,
+					# otherwise 'nmcli' rejects setting method to 'manual'.
+					local new_addrs=$(echo "" | display_menu 5 "$tr_menu_ip_config_addresses_prompt" "")
+					if [ -n "$new_addrs" ]; then
+						# We must set BOTH method and address at the same time
+						nmcli connection modify uuid "$connection_uuid" ipv${ipv}.method manual ipv${ipv}.addresses "$new_addrs"
+						# Also optional: prompt for gateway immediately to be helpful, strictly not required for 'manual' but good practice
+						# keeping it simple for now to just fix the toggle.
+					fi
 				else
 					nmcli connection modify uuid "$connection_uuid" ipv${ipv}.method auto
 					nmcli connection modify uuid "$connection_uuid" ipv${ipv}.gateway ''
@@ -1135,7 +1143,12 @@ menu_dns() {
 
 	while true; do
 		mapfile -t dns_list < <(nmcli --get-values ipv${ipv}.dns connection show "$connection_uuid" | sed 's/,/\n/g')
-		local options=$(printf "%s\n" "${dns_list[@]}")
+		local options=""
+		# Check if we have any actual DNS entries (mapfile might catch valid empty string if nmcli returns nothing)
+		if [ ${#dns_list[@]} -gt 0 ] && [ -n "${dns_list[0]}" ]; then
+			options=$(printf "%s\n" "${dns_list[@]}")
+			options+="\n"
+		fi
 		options+="$icon_close Back"
 
 		chosen=$(echo -e "$options" | display_menu 1 "$tr_menu_dns_prompt" "") # Pass "" for prompt_icon
@@ -1148,7 +1161,7 @@ menu_dns() {
 		for dns_entry in "${dns_list[@]}"; do
 			if [ "$chosen" = "$dns_entry" ]; then
 				found=1
-				sure=$(echo -e "$icon_check\n$icon_close Back" | display_menu 1 "$tr_menu_dns_sure_prompt_1 ${chosen}$tr_menu_dns_sure_prompt_2" "") # Pass "" for prompt_icon
+				sure=$(echo -e "$icon_check Remove\n$icon_close Back" | display_menu 1 "$tr_menu_dns_sure_prompt_1 ${chosen}$tr_menu_dns_sure_prompt_2" "") # Pass "" for prompt_icon
 				if [ -z "$sure" ] || [[ "$sure" =~ ^"$icon_close Back" ]]; then continue; fi # User cancelled confirmation
 				if [[ "$sure" =~ ^"$icon_check" ]]; then
 					nmcli connection modify uuid "$connection_uuid" -ipv${ipv}.dns "$chosen"
