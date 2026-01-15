@@ -56,10 +56,8 @@ https://github.com/user-attachments/assets/7da1d5b8-d8a1-47f4-8809-e82efc078ab2
 - **Distro Detection**: Auto-installs dependencies (Arch, Fedora, openSUSE, NixOS)
 - **Desktop Entry**: Creates launcher menu entry & icon
 
-### 🛡️ Robust Feedback
-- **Universal Semantic Styling**: Red (Error), Orange (Warning), Green (Success).
-- **Blocking Dialogs**: Critical errors (e.g. Wrong Password) require user action.
-- **Fallback System**: Works even without a notification service.
+### 1. Robust feedback & Fallback Notification System
+`hyprltm-net` now includes a complete visual feedback system. Every action (Connecting, Success, Failure) provides clear, styled notifications. Crucially, it includes a **Fallback Notification System**: if no notification daemon (like `dunst` or `swaync`) is running, the script automatically falls back to generating beautiful Rofi dialogs to ensure you never miss an error message.
 
 #### Feedback Gallery
 <table width="100%">
