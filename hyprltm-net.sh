@@ -33,7 +33,7 @@ icon_close="${icon_close:-""}"
 icon_check="${icon_check:-""}"
 icon_on="${icon_on:-""}"
 icon_off="${icon_off:-""}"
-icon_info="${icon_info:-"󰖐"}"
+icon_info="${icon_info:-""}"
 icon_refresh="${icon_refresh:-"󰑐"}"
 icon_config="${icon_config:-""}"
 
