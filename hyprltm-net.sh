@@ -1705,7 +1705,20 @@ import_vpn() {
             ;;
     esac
 
-    if nmcli connection import type "$vpn_type" file "$vpn_file_path"; then
+    # Capture output to extract UUID
+    local import_output
+    import_output=$(nmcli connection import type "$vpn_type" file "$vpn_file_path" 2>&1)
+    
+    if [ $? -eq 0 ]; then
+        # Extract UUID from success message: "Connection 'Name' (UUID) successfully added."
+        # Using a portable sed extraction
+        local uuid=$(echo "$import_output" | sed -n 's/.*(\(.*\)) successfully added.*/\1/p')
+        
+        # Disable autoconnect immediately to prevent accidental activation
+        if [ -n "$uuid" ]; then
+            nmcli connection modify "$uuid" connection.autoconnect no
+        fi
+
         send_notification "$tr_notice_import_success_summary" "$tr_notice_import_success_body"
     else
         send_notification "$tr_notice_import_error_summary" "$tr_notice_import_error_body" "error"
