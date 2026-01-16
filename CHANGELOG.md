@@ -13,8 +13,10 @@ All notable changes to this project will be documented in this file.
     -   🟩 **Success**: Green border/text.
 -   **Fallback Feedback**: If no system notification daemon (e.g., `dunst`) is running, the script automatically falls back to showing a Green Rofi Success dialog.
 -   **Explicit Notification Logic**: Refactored internal notification system to use explicit properties (`type="error"`) instead of fragile text parsing.
+-   **Documentation Gallery**: Refactored README to include a detailed Vertical Feedback Gallery with descriptive captions.
 
 ### Changed
+-   **Terminology**: Standardized documentation to use "Notification Service" instead of "Daemon".
 -   **Info Dialogs**: Refactored informational messages (e.g., Airplane Mode status) to use a dedicated visual style (Blue Box) instead of generic lists.
 -   **Airplane Mode**: Now uses specific icons for Enabled (󱡻) and Disabled (󱢂) states.
 -   **Error Messages**: Added specific detection for "Network not found" (Router down/out of range) to distinguish it from generic "Refused" errors.
@@ -23,10 +25,16 @@ All notable changes to this project will be documented in this file.
 -   **Icons**: Fixed missing icons in Error dialogs and added distinct icons for "Network not found" (󰐷).
 
 ### Fixed
+-   **VPN Autoconnect**: Fixed critical issue where imported VPNs would auto-connect on boot/restart. New imports now default to `autoconnect=no`.
 -   **Logic**: Fixed "Edit Password" incorrectly reporting "Successfully Connected" without attempting connection. Now correctly says "Password Updated".
 -   **Silent Failures**: Fixed bug where cancelling a connection or failing a VPN import would fail silently or show a confusing Green success message.
 -   **False Positives**: Resolved issue where "Failed to connect" messages were styled as Success (Green).
 ---
+
+## [v0.2.1] - 2026-01-11
+
+### Fixed
+-   **VPN Menu**: Fixed parsing issue where null delimiters (`\0`) caused VPN entries to be mishandled by `awk`.
 
 ## [v0.2.0] - 2026-01-10
 
