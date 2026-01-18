@@ -221,21 +221,34 @@ bind = SUPER, N, exec, hyprltm-net
 
 HyprLTM-Net uses the **LTMNight** color palette. Customize appearance by editing `~/.config/rofi/themes/ltmnight.rasi`.
 
-| Variable | Description | Default |
-| :--- | :--- | :--- |
-| `@ltmnight9` | Primary Accent (Purple) | `#bd93f9` |
-| `@ltmnight0` | Background | `#282a36` |
-| `@ltmnight2` | Foreground | `#f8f8f2` |
-| `@ltmnight7` | Success (Green) | `#50fa7b` |
+| Variable | Description | Default | Usage |
+| :--- | :--- | :--- | :--- |
+| `@ltmnight0` | Background | `#282a36` | Menu Background |
+| `@ltmnight2` | Foreground | `#f8f8f2` | Main Text |
+| `@ltmnight9` | Primary Accent | `#bd93f9` | List Selection |
+| `@ltmnight4` | **Error** | `#ff5555` | 🟥 Error Dialogs |
+| `@ltmnight5` | **Warning** | `#ffb86c` | 🟧 Warnings / Alerts |
+| `@ltmnight7` | **Success** | `#50fa7b` | 🟩 Success Messages |
+| `@ltmnight8` | **Info** | `#8be9fd` | 🟦 Info Dialogs |
+| `@ltmnight3` | Comments | `#6272a4` | Borders / Outlines |
 
 ![Gradient](assets/gradient.svg)
 
 ## ☕ Support the Project
 
-If you find this tool helpful and want to support its development and the **HyprLTM** ecosystem, consider supporting me through the following platforms:
+If you find this tool helpful, there are many ways to support the project:
+
+### ☕ Buy Me A Coffee
+If you'd like to support the development financially:
 
 [![Buy Me A Coffee](https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=☕&slug=linuxtechmore&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff)](https://www.buymeacoffee.com/linuxtechmore)
 
+### 🤝 Contribute & Support
+Financial contributions are not the only way to help! Here are other options:
+- **⭐ Star the Repository**: It helps more people find the project!
+- **🐛 Report Bugs**: Found an issue? Open a ticket on GitHub.
+- **💡 Suggest Features**: Have a cool idea? Let me know!
+- **📢 Share**: Tell your friends!
 
 Every bit of support helps keep the project alive and ensures I can spend more time developing open source tools for the Linux community!
 
