@@ -29,9 +29,9 @@ echo -e "${CYAN}Detected Distribution:${NC} $DISTRO"
 
 # Package Definitions
 # Required
-PKGS_ARCH_REQ="rofi-wayland networkmanager qrencode ttf-jetbrains-mono-nerd"
-PKGS_FEDORA_REQ="rofi-wayland NetworkManager qrencode"
-PKGS_SUSE_REQ="rofi-wayland NetworkManager qrencode"
+PKGS_ARCH_REQ="rofi-wayland networkmanager qrencode dnsmasq ttf-jetbrains-mono-nerd"
+PKGS_FEDORA_REQ="rofi-wayland NetworkManager qrencode dnsmasq"
+PKGS_SUSE_REQ="rofi-wayland NetworkManager qrencode dnsmasq"
 
 # Optional (for notifications)
 PKGS_ARCH_OPT="libnotify"
@@ -39,7 +39,7 @@ PKGS_FEDORA_OPT="libnotify"
 PKGS_SUSE_OPT="libnotify"
 
 # Check Dependencies
-DEPENDENCIES=("rofi" "nmcli" "qrencode")
+DEPENDENCIES=("rofi" "nmcli" "qrencode" "dnsmasq")
 # Note: Font detection is skipped (unreliable). User verification required.
 MISSING_DEPS=()
 
@@ -59,7 +59,7 @@ if [ ${#MISSING_DEPS[@]} -gt 0 ]; then
     echo ""
     if [ "$DISTRO" = "nixos" ]; then
         echo -e "${YELLOW}NixOS Detected.${NC} Please add the following to your configuration.nix:"
-        echo -e "  ${GREEN}environment.systemPackages = with pkgs; [ rofi-wayland networkmanager qrencode libnotify (nerdfonts.override { fonts = [ \"JetBrainsMono\" ]; }) ];${NC}"
+        echo -e "  ${GREEN}environment.systemPackages = with pkgs; [ rofi-wayland networkmanager qrencode dnsmasq libnotify (nerdfonts.override { fonts = [ \"JetBrainsMono\" ]; }) ];${NC}"
     elif [ "$DISTRO" != "unknown" ]; then
         read -p "Install missing dependencies using your package manager? [Y/n] " choice_install
         if [[ ! "$choice_install" =~ ^[Nn]$ ]]; then
@@ -90,7 +90,7 @@ if [ ${#MISSING_DEPS[@]} -gt 0 ]; then
         fi
     else
         echo -e "${YELLOW}Could not detect your distribution.${NC}"
-        echo "Please install the following packages manually: rofi-wayland, networkmanager, qrencode, and a Nerd Font."
+        echo "Please install the following packages manually: rofi-wayland, networkmanager, qrencode, dnsmasq, and a Nerd Font."
     fi
 fi
 
