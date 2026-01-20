@@ -1645,7 +1645,14 @@ get_wifi_password() {
 }
 
 # --- Hotspot Creation ---
+# --- Hotspot Creation ---
 create_hotspot() {
+    # Check for dnsmasq (Required for shared IP / DHCP)
+    if ! command -v dnsmasq &> /dev/null; then
+        show_message "❌ Missing dependency: 'dnsmasq'\nRequired to assign IP addresses (DHCP) to connected devices.\nPlease install it: sudo pacman -S dnsmasq (or equivalent)" "$tr_hotspot_message"
+        return
+    fi
+
     local ssid=$(echo "" | display_menu 5 "$tr_hotspot_ssid_prompt" "")
     if [ -z "$ssid" ]; then
         return
@@ -1658,12 +1665,39 @@ create_hotspot() {
     fi
 
     show_loading_notification "$tr_hotspot_creating"
-    if nmcli device wifi hotspot ifname "$interface_to_use" ssid "$ssid" password "$password"; then
-        kill_loading_notification
-        show_message "$tr_hotspot_success\nSSID: $ssid" "$tr_hotspot_message"
+
+    # 1. Clean Slate: Remove any existing connection with this name to avoid conflicts
+    nmcli connection delete id "$ssid" &> /dev/null
+
+    # 2. Create Explicit Profile
+    # - con-name: Matches SSID (Avoids "Hotspot" generic name)
+    # - mode: ap (Access Point)
+    # - band: bg (Force 2.4GHz for max compatibility/avoiding DFS issues)
+    # - security: wpa-psk (WPA2 for broad support)
+    # - ip: shared (Enables NAT/Route sharing for IPv4 and IPv6)
+    if nmcli connection add type wifi ifname "$interface_to_use" \
+        con-name "$ssid" \
+        ssid "$ssid" \
+        wifi.mode ap \
+        wifi.band bg \
+        wifi-sec.key-mgmt wpa-psk \
+        wifi-sec.psk "$password" \
+        ipv4.method shared \
+        ipv6.method shared &> /dev/null; then
+        
+        # 3. Bring it Up
+        if nmcli connection up id "$ssid" &> /dev/null; then
+            kill_loading_notification
+            show_message "$tr_hotspot_success\nSSID: $ssid\nPassword: $password" "$tr_hotspot_message"
+        else
+            kill_loading_notification
+            show_message "$tr_hotspot_error (Failed to activate)" "$tr_hotspot_message"
+            # Cleanup on failure
+            nmcli connection delete id "$ssid" &> /dev/null
+        fi
     else
         kill_loading_notification
-        show_message "$tr_hotspot_error" "$tr_hotspot_message"
+        show_message "$tr_hotspot_error (Failed to create profile)" "$tr_hotspot_message"
     fi
 }
 
