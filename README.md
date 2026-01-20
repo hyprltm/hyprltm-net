@@ -5,7 +5,7 @@
 </h1>
 
 <p align="center">
-  <strong>A high-performance network management interface for Hyprland, powered by Rofi and NetworkManager.</strong>
+  <strong>A high-performance network management interface (GUI) for Hyprland, powered by Rofi and NetworkManager.</strong>
 </p>
 
 <p align="center">
