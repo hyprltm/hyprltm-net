@@ -726,12 +726,136 @@ menu_available_wifi_networks() {
 
 
 # --- Main Wi-Fi menu (toggle, hidden, known, available networks) ---
+# --- Hotspot Manager Menu ---
+menu_hotspot() {
+    while true; do
+        # Detect active hotspot on the interface
+        local active_hotspot_uuid=$(nmcli -t -f UUID,DEVICE,TYPE connection show --active | grep ":${interface_to_use}:" | grep ":802-11-wireless" | cut -d':' -f1)
+        
+        # Check if it's actually AP mode
+        local is_ap_active="no"
+        local active_ssid=""
+        if [ -n "$active_hotspot_uuid" ]; then
+             local mode=$(nmcli -g 802-11-wireless.mode connection show "$active_hotspot_uuid" 2>/dev/null)
+             if [ "$mode" = "ap" ]; then
+                is_ap_active="yes"
+                active_ssid=$(nmcli -g 802-11-wireless.ssid connection show "$active_hotspot_uuid")
+             fi
+        fi
+
+        # Find saved Hotspot profile (if any exists but effectively inactive)
+        # We look for ANY connection with mode=ap
+        local saved_hotspot_uuid=$(nmcli -g UUID,802-11-wireless.mode connection show | grep ":ap$" | cut -d':' -f1 | head -n 1)
+        local saved_hotspot_name=""
+        if [ -n "$saved_hotspot_uuid" ]; then
+            saved_hotspot_name=$(nmcli -g 802-11-wireless.ssid connection show "$saved_hotspot_uuid")
+        fi
+
+        # Determine which UUID to operate on (Active > Saved)
+        local target_uuid="${active_hotspot_uuid:-$saved_hotspot_uuid}"
+        local target_name="${active_ssid:-$saved_hotspot_name}"
+
+        local options=""
+        local status_line=""
+        local toggle_icon="$icon_off"
+        
+        if [ "$is_ap_active" = "yes" ]; then
+            status_line="$icon_on  Status: Active ($active_ssid)\n"
+            toggle_icon="$icon_on"
+        else
+            status_line="$icon_off  Status: Inactive\n"
+            toggle_icon="$icon_off"
+        fi
+
+        # Menu Options construction
+        if [ -n "$target_uuid" ]; then
+            # We have a profile (Active or Saved)
+            options+="$icon_hotspot  $tr_hotspot_message  $toggle_icon\n" # Toggle Enable/Disable
+            options+="$icon_password  $tr_edit_password_message\n"
+            options+="$icon_pen  $tr_rename_connection_message\n"
+            options+="$icon_qrcode  $tr_qrcode_message\n"
+            options+="$icon_trash  Delete Hotspot Profile\n"
+        else
+            # No profile exists -> Create one
+             options+="$icon_hotspot  Create New Hotspot\n"
+        fi
+        
+        options+="$icon_close Back"
+
+        local header="$status_line"
+        # Prompt: "Hotspot Manager" (icon_hotspot)
+        local chosen=$(echo -e "$options" | display_menu 1 "$tr_hotspot_menu_prompt" "$icon_hotspot")
+
+        if [ -z "$chosen" ] || [[ "$chosen" =~ ^"$icon_close Back" ]]; then
+            return
+        fi
+
+        case "$chosen" in
+            *"Create New Hotspot"*)
+                create_hotspot
+                ;;
+            *"$tr_hotspot_message"*) # Toggle
+                 if [ "$is_ap_active" = "yes" ]; then
+                    show_loading_notification "Stopping Hotspot..."
+                    nmcli connection down uuid "$target_uuid"
+                    kill_loading_notification
+                 else
+                    # Enable logic (Safety Check Included in create_hotspot, but here we just UP the profile)
+                    # We re-run safety check manually because we are bypassing create_hotspot
+                     local active_wifi=$(nmcli -t -f NAME,TYPE,DEVICE connection show --active | grep ":wifi:${interface_to_use}")
+                     if [ -n "$active_wifi" ] && [[ ! "$active_wifi" =~ "$target_name" ]]; then
+                        if ! show_warning_dialog "⚠️ Wi-Fi Disconnect Required" "Starting Hotspot will disconnect current Wi-Fi.\nProceed?"; then continue; fi
+                        nmcli device disconnect "$interface_to_use" &> /dev/null
+                     fi
+
+                    show_loading_notification "Starting Hotspot..."
+                    nmcli connection up uuid "$target_uuid"
+                    kill_loading_notification
+                 fi
+                ;;
+            *"$tr_edit_password_message"*)
+                edit_connection_password "$target_uuid" "$target_name"
+                ;;
+            *"$tr_rename_connection_message"*)
+                 rename_connection "$target_uuid"
+                ;;
+            *"$tr_qrcode_message"*)
+                local sec=$(nmcli -g 802-11-wireless-security.key-mgmt connection show "$target_uuid" | sed 's/wpa-psk/WPA/')
+                local pass=$(nmcli -s -g 802-11-wireless-security.psk connection show "$target_uuid")
+                show_qrcode "$target_name" "$sec" "$pass"
+                ;;
+            *"Delete Hotspot Profile"*)
+                if forget_connection "$target_name" "$target_uuid"; then
+                    show_message "Hotspot profile deleted."
+                fi
+                ;;
+        esac
+    done
+}
+
+# --- Main Wi-Fi menu (toggle, hidden, known, available networks) ---
 menu_wifi() {
 	local connection_state options chosen
 	while true; do
         show_loading_notification "$tr_checking_wifi_status"
 		connection_state=$(nmcli --colors no --get-values WIFI general)
-        local active_connection_info=$(nmcli -t -f NAME,DEVICE connection show --active | grep -E "wlan|wifi" | head -n 1)
+        
+        # Robust Active Connection Logic
+        # 1. Get UUID of active connection on this interface
+        local active_uuid=$(nmcli -t -f UUID,DEVICE connection show --active | grep ":${interface_to_use}$" | cut -d':' -f1 | head -n 1)
+        
+        local active_ssid=""
+        local is_ap_mode="no"
+
+        if [ -n "$active_uuid" ]; then
+            # 2. Get Name and Mode
+            active_ssid=$(nmcli -g 802-11-wireless.ssid connection show "$active_uuid")
+            local mode=$(nmcli -g 802-11-wireless.mode connection show "$active_uuid")
+            if [ "$mode" = "ap" ]; then is_ap_mode="yes"; fi
+            # Fallback name if SSID is empty (unlikely for active)
+             if [ -z "$active_ssid" ]; then active_ssid=$(nmcli -g connection.id connection show "$active_uuid"); fi
+        fi
+
         kill_loading_notification
 
         local status_line=""
@@ -739,10 +863,14 @@ menu_wifi() {
             status_line="$icon_wifi_disable $tr_status_message $tr_status_disabled"
 			options="$icon_wifi_enable  $tr_enable_message\n"
 		else
-            if [ -n "$active_connection_info" ]; then
-                local active_ssid=$(echo "$active_connection_info" | cut -d':' -f1)
-                local active_device=$(echo "$active_connection_info" | cut -d':' -f2)
-                status_line="$icon_wifi_full $tr_status_message $tr_status_connected_to '$active_ssid' ($active_device)"
+            if [ -n "$active_uuid" ]; then
+                if [ "$is_ap_mode" = "yes" ]; then
+                    # HOTSPOT STATUS (Fixed)
+                     status_line="$icon_hotspot $tr_status_message Hotspot Active: '$active_ssid'"
+                else
+                    # CLIENT STATUS
+                     status_line="$icon_wifi_full $tr_status_message $tr_status_connected_to '$active_ssid'"
+                fi
             else
                 status_line="$icon_wifi_disconnected $tr_status_message $tr_status_disconnected"
             fi
@@ -754,9 +882,9 @@ menu_wifi() {
         
         local full_options="$status_line\n"
         full_options+="$options"
-        full_options+="$icon_hotspot  $tr_hotspot_message\n" # NEW: Create Hotspot
-        full_options+="$icon_bookmark_saved  $tr_known_connections_message\n" # FIX: Using icon_bookmark_saved
-        full_options+="$icon_hidden_network  $tr_hidden_message\n" # FIX: Using icon_hidden_network
+        full_options+="$icon_hotspot  Hotspot Manager\n" # NEW: Hotspot Manager
+        full_options+="$icon_bookmark_saved  $tr_known_connections_message\n"
+        full_options+="$icon_hidden_network  $tr_hidden_message\n"
         full_options+="$icon_close Back" # Always at the bottom
 
 		chosen=$(echo -e "$full_options" | display_menu 1 "$tr_wifi_menu_prompt" "") # Pass "" for prompt_icon
@@ -777,13 +905,11 @@ menu_wifi() {
             "$icon_wireless  $tr_available_networks_message") menu_available_wifi_networks ;;
 			*"$tr_known_connections_message"*) menu_known_connections "wifi" ;;
 			*"$tr_hidden_message"*) connect_hidden ;;
-            *"$tr_hotspot_message"*) create_hotspot ;;
+            *"Hotspot Manager"*) menu_hotspot ;;
             *"$tr_status_message"*) 
-                # Show details if connected
-                if [ -n "$active_connection_info" ]; then
-                    local active_ssid=$(echo "$active_connection_info" | cut -d':' -f1)
-                    local active_device=$(echo "$active_connection_info" | cut -d':' -f2)
-                    show_connection_details "$active_ssid" "$active_device"
+                # Show details if connected (Works for both AP and Client)
+                if [ -n "$active_uuid" ]; then
+                    show_connection_details "$active_ssid" "${interface_to_use}"
                 fi
                 ;;
 			*)
@@ -1653,6 +1779,23 @@ create_hotspot() {
         return
     fi
 
+    # Safety Check: Disconnect Wireless if currently connected
+    # Most cards cannot be Station (Client) + AP (Hotspot) simultaneously
+    local active_connection=$(nmcli -t -f NAME,TYPE,DEVICE connection show --active | grep ":wifi:${interface_to_use}")
+    
+    if [ -n "$active_connection" ]; then
+        # Check if the active connection is strictly wifi (not a hotspot itself)
+        # Note: We rely on user confirmation for now.
+        if ! show_warning_dialog "⚠️ Wi-Fi Disconnect Required" "Starting a Hotspot will disconnect you from the current Wi-Fi network.\nYour card cannot do both simultaneously.\n\nProceed?"; then
+            return
+        fi
+        
+        # Disconnect current wifi
+        show_loading_notification "Disconnecting Wi-Fi..."
+        nmcli device disconnect "$interface_to_use" &> /dev/null
+        kill_loading_notification
+    fi
+
     local ssid=$(echo "" | display_menu 5 "$tr_hotspot_ssid_prompt" "")
     if [ -z "$ssid" ]; then
         return
@@ -1879,7 +2022,7 @@ main_menu() {
                 menu_wifi
                 ;;
             *"Wired")
-                menu_wired # Call the new wired sub-menu
+                menu_wired
                 ;;
             *"VPN")
                 vpn_menu

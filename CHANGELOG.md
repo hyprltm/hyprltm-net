@@ -23,8 +23,9 @@ All notable changes to this project will be documented in this file.
 -   **Dialog Layout**: Refined Error/Warning dialogs to remove unused input bars and prompts for a cleaner look.
 -   **UI Consistency**: Ensured 1px borders and consistent iconography across all message types.
 -   **Icons**: Fixed missing icons in Error dialogs and added distinct icons for "Network not found" (󰐷).
--   **Hotspot**: Completely rewrote creation logic. Now forces WPA2, 2.4GHz band (for compatibility), and uses explicit profile names to avoid conflicts.
--   **Dependencies**: Added `dnsmasq` as a required dependency for proper Hotspot IP assignment (DHCP).
+-   **Hotspot Manager**: Full-featured menu to Toggle (Enable/Disable), Edit Password, Rename, QR Code Share, and Delete profiles.
+-   **Status Clarity**: Main Wi-Fi menu now explicitly says "Hotspot Active" instead of "Connected to" when running an Access Point.
+-   **Hotspot Logic**: Completely rewrote creation logic (WPA2/2.4GHz), added "Disconnect Safety Check", and made `dnsmasq` a required dependency.
 
 ### Fixed
 -   **VPN Autoconnect**: Fixed critical issue where imported VPNs would auto-connect on boot/restart. New imports now default to `autoconnect=no`.
