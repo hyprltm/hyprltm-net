@@ -13,7 +13,7 @@ echo -e "${PURPLE}║      ${CYAN}HyprLTM-Net Installer${PURPLE}               �
 echo -e "${PURPLE}╚══════════════════════════════════════════╝${NC}"
 echo ""
 
-# --- 0. Distro Detection ---
+# Distro Detection
 DISTRO="unknown"
 if [ -f /etc/os-release ]; then
     . /etc/os-release
@@ -27,8 +27,7 @@ if [ -f /etc/os-release ]; then
 fi
 echo -e "${CYAN}Detected Distribution:${NC} $DISTRO"
 
-# --- 1. Define Packages per Distro ---
-# --- 1. Define Packages per Distro ---
+# Package Definitions
 # Required
 PKGS_ARCH_REQ="rofi-wayland networkmanager qrencode ttf-jetbrains-mono-nerd"
 PKGS_FEDORA_REQ="rofi-wayland NetworkManager qrencode"
@@ -39,10 +38,9 @@ PKGS_ARCH_OPT="libnotify"
 PKGS_FEDORA_OPT="libnotify"
 PKGS_SUSE_OPT="libnotify"
 
-# --- 2. Check Dependencies ---
+# Check Dependencies
 DEPENDENCIES=("rofi" "nmcli" "qrencode")
-# Check for a nerd font roughly by name if possible, or assume user knows.
-# Checking for fonts via script is tricky/unreliable. We'll trust the package manager or user validation.
+# Note: Font detection is skipped (unreliable). User verification required.
 MISSING_DEPS=()
 
 echo ""
@@ -56,7 +54,7 @@ for dep in "${DEPENDENCIES[@]}"; do
     fi
 done
 
-# --- 3. Offer to Install Missing Dependencies ---
+# Install Missing Dependencies
 if [ ${#MISSING_DEPS[@]} -gt 0 ]; then
     echo ""
     if [ "$DISTRO" = "nixos" ]; then
@@ -96,7 +94,7 @@ if [ ${#MISSING_DEPS[@]} -gt 0 ]; then
     fi
 fi
 
-# --- 4. Prepare Directories ---
+# Setup Directories
 INSTALL_DIR="$HOME/.local/bin"
 THEME_DIR="$HOME/.config/rofi/themes"
 
@@ -105,7 +103,7 @@ echo "Creating directories..."
 mkdir -p "$INSTALL_DIR"
 mkdir -p "$THEME_DIR"
 
-# --- 5. Copy Files ---
+# Install Files
 echo "Installing script to $INSTALL_DIR..."
 cp hyprltm-net.sh "$INSTALL_DIR/hyprltm-net"
 chmod +x "$INSTALL_DIR/hyprltm-net"
@@ -113,9 +111,9 @@ chmod +x "$INSTALL_DIR/hyprltm-net"
 echo "Installing themes to $THEME_DIR..."
 cp *.rasi "$THEME_DIR/"
 
-# --- 6. Interactive Configuration ---
+# Configuration
 
-# A. Desktop Entry
+# Desktop Entry
 echo ""
 echo -e "${YELLOW}[Desktop Entry]${NC} Adds HyprLTM-Net to your application launcher."
 read -p "Create a Desktop Entry? [Y/n] " choice_desktop
@@ -139,7 +137,7 @@ EOF
     echo -e "${GREEN}Desktop Entry created.${NC}"
 fi
 
-# B. Hyprland Keybind Instructions
+# Hyprland Binding
 echo ""
 echo -e "${YELLOW}[Keybinding]${NC} Allows you to open the menu with SUPER+N."
 read -p "Show instructions? [Y/n] " choice_keybind
@@ -148,7 +146,7 @@ if [[ ! "$choice_keybind" =~ ^[Nn]$ ]]; then
     echo -e "   ${GREEN}bind = SUPER, N, exec, hyprltm-net${NC}"
 fi
 
-# C. Waybar Instructions
+# Waybar Integration
 echo ""
 echo -e "${YELLOW}[Waybar]${NC} Makes the network module open this menu on click."
 read -p "Show instructions? [Y/n] " choice_waybar
@@ -157,7 +155,7 @@ if [[ ! "$choice_waybar" =~ ^[Nn]$ ]]; then
     echo -e "   ${GREEN}\"on-click\": \"hyprltm-net\"${NC}"
 fi
 
-# --- 7. Finale ---
+# Complete
 echo ""
 echo -e "${PURPLE}╔══════════════════════════════════════════╗${NC}"
 echo -e "${PURPLE}║      ${GREEN}Installation Complete!${PURPLE}              ║${NC}"

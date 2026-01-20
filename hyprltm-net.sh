@@ -242,13 +242,13 @@ interface_to_use="${interfaces[0]}"
 
 # --- Helper Functions ---
 
-# Function to display a menu (form 1: selection, 2: text input with list, 3: password input, 4: message box, 5: text input no list)
-# Now accepts optional extra flags to pass to rofi.
+# Function to display a menu (forms: 1=selection, 2=text+list, 3=password, 4=msg, 5=text)
+# Accepts optional extra flags.
 display_menu() {
 	local form="$1"
 	local prompt_text="$2"
-	local prompt_icon="${3:-}" # Optional: icon to prepend to prompt
-    local extra_flags="${4:-}"   # Optional: extra flags for the rofi command
+	local prompt_icon="${3:-}"
+    local extra_flags="${4:-}"
     local rofi_prompt rofi_flags options_list
 
 	# If a prompt_icon is provided and the prompt_text doesn't already start with it, prepend it.
@@ -294,8 +294,7 @@ display_menu() {
 # Shows a non-blocking "loading" Rofi window and stores its PID.
 show_loading_notification() {
     local message="$1"
-    # Use dmenu mode to get the themed window, but completely override the
-    # mainbox layout to show only a single, centered textbox.
+    # Use dmenu mode with a custom theme override to center text
     echo "" | rofi -dmenu -p "" \
         -theme "$ROFI_NETWORK_MANAGER_THEME" \
         -theme-str 'mainbox { children: [textbox]; }' \
@@ -309,13 +308,12 @@ clean_error_message() {
     local clean_msg=""
     local icon="❌" # Default error icon
 
-    # Remove the "Hint:" section and everything after it
+    # Remove "Hint:" and trailing text
     raw_msg="${raw_msg%%Hint:*}"
     
-    # Remove leading "Error: " prefix if present
+    # Remove "Error:" prefix
     raw_msg="${raw_msg#Error: }"
     
-    # Trim whitespace
     raw_msg="$(echo "$raw_msg" | xargs)"
 
     # Match specific known errors for better UX
@@ -341,7 +339,6 @@ clean_error_message() {
              clean_msg="Operation cancelled."
              ;;
         *)
-            # Fallback: Just use the cleaned raw message
             clean_msg="$raw_msg"
             ;;
     esac
@@ -504,15 +501,15 @@ show_error_message() {
         -theme-str 'textbox { text-color: @error-message; }'
 }
 
-# Handles password input with a dynamic, interactive menu for showing, hiding, and editing.
+# Interactive password menu (show/hide/edit)
 ask_password() {
     local password_input
     local password_shown="false" # 'true' or 'false'
 
-    # Step 1: Initial password prompt
+    # Initial prompt
     password_input=$(echo "" | display_menu 3 "$tr_ask_password_prompt" "")
     
-    # If user cancels the initial prompt (presses Esc or enters nothing), return empty.
+    # Handle cancellation
     if [ -z "$password_input" ]; then
         return 1
     fi
@@ -584,11 +581,9 @@ show_connection_details() {
     show_loading_notification "Gathering details..."
     
     # Get details using nmcli device show
-    # We grep for specific fields
     local info=$(nmcli -t -f GENERAL,IP4,IP6 device show "$device")
     
-    # Extract fields (hacky but effective for standard nmcli output)
-    # MAC often contains colons, so we strip the field name "GENERAL.HWADDR:"
+    # Extract fields
     local ipv4=$(echo "$info" | grep "IP4.ADDRESS\[1\]" | cut -d':' -f2)
     local gateway=$(echo "$info" | grep "IP4.GATEWAY" | cut -d':' -f2)
     local hwaddr=$(echo "$info" | grep "GENERAL.HWADDR" | sed 's/^GENERAL.HWADDR://')
@@ -926,8 +921,7 @@ connect_wifi() {
         
     while true; do
         # Robust Profile Lookup:
-        # Search for any profile matching our SSID (by property) OR by precise Name.
-        # This catches "Saved" profiles, "Broken" profiles, and "Duplicate" profiles.
+        # Search for any profile matching our SSID or Name.
         local existing_uuid=""
         
         # We process line by line to handle spaces correctly. 
@@ -956,12 +950,11 @@ connect_wifi() {
         local connection_result
 
         if [ -n "$existing_uuid" ]; then
-            # Path A: Profile Exists (Valid or Broken) -> Use "Connection Up" (Robust)
-            # This mirrors the "Saved Connection > Connect Now" behavior which works.
+            # Path A: Profile Exists -> Connect
             output=$(nmcli connection up uuid "$existing_uuid" 2>&1)
             connection_result=$?
         else
-            # Path B: No Profile Found -> Create Valid One Manually
+            # Path B: Create New Profile
             if [ "$is_secure" = "yes" ]; then
                 # Clean slate (just in case)
                 nmcli connection delete id "$wifi_ssid" &>/dev/null
@@ -1435,9 +1428,9 @@ menu_known_connections() {
 
 	while true; do
 		local options=$(for i in "${profiles_list[@]}"; do echo -e "$i" | cut --delimiter $'\0' --fields 2; done)
-		options+="\n$icon_close Back" # FIX: Added newline before the Back entry
-
-		# Prompt for this menu is explicitly set by prompt_to_use, no extra icon prepended by display_menu
+		options+="\n$icon_close Back"
+		
+		# Custom prompt
 		chosen=$(echo -e "$options" | display_menu 1 "$prompt_to_use" "") # Pass "" for prompt_icon
 
 		if [ -z "$chosen" ] || [[ "$chosen" =~ ^"$icon_close Back" ]]; then
@@ -1455,7 +1448,7 @@ menu_known_connections() {
 	done
 }
 
-# NEW: Menu for connecting to a specific wired connection
+# Wired connection menu
 menu_connect_wired_connection() {
     local profiles_list_raw=$(nmcli --colors no -t -f TYPE,UUID,NAME connection show | awk -F ':' -v icon="$icon_ethernet" '$1 ~ /^(ethernet|802-3-ethernet).*/ {print $2 "\\0" icon "  " " " $3}')
     mapfile -t profiles_list < <(echo "$profiles_list_raw")
@@ -1618,13 +1611,7 @@ show_qrcode() {
     qrencode -o "$qr_file" -s 10 -m 2 "$qr_string"
     kill_loading_notification
 
-    # Display QR code inside Rofi
-    # -i: Enable icons
-    # -theme-str: Override theme to show large icon and no text input
-    # Display QR code inside Rofi
-    # -i: Enable icons
-    # -show-icons: Required to show icons in dmenu mode
-    # -theme-str: Override theme to show large icon and no text input
+    # Show QR code
     
     # We use the successful configuration from the test script
     local rofi_override="
@@ -1705,16 +1692,15 @@ import_vpn() {
             ;;
     esac
 
-    # Capture output to extract UUID
+    # Import connection
     local import_output
     import_output=$(nmcli connection import type "$vpn_type" file "$vpn_file_path" 2>&1)
     
     if [ $? -eq 0 ]; then
-        # Extract UUID from success message: "Connection 'Name' (UUID) successfully added."
-        # Using a portable sed extraction
+        # Extract new UUID
         local uuid=$(echo "$import_output" | sed -n 's/.*(\(.*\)) successfully added.*/\1/p')
         
-        # Disable autoconnect immediately to prevent accidental activation
+        # Prevent autoconnect
         if [ -n "$uuid" ]; then
             nmcli connection modify "$uuid" connection.autoconnect no
         fi
@@ -1832,8 +1818,7 @@ vpn_menu() {
 
 
 main_menu() {
-    # Check for notification daemon
-    # Check for notification daemon
+    # Check for notification service
     if ! is_notification_service_running; then
         show_warning_dialog "⚠️ No Notification Service Found" "You can continue, but you won't receive desktop notifications."
     fi
