@@ -43,6 +43,7 @@ icon_wifi_prompt="${icon_wifi_prompt:-"󱚾"}"
 icon_ethernet="${icon_ethernet:-"󰈀"}"
 icon_vpn="${icon_vpn:-"󰖃"}"
 icon_wireguard="${icon_wireguard:-"󰖆"}"
+icon_bluetooth="${icon_bluetooth:-"󰂯"}"
 icon_hotspot="${icon_hotspot:-"󱄙"}"
 icon_airplane="${icon_airplane:-"󰀝"}"
 icon_airplane_on="${icon_airplane_on:-"󱡻"}"
@@ -65,11 +66,11 @@ icon_password="${icon_password:-""}"
 icon_eye="${icon_eye:-"󰛐"}"
 icon_eye_closed="${icon_eye_closed:-"󰛑"}"
 icon_bookmark_saved="${icon_bookmark_saved:-"󰢭"}"
-icon_saved="${icon_saved:-"󰋋"}"
+icon_saved="${icon_saved:-"󰢭"}"
 
 # --- Icons: Menus & Actions ---
 icon_connect="${icon_connect:-"󰚫"}"
-icon_disconnect="${icon_disconnect:-"qa"}"
+icon_disconnect="${icon_disconnect:-"󰚬"}"
 icon_vpn_disconnect="${icon_vpn_disconnect:-"󰖂"}"
 icon_trash="${icon_trash:-""}"
 icon_pen="${icon_pen:-"󰑕"}"
@@ -143,6 +144,7 @@ tr_no_ethernet_device='No Ethernet device found.' # New message
 tr_no_wifi_networks_found='No Wi-Fi networks found.' # New message for empty scan
 tr_wired_status_message='Wired Status' # New message for wired status option
 tr_manage_wired_profile='Manage Active Wired Profile' # New message for wired profile management
+tr_hotspot_menu_prompt="Hotspot Manager" # Hotspot menu prompt
 tr_connect_wired_connection='Connect to Wired Connection:' # Refined prompt
 tr_manage_wired_connections='Manage Wired Connections' # New message for wired connections management
 tr_import_vpn_message='Import VPN from file'
@@ -727,6 +729,133 @@ menu_available_wifi_networks() {
 
 # --- Main Wi-Fi menu (toggle, hidden, known, available networks) ---
 # --- Hotspot Manager Menu ---
+
+# Sub-menu to manage a specific saved hotspot profile
+menu_manage_hotspot_profile() {
+    local uuid="$1"
+    local name="$2"
+
+    while true; do
+        # Check if this specific profile is active
+        local is_active=$(nmcli -t -f UUID,STATE connection show --active | grep "$uuid" | grep -q "activated" && echo "yes" || echo "no")
+        local toggle_icon="$([ "$is_active" = "yes" ] && echo "$icon_on" || echo "$icon_off")"
+        local toggle_text="$([ "$is_active" = "yes" ] && echo "Stop Hotspot" || echo "Enable Hotspot")"
+
+        local options=""
+        options+="$icon_hotspot  $toggle_text  $toggle_icon\n"
+        options+="$icon_password  $tr_edit_password_message\n"
+        options+="$icon_pen  $tr_rename_connection_message\n"
+        options+="$icon_qrcode  $tr_qrcode_message\n"
+        options+="$icon_trash  Delete Hotspot Profile\n"
+        options+="$icon_close Back"
+
+        local chosen=$(echo -e "$options" | display_menu 1 "Manage '$name'" "$icon_hotspot")
+
+        if [ -z "$chosen" ] || [[ "$chosen" =~ ^"$icon_close Back" ]]; then
+            return
+        fi
+
+        case "$chosen" in
+            *"$toggle_text"*)
+                if [ "$is_active" = "yes" ]; then
+                    show_loading_notification "Stopping Hotspot..."
+                    nmcli connection down uuid "$uuid"
+                    kill_loading_notification
+                else
+                    # Enable (Safety Check)
+                     local active_wifi=$(nmcli -t -f NAME,TYPE,DEVICE connection show --active | grep ":wifi:${interface_to_use}")
+                     if [ -n "$active_wifi" ]; then
+                        if ! show_warning_dialog "⚠️ Wi-Fi Disconnect Required" "Starting Hotspot will disconnect current Wi-Fi.\nProceed?"; then continue; fi
+                        nmcli device disconnect "$interface_to_use" &> /dev/null
+                     fi
+
+                    show_loading_notification "Starting Hotspot..."
+                    if nmcli connection up uuid "$uuid"; then
+                        kill_loading_notification
+                        send_notification "Hotspot Started" "Active: $name"
+                    else
+                        kill_loading_notification
+                        show_message "Failed to start hotspot."
+                    fi
+                fi
+                ;;
+            *"$tr_edit_password_message"*)
+                edit_connection_password "$uuid" "$name"
+                name=$(nmcli -g connection.id connection show "$uuid") # Update name in case changed
+                ;;
+            *"$tr_rename_connection_message"*)
+                 if rename_connection "$uuid"; then
+                    name=$(nmcli -g connection.id connection show "$uuid") # Update local name var
+                 fi
+                ;;
+            *"$tr_qrcode_message"*)
+                local sec=$(nmcli -g 802-11-wireless-security.key-mgmt connection show "$uuid" | sed 's/wpa-psk/WPA/')
+                local pass=$(nmcli -s -g 802-11-wireless-security.psk connection show "$uuid")
+                show_qrcode "$name" "$sec" "$pass"
+                ;;
+            *"Delete Hotspot Profile"*)
+                if forget_connection "$name" "$uuid"; then
+                    show_message "Hotspot profile deleted."
+                    return # Exit menu since profile is gone
+                fi
+                ;;
+        esac
+    done
+}
+
+# Sub-menu to list all saved hotspot profiles
+menu_saved_hotspots() {
+    while true; do
+        # 1. Get all Wi-Fi connection UUIDs and Names
+        # Format: UUID:NAME:TYPE
+        # We filter for wifi types first
+        local wifi_profiles=$(nmcli -t -f UUID,NAME,TYPE connection show | grep ":802-11-wireless")
+        
+        local hotspot_list=()
+        
+        # 2. Iterate and check 'mode' for each
+        while IFS=':' read -r uuid name type; do
+            if [ -z "$uuid" ]; then continue; fi
+            local mode=$(nmcli -g 802-11-wireless.mode connection show "$uuid" 2>/dev/null)
+            if [ "$mode" = "ap" ]; then
+                # Format: UUID ;;; NAME
+                hotspot_list+=("$uuid;;;$name")
+            fi
+        done <<< "$wifi_profiles"
+
+        if [ "${#hotspot_list[@]}" -eq 0 ]; then
+            display_info_message "No saved hotspot profiles found." "Saved Hotspots"
+            return
+        fi
+
+
+
+        # Extract display name (Field 2)
+        local options=""
+        for item in "${hotspot_list[@]}"; do
+             local name=$(echo "$item" | awk -F';;;' '{print $2}')
+             options+="$icon_hotspot  $name\n"
+        done
+        options+="$icon_close Back"
+
+        local chosen_index=$(echo -e "$options" | display_menu 1 "Saved Hotspots" "$icon_hotspot" "-format i")
+
+        if [ -z "$chosen_index" ]; then
+            return
+        fi
+
+        if [ "$chosen_index" -eq "${#hotspot_list[@]}" ]; then
+             return
+        fi
+
+        local selected_item="${hotspot_list[$chosen_index]}"
+        local uuid=$(echo "$selected_item" | awk -F';;;' '{print $1}')
+        local name=$(echo "$selected_item" | awk -F';;;' '{print $2}')
+
+        menu_manage_hotspot_profile "$uuid" "$name"
+    done
+}
+
 menu_hotspot() {
     while true; do
         # Detect active hotspot on the interface
@@ -743,47 +872,24 @@ menu_hotspot() {
              fi
         fi
 
-        # Find saved Hotspot profile (if any exists but effectively inactive)
-        # We look for ANY connection with mode=ap
-        local saved_hotspot_uuid=$(nmcli -g UUID,802-11-wireless.mode connection show | grep ":ap$" | cut -d':' -f1 | head -n 1)
-        local saved_hotspot_name=""
-        if [ -n "$saved_hotspot_uuid" ]; then
-            saved_hotspot_name=$(nmcli -g 802-11-wireless.ssid connection show "$saved_hotspot_uuid")
-        fi
-
-        # Determine which UUID to operate on (Active > Saved)
-        local target_uuid="${active_hotspot_uuid:-$saved_hotspot_uuid}"
-        local target_name="${active_ssid:-$saved_hotspot_name}"
-
         local options=""
         local status_line=""
-        local toggle_icon="$icon_off"
         
         if [ "$is_ap_active" = "yes" ]; then
             status_line="$icon_on  Status: Active ($active_ssid)\n"
-            toggle_icon="$icon_on"
         else
             status_line="$icon_off  Status: Inactive\n"
-            toggle_icon="$icon_off"
         fi
-
-        # Menu Options construction
-        if [ -n "$target_uuid" ]; then
-            # We have a profile (Active or Saved)
-            options+="$icon_hotspot  $tr_hotspot_message  $toggle_icon\n" # Toggle Enable/Disable
-            options+="$icon_password  $tr_edit_password_message\n"
-            options+="$icon_pen  $tr_rename_connection_message\n"
-            options+="$icon_qrcode  $tr_qrcode_message\n"
-            options+="$icon_trash  Delete Hotspot Profile\n"
-        else
-            # No profile exists -> Create one
-             options+="$icon_hotspot  Create New Hotspot\n"
-        fi
+        
+        # 1. Manage Saved Profiles
+        options+="$icon_bookmark_saved  Manage Saved Hotspots\n"
+        
+        # 2. Create New
+        options+="$icon_hotspot  Create New Hotspot\n"
         
         options+="$icon_close Back"
 
         local header="$status_line"
-        # Prompt: "Hotspot Manager" (icon_hotspot)
         local chosen=$(echo -e "$options" | display_menu 1 "$tr_hotspot_menu_prompt" "$icon_hotspot")
 
         if [ -z "$chosen" ] || [[ "$chosen" =~ ^"$icon_close Back" ]]; then
@@ -794,40 +900,8 @@ menu_hotspot() {
             *"Create New Hotspot"*)
                 create_hotspot
                 ;;
-            *"$tr_hotspot_message"*) # Toggle
-                 if [ "$is_ap_active" = "yes" ]; then
-                    show_loading_notification "Stopping Hotspot..."
-                    nmcli connection down uuid "$target_uuid"
-                    kill_loading_notification
-                 else
-                    # Enable logic (Safety Check Included in create_hotspot, but here we just UP the profile)
-                    # We re-run safety check manually because we are bypassing create_hotspot
-                     local active_wifi=$(nmcli -t -f NAME,TYPE,DEVICE connection show --active | grep ":wifi:${interface_to_use}")
-                     if [ -n "$active_wifi" ] && [[ ! "$active_wifi" =~ "$target_name" ]]; then
-                        if ! show_warning_dialog "⚠️ Wi-Fi Disconnect Required" "Starting Hotspot will disconnect current Wi-Fi.\nProceed?"; then continue; fi
-                        nmcli device disconnect "$interface_to_use" &> /dev/null
-                     fi
-
-                    show_loading_notification "Starting Hotspot..."
-                    nmcli connection up uuid "$target_uuid"
-                    kill_loading_notification
-                 fi
-                ;;
-            *"$tr_edit_password_message"*)
-                edit_connection_password "$target_uuid" "$target_name"
-                ;;
-            *"$tr_rename_connection_message"*)
-                 rename_connection "$target_uuid"
-                ;;
-            *"$tr_qrcode_message"*)
-                local sec=$(nmcli -g 802-11-wireless-security.key-mgmt connection show "$target_uuid" | sed 's/wpa-psk/WPA/')
-                local pass=$(nmcli -s -g 802-11-wireless-security.psk connection show "$target_uuid")
-                show_qrcode "$target_name" "$sec" "$pass"
-                ;;
-            *"Delete Hotspot Profile"*)
-                if forget_connection "$target_name" "$target_uuid"; then
-                    show_message "Hotspot profile deleted."
-                fi
+            *"Manage Saved Hotspots"*)
+                menu_saved_hotspots
                 ;;
         esac
     done
@@ -1371,7 +1445,7 @@ menu_connection() {
         fi
 		options+="$icon_close Back"
 
-		chosen=$(echo -e "$options" | display_menu 1 "$chosen_connection_name" "") # Pass "" for prompt_icon
+		chosen=$(echo -e "$options" | display_menu 1 "$chosen_connection_name" "$icon_config")
 
 		if [ -z "$chosen" ] || [[ "$chosen" =~ ^"$icon_close Back" ]]; then
             return # User cancelled or pressed back
@@ -1516,61 +1590,132 @@ menu_known_connections() {
 		"wifi")
 			icon_for_type="$icon_wireless"
 			menu_type_function="menu_connection"
-            profiles_list_raw=$(nmcli --colors no -t -f TYPE,UUID,NAME connection show | awk -F ':' -v icon="$icon_for_type" '$1 ~ /^(wifi|802-11-wireless).*/ {print $2 "\\0" icon "  " $3}')
+            # We need to loop through Wi-Fi connections manually because nmcli summary view 
+            # doesn't let us filter by 'mode' (Client vs AP).
+            local raw_wifi_list=$(nmcli -t -f UUID,NAME,TYPE connection show | grep ":802-11-wireless")
+            profiles_list_raw=""
+            while IFS=':' read -r uuid name type; do
+                 local mode=$(nmcli -g 802-11-wireless.mode connection show "$uuid" 2>/dev/null)
+                 # We only want to show client connections here, Hotspots are managed elsewhere
+                 if [ "$mode" != "ap" ]; then
+                     # Format: UUID ;;; ICON NAME ;;; REAL NAME
+                     profiles_list_raw+="${uuid};;;${icon_for_type}  ${name};;;${name}\n"
+                 fi
+            done <<< "$raw_wifi_list"
+            # Trim trailing newline
+            profiles_list_raw="${profiles_list_raw%\\n}"
+            
             prompt_to_use="$tr_known_connections_message" # Use descriptive text for prompt
 			;;
 		"wireguard")
 			icon_for_type="$icon_wireguard"
 			menu_type_function="menu_wireguard_connection"
-            profiles_list_raw=$(nmcli --colors no -t -f TYPE,UUID,NAME connection show | awk -F ':' -v icon="$icon_for_type" '$1 == "wireguard" {print $2 "\\0" icon "  " $3}')
+            # Format: UUID ;;; ICON NAME ;;; REAL NAME
+            profiles_list_raw=$(nmcli --colors no -t -f TYPE,UUID,NAME connection show | awk -F ':' -v icon="$icon_for_type" '$1 == "wireguard" {print $2 ";;;" icon "  " $3 ";;;" $3}')
             prompt_to_use="$tr_vpn_menu_prompt" # Use new VPN prompt
 			;;
 		"ethernet")
 			icon_for_type="$icon_ethernet"
 			menu_type_function="menu_connection"
-            profiles_list_raw=$(nmcli --colors no -t -f TYPE,UUID,NAME connection show | awk -F ':' -v icon="$icon_for_type" '$1 ~ /^(ethernet|802-3-ethernet).*/ {print $2 "\\0" icon "  " $3}')
+             # Format: UUID ;;; ICON NAME ;;; REAL NAME
+            profiles_list_raw=$(nmcli --colors no -t -f TYPE,UUID,NAME connection show | awk -F ':' -v icon="$icon_for_type" '$1 ~ /^(ethernet|802-3-ethernet).*/ {print $2 ";;;" icon "  " $3 ";;;" $3}')
             prompt_to_use="$tr_manage_wired_connections"
 			;;
 		*) # All saved connections
 			icon_for_type="$icon_saved"
 			menu_type_function="menu_connection"
-            profiles_list_raw=$(nmcli --colors no -t -f TYPE,UUID,NAME connection show | awk -F ':' -v icon_saved="$icon_saved" -v icon_wireless="$icon_wireless" -v icon_ethernet="$icon_ethernet" -v icon_vpn_disconnect="$icon_vpn_disconnect" '{
-                icon_local = icon_saved;
-                if ($1 == "wifi" || $1 == "802-11-wireless") icon_local = icon_wireless;
-                else if ($1 == "ethernet" || $1 == "802-3-ethernet") icon_local = icon_ethernet;
-                else if ($1 == "vpn" || $1 == "wireguard") icon_local = icon_vpn_disconnect;
-                print $2 "\\0" icon_local "  " $3 " (" $1 ")"
-            }')
+            
+            # Since this is the "All" list, we also need to manually loop to filter out Hotspots
+            # Get all connections: UUID:TYPE:NAME
+            local all_conns=$(nmcli -t -f UUID,TYPE,NAME connection show)
+            profiles_list_raw=""
+
+            while IFS=':' read -r uuid type name; do
+                local show_item="yes"
+                local icon="$icon_saved" # Default
+
+                # Check if it's a wifi connection that is actually a hotspot (ap mode)
+                if [[ "$type" == "wifi" || "$type" == "802-11-wireless" ]]; then
+                     local mode=$(nmcli -g 802-11-wireless.mode connection show "$uuid" 2>/dev/null)
+                     if [ "$mode" = "ap" ]; then
+                        show_item="no"
+                     fi
+                     icon="$icon_wireless"
+                elif [[ "$type" == "ethernet" || "$type" == "802-3-ethernet" ]]; then
+                    icon="$icon_ethernet"
+                elif [[ "$type" == "vpn" || "$type" == "wireguard" ]]; then
+                    icon="$icon_vpn_disconnect"
+                elif [[ "$type" == "bluetooth" ]]; then
+                    icon="$icon_bluetooth"
+                elif [[ "$type" == "loopback" ]]; then
+                    show_item="no"
+                else
+                    icon="$icon_config" 
+                fi
+
+                if [ "$show_item" = "yes" ]; then
+                     # Format: UUID ;;; ICON NAME (TYPE) ;;; REAL NAME
+                     profiles_list_raw+="${uuid};;;${icon}  ${name} ($type);;;${name}\n"
+                fi
+            done <<< "$all_conns"
+            
+            profiles_list_raw="${profiles_list_raw%\\n}"
             prompt_to_use="$tr_saved_connections_menu_prompt" # Use new Saved Connections prompt
 			;;
 	esac
 
-    mapfile -t profiles_list < <(echo "$profiles_list_raw")
 
-    if [ "${#profiles_list[@]}" -eq 0 ] || ([ "${#profiles_list[@]}" -eq 1 ] && [ -z "${profiles_list[0]}" ]); then
-        display_info_message "$tr_no_saved_connections" "$prompt_to_use" # Pass custom prompt
+
+    # Use printf to handle newlines safely
+    if [ -n "$profiles_list_raw" ]; then
+        mapfile -t profiles_list < <(printf "%b" "$profiles_list_raw")
+    else
+        profiles_list=()
+    fi
+
+    if [ "${#profiles_list[@]}" -eq 0 ]; then
+        display_info_message "$tr_no_saved_connections" "$prompt_to_use"
         return
+    fi
+     
+    # Ensure items exist
+    if [ -z "${profiles_list[0]}" ]; then
+         return
     fi
 
 	while true; do
-		local options=$(for i in "${profiles_list[@]}"; do echo -e "$i" | cut --delimiter $'\0' --fields 2; done)
+        # Extract display name (Field 2)
+		local options=$(for i in "${profiles_list[@]}"; do echo "$i" | awk -F';;;' '{print $2}'; done)
 		options+="\n$icon_close Back"
 		
 		# Custom prompt
-		chosen=$(echo -e "$options" | display_menu 1 "$prompt_to_use" "") # Pass "" for prompt_icon
+        # We use index matching (-format i) to avoid any issues with parsing special characters in names
+		chosen_index=$(echo -e "$options" | display_menu 1 "$prompt_to_use" "$icon_saved" "-format i")
 
-		if [ -z "$chosen" ] || [[ "$chosen" =~ ^"$icon_close Back" ]]; then
-            return # User cancelled or pressed back
+		if [ -z "$chosen_index" ]; then
+            return # User cancelled
+        fi
+        
+        # Check if "Back" was selected (it's the last item)
+        # Bash arrays are 0-indexed. length is ${#profiles_list[@]}
+        # The 'Back' option is appended, so its index is equal to the array length.
+        if [ "$chosen_index" -eq "${#profiles_list[@]}" ]; then
+             return
         fi
 
-		for i in "${profiles_list[@]}"; do
-			if [ "$chosen" = "$(echo -e "$i" | cut --delimiter $'\0' --fields 2)" ]; then
-				local conn_uuid=$(echo -e "$i" | cut --delimiter $'\0' --fields 1)
-				local conn_name_display=$(echo "$chosen" | sed -E 's/^(󰋋|󰖩|󰈀|󰖂) //; s/ \(.+\)$//') # Changed 󰖃 to 󰖂
-				eval "$menu_type_function \"$(sed 's/"/\\"/g' <<< "$conn_name_display")\" \"$conn_uuid\""
-				break
-			fi
-		done
+        local selected_item="${profiles_list[$chosen_index]}"
+        
+        # We used ;;; as a delimiter to prevent issues with null bytes in Bash arrays.
+        # Now we extract the hidden Real Name and UUID.
+        local conn_uuid=$(echo "$selected_item" | awk -F';;;' '{print $1}')
+        local conn_real_name=$(echo "$selected_item" | awk -F';;;' '{print $3}')
+
+        # Execute
+        eval "$menu_type_function \"$(sed 's/"/\\"/g' <<< "$conn_real_name")\" \"$conn_uuid\""
+        # We break because managing a connection usually exits or returns to this menu refreshed
+        # But 'forget' might require a refresh. For now, we assume loop continues or returns.
+        # However, since the list might change (rename/delete), we should strictly break/return or ideally REFRESH the list.
+        # Given current architecture, we loop.
 	done
 }
 
