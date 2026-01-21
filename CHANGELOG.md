@@ -8,18 +8,6 @@ All notable changes to this project will be documented in this file.
 -   **Hotspot Manager**: New hierarchical menu with "Create New" and "Manage Saved" profiles.
 -   **Tethering Support**: Added dedicated Bluetooth icon (`󰂯`) for tethering connections.
 -   **Granular Control**: Option to Rename, Edit Password, Show QR, and Delete saved hotspot profiles.
-
-### Changed
--   **UI Polish**: Replaced "Headphones" icon with "Bookmark Check" (`󰢭`) for saved items.
--   **Code Quality**: Replaced unsafe `\0` delimiters with `;;;` and cleaned code comments.
-
-### Fixed
--   **Loopback**: Filtered out useless `lo` connections from the saved list.
--   **Hotspot Selection**: Fixed bug where selecting a saved hotspot caused a menu loop (implemented Index Matching).
-
-
-
-### Added
 -   **Robust Error Handling**: Connection failures (Wi-Fi, VPN, Wired) now trigger blocking Rofi dialogs with "Try Again" / "Edit Password" options, ensuring issues are never silent.
 -   **Universal Semantic Styling**: All Rofi dialogs now follow a strict color code:
     -   🟥 **Error**: Red border/text (Connection failed).
@@ -31,6 +19,8 @@ All notable changes to this project will be documented in this file.
 -   **Documentation Gallery**: Refactored README to include a detailed Vertical Feedback Gallery with descriptive captions.
 
 ### Changed
+-   **UI Polish**: Replaced "Headphones" icon with "Bookmark Check" (`󰢭`) for saved items.
+-   **Code Quality**: Replaced unsafe `\0` delimiters with `;;;` and cleaned code comments.
 -   **Terminology**: Standardized documentation to use "Notification Service" instead of "Daemon".
 -   **Info Dialogs**: Refactored informational messages (e.g., Airplane Mode status) to use a dedicated visual style (Blue Box) instead of generic lists.
 -   **Airplane Mode**: Now uses specific icons for Enabled (󱡻) and Disabled (󱢂) states.
@@ -43,6 +33,8 @@ All notable changes to this project will be documented in this file.
 -   **Hotspot Logic**: Completely rewrote creation logic (WPA2/2.4GHz), added "Disconnect Safety Check", and made `dnsmasq` a required dependency.
 
 ### Fixed
+-   **Loopback**: Filtered out useless `lo` connections from the saved list.
+-   **Hotspot Selection**: Fixed bug where selecting a saved hotspot caused a menu loop (implemented Index Matching).
 -   **VPN Autoconnect**: Fixed critical issue where imported VPNs would auto-connect on boot/restart. New imports now default to `autoconnect=no`.
 -   **Logic**: Fixed "Edit Password" incorrectly reporting "Successfully Connected" without attempting connection. Now correctly says "Password Updated".
 -   **Silent Failures**: Fixed bug where cancelling a connection or failing a VPN import would fail silently or show a confusing Green success message.
