@@ -2,7 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
-## [v0.3.0] - 2026-01-13
+## [v0.3.0] - 2026-01-21
+
+### Added
+-   **Hotspot Manager**: New hierarchical menu with "Create New" and "Manage Saved" profiles.
+-   **Tethering Support**: Added dedicated Bluetooth icon (`󰂯`) for tethering connections.
+-   **Granular Control**: Option to Rename, Edit Password, Show QR, and Delete saved hotspot profiles.
+
+### Changed
+-   **UI Polish**: Replaced "Headphones" icon with "Bookmark Check" (`󰢭`) for saved items.
+-   **Code Quality**: Replaced unsafe `\0` delimiters with `;;;` and cleaned code comments.
+
+### Fixed
+-   **Loopback**: Filtered out useless `lo` connections from the saved list.
+-   **Hotspot Selection**: Fixed bug where selecting a saved hotspot caused a menu loop (implemented Index Matching).
+
+
 
 ### Added
 -   **Robust Error Handling**: Connection failures (Wi-Fi, VPN, Wired) now trigger blocking Rofi dialogs with "Try Again" / "Edit Password" options, ensuring issues are never silent.
@@ -23,7 +38,7 @@ All notable changes to this project will be documented in this file.
 -   **Dialog Layout**: Refined Error/Warning dialogs to remove unused input bars and prompts for a cleaner look.
 -   **UI Consistency**: Ensured 1px borders and consistent iconography across all message types.
 -   **Icons**: Fixed missing icons in Error dialogs and added distinct icons for "Network not found" (󰐷).
--   **Hotspot Manager**: Full-featured menu to Toggle (Enable/Disable), Edit Password, Rename, QR Code Share, and Delete profiles.
+-   **Hotspot Manager**: Full-featured menu with **Multi-profile support**. Manage multiple saved hotspots (Toggle, Edit, Rename, QR, Delete) from a dedicated sub-menu.
 -   **Status Clarity**: Main Wi-Fi menu now explicitly says "Hotspot Active" instead of "Connected to" when running an Access Point.
 -   **Hotspot Logic**: Completely rewrote creation logic (WPA2/2.4GHz), added "Disconnect Safety Check", and made `dnsmasq` a required dependency.
 
