@@ -369,10 +369,10 @@ show_error_dialog() {
 show_warning_dialog() {
     local title="$1"
     local message="$2"
-    local options="$icon_check Continue"
+    local options="$icon_check Proceed"
     
     # Combined message: Single line/paragraph as requested
-    local full_msg="$title: $message"
+    local full_msg=$(echo -e "$title: $message")
 
     echo -e "$options" | rofi -dmenu -i \
         -name "warning_dialog" \
@@ -940,10 +940,10 @@ menu_wifi() {
             if [ -n "$active_uuid" ]; then
                 if [ "$is_ap_mode" = "yes" ]; then
                     # HOTSPOT STATUS (Fixed)
-                     status_line="$icon_hotspot $tr_status_message Hotspot Active: '$active_ssid'"
+                     status_line="$icon_hotspot $tr_status_message Hotspot Active: '$active_ssid' (${interface_to_use})"
                 else
                     # CLIENT STATUS
-                     status_line="$icon_wifi_full $tr_status_message $tr_status_connected_to '$active_ssid'"
+                     status_line="$icon_wifi_full $tr_status_message $tr_status_connected_to '$active_ssid' (${interface_to_use})"
                 fi
             else
                 status_line="$icon_wifi_disconnected $tr_status_message $tr_status_disconnected"
@@ -1926,12 +1926,12 @@ create_hotspot() {
 
     # Safety Check: Disconnect Wireless if currently connected
     # Most cards cannot be Station (Client) + AP (Hotspot) simultaneously
-    local active_connection=$(nmcli -t -f NAME,TYPE,DEVICE connection show --active | grep ":wifi:${interface_to_use}")
+    local active_connection=$(nmcli -t -f NAME,TYPE,DEVICE connection show --active | grep ":802-11-wireless:${interface_to_use}")
     
     if [ -n "$active_connection" ]; then
         # Check if the active connection is strictly wifi (not a hotspot itself)
         # Note: We rely on user confirmation for now.
-        if ! show_warning_dialog "⚠️ Wi-Fi Disconnect Required" "Starting a Hotspot will disconnect you from the current Wi-Fi network.\nYour card cannot do both simultaneously.\n\nProceed?"; then
+        if ! show_warning_dialog "⚠️ Wi-Fi Disconnect Required" "Starting a Hotspot will disconnect you from the current Wi-Fi network.\nYour card cannot do both simultaneously."; then
             return
         fi
         
@@ -1971,21 +1971,25 @@ create_hotspot() {
         wifi-sec.key-mgmt wpa-psk \
         wifi-sec.psk "$password" \
         ipv4.method shared \
-        ipv6.method shared &> /dev/null; then
+        ipv6.method shared \
+        connection.autoconnect no &> /dev/null; then
         
         # 3. Bring it Up
         if nmcli connection up id "$ssid" &> /dev/null; then
             kill_loading_notification
-            show_message "$tr_hotspot_success\nSSID: $ssid\nPassword: $password" "$tr_hotspot_message"
+            kill_loading_notification
+            show_success_dialog "$tr_hotspot_success\nSSID: $ssid\nPassword: $password" "$tr_hotspot_message"
+            # Optional: Send notification
+            send_notification "Hotspot Created" "$tr_hotspot_success\nSSID: $ssid"
         else
             kill_loading_notification
-            show_message "$tr_hotspot_error (Failed to activate)" "$tr_hotspot_message"
+            show_error_dialog "$tr_hotspot_error (Failed to activate)"
             # Cleanup on failure
             nmcli connection delete id "$ssid" &> /dev/null
         fi
     else
         kill_loading_notification
-        show_message "$tr_hotspot_error (Failed to create profile)" "$tr_hotspot_message"
+        show_error_dialog "$tr_hotspot_error (Failed to create profile)"
     fi
 }
 
