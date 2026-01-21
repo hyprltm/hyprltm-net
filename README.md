@@ -46,7 +46,7 @@ https://github.com/user-attachments/assets/7da1d5b8-d8a1-47f4-8809-e82efc078ab2
 ### ⚙️ Advanced Controls
 - **Airplane Mode** toggle ![New](https://img.shields.io/badge/✨-NEW-%2350fa7b?style=flat-square&labelColor=282a36)
 - **QR Code Sharing** for Wi-Fi ![New](https://img.shields.io/badge/✨-NEW-%2350fa7b?style=flat-square&labelColor=282a36)
-- **Hotspot** creation ![New](https://img.shields.io/badge/✨-NEW-%2350fa7b?style=flat-square&labelColor=282a36)
+- **Hotspot Manager** ![New](https://img.shields.io/badge/✨-NEW-%2350fa7b?style=flat-square&labelColor=282a36)
 
 </td>
 </tr>
@@ -122,7 +122,10 @@ Main Menu
 │   │       ├── Rename Connection
 │   │       ├── Edit Password
 │   │       └── Share via QR Code
-│   ├── Create Hotspot
+│   ├── Hotspot Manager
+│   │   ├── Create New Hotspot
+│   │   └── Manage Saved Hotspots
+│   │       └── [Hotspot Profile] -> (Toggle, Edit Password, Rename, Delete)
 │   ├── Known Connections (Saved Profiles)
 │   │   └── [Saved Wi-Fi Profile]
 │   │       ├── Autoconnect (Toggle)
@@ -169,6 +172,7 @@ Main Menu
 | `networkmanager` | Backend connection management (`nmcli`) |
 | `rofi-wayland` | The graphical menu engine |
 | `qrencode` | Generating Wi-Fi QR codes |
+| `dnsmasq` | Required for Hotspot creation (DHCP) |
 | `Nerd Fonts` | Required for icons (e.g., *JetBrains Mono Nerd Font*) |
 | `libnotify` | **(Optional)** For desktop notifications via `notify-send` |
 
