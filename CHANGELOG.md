@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 -   **Tethering Support**: Added dedicated Bluetooth icon (`󰂯`) for tethering connections.
 -   **Granular Control**: Option to Rename, Edit Password, Show QR, and Delete saved hotspot profiles.
 -   **Robust Error Handling**: Connection failures (Wi-Fi, VPN, Wired) now trigger blocking Rofi dialogs with "Try Again" / "Edit Password" options, ensuring issues are never silent.
+-   **One-Line Installer**: New `setup.sh` with bootstrap logic allows installing via a single `curl | bash` command without manual cloning.
 -   **Universal Semantic Styling**: All Rofi dialogs now follow a strict color code:
     -   🟥 **Error**: Red border/text (Connection failed).
     -   🟧 **Warning**: Orange border/text.
@@ -35,6 +36,10 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 -   **Loopback**: Filtered out useless `lo` connections from the saved list.
 -   **Hotspot Selection**: Fixed bug where selecting a saved hotspot caused a menu loop (implemented Index Matching).
+-   **Hotspot Safety**: Fixed critical conflict where stopping one hotspot would auto-enable another (Added `autoconnect=no`).
+-   **Safe Disconnect**: Fixed detection logic (`grep :802-11-wireless`) so the "Wi-Fi Disconnect Warning" correctly appears before creating a hotspot.
+-   **UI Formatting**: Fixed issue where newlines in dialog messages were rendered as literal `\n` text.
+-   **Dialog Polish**: Changed confirmation button from generic "Continue" to "Proceed" for clearer warnings.
 -   **VPN Autoconnect**: Fixed critical issue where imported VPNs would auto-connect on boot/restart. New imports now default to `autoconnect=no`.
 -   **Logic**: Fixed "Edit Password" incorrectly reporting "Successfully Connected" without attempting connection. Now correctly says "Password Updated".
 -   **Silent Failures**: Fixed bug where cancelling a connection or failing a VPN import would fail silently or show a confusing Green success message.
