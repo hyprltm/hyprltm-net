@@ -56,10 +56,10 @@ https://github.com/user-attachments/assets/7da1d5b8-d8a1-47f4-8809-e82efc078ab2
 - **Distro Detection**: Auto-installs dependencies (Arch, Fedora, openSUSE, NixOS)
 - **Desktop Entry**: Creates launcher menu entry & icon
 
-###  Robust Feedback
+### 💬 Robust Feedback
 `hyprltm-net` includes a complete visual feedback system ensuring you never miss a status update.
-- **󰃐 Universal Semantic Styling**: Red (Error), Orange (Warning), Green (Success), and Blue (Info).
-- ** Blocking Dialogs**: Critical errors (e.g. Wrong Password) require user action to proceed.
+- **🎨 Universal Semantic Styling**: Red (Error), Orange (Warning), Green (Success), and Blue (Info).
+- **🛑 Blocking Dialogs**: Critical errors (e.g. Wrong Password) require user action to proceed.
 - **🔔 Fallback Notification System**: If no notification service (like `dunst`) is running, the script automatically falls back to Rofi dialogs.
 
 #### Feedback Gallery
@@ -234,19 +234,20 @@ HyprLTM-Net uses the **LTMNight** color palette. Customize appearance by editing
 
 ![Gradient](assets/gradient.svg)
 
-## ☕ Support the Project
+## ❤️ Support the Project
 
 If you find this tool helpful, there are many ways to support the project:
 
-### ☕ Buy Me A Coffee
+### 💰 Financial Support
 If you'd like to support the development financially:
 
-[![Buy Me A Coffee](https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=☕&slug=linuxtechmore&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff)](https://www.buymeacoffee.com/linuxtechmore)
+<a href="https://www.buymeacoffee.com/linuxtechmore"><img src="https://img.shields.io/badge/Buy%20Me%20A%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" height="42" /></a>
+<a href="https://github.com/sponsors/sniper1720"><img src="https://img.shields.io/badge/GitHub%20Sponsors-ea4aaa?style=for-the-badge&logo=github&logoColor=white" height="42" /></a>
 
 ### 🤝 Contribute & Support
 Financial contributions are not the only way to help! Here are other options:
 - **⭐ Star the Repository**: It helps more people find the project!
-- **🐛 Report Bugs**: Found an issue? Open a ticket on GitHub.
+- **🩹 Report Bugs**: Found an issue? Open a ticket on GitHub.
 - **💡 Suggest Features**: Have a cool idea? Let me know!
 - **📢 Share**: Tell your friends!
 
