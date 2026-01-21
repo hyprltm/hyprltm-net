@@ -176,24 +176,11 @@ Main Menu
 
 ## 🚀 Installation
 
-### 1. Clone the Repository
+### 1. One-Line Installation
 ```bash
-git clone https://github.com/hyprltm/hyprltm-net.git
-cd hyprltm-net
+bash <(curl -s https://raw.githubusercontent.com/hyprltm/hyprltm-net/main/setup.sh)
 ```
-
-### 2. Run the Installer
-The install script will **detect your distribution** and offer to install missing dependencies.
-
-It then provides **three interactive options**:
-1.  **Desktop Entry** – Auto-creates a launcher menu entry & icon.
-2.  **Keybind Setup** – Shows instructions to add a Hyprland keybind.
-3.  **Waybar Setup** – Shows instructions to configure Waybar.
-
-```bash
-chmod +x install.sh
-./install.sh
-```
+The script will auto-detect your distribution, install dependencies, and set up the menu.
 
 <details>
 <summary><strong>Manual Installation</strong></summary>

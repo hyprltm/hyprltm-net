@@ -8,6 +8,47 @@ PURPLE='\033[0;35m'  # bd93f9
 CYAN='\033[0;36m'    # 8be9fd
 NC='\033[0m'         # No Color
 
+
+# Check if running from within the repo
+if [ ! -f "hyprltm-net.sh" ]; then
+    echo -e "${PURPLE}╔══════════════════════════════════════════╗${NC}"
+    echo -e "${PURPLE}║      ${CYAN}HyprLTM-Net Installer${PURPLE}               ║${NC}"
+    echo -e "${PURPLE}╚══════════════════════════════════════════╝${NC}"
+    echo ""
+    echo -e "${YELLOW}Running in bootstrap mode...${NC}"
+    
+    # Check for git
+    if ! command -v git &> /dev/null; then
+        echo -e "${RED}Error: 'git' is required to clone the repository.${NC}"
+        echo "Please install git and try again."
+        exit 1
+    fi
+
+    TEMP_DIR=$(mktemp -d)
+    echo -e "${CYAN}Cloning repository to temporary directory...${NC}"
+    git clone https://github.com/hyprltm/hyprltm-net.git "$TEMP_DIR/hyprltm-net"
+    
+    if [ $? -ne 0 ]; then
+        echo -e "${RED}Failed to clone repository.${NC}"
+        exit 1
+    fi
+
+    echo -e "${GREEN}Repository cloned.${NC}"
+    echo ""
+    
+    # Run the setup script from the cloned directory
+    cd "$TEMP_DIR/hyprltm-net" || exit 1
+    chmod +x setup.sh
+    ./setup.sh "$@"
+    
+    # Cleanup (Optional, but good practice if we want to leave no trace)
+    # However, user might want to keep the repo? 
+    # The standard 'install' copies files to ~/.local/bin, so we don't strictly need the repo after.
+    # We'll leave it in temp (cleared on reboot) or offer to keep it?
+    # Let's just run it. The user will be prompted inside.
+    exit $?
+fi
+
 echo -e "${PURPLE}╔══════════════════════════════════════════╗${NC}"
 echo -e "${PURPLE}║      ${CYAN}HyprLTM-Net Installer${PURPLE}               ║${NC}"
 echo -e "${PURPLE}╚══════════════════════════════════════════╝${NC}"
