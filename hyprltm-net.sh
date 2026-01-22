@@ -385,6 +385,25 @@ show_warning_dialog() {
         -theme-str 'textbox { text-color: @warning-message; }'
 }
 
+# Show a blocking success dialog
+show_success_dialog() {
+    local title="$1"
+    local message="$2"
+    local options="$icon_check OK"
+    
+    local full_msg=$(echo -e "$title: $message")
+
+    echo -e "$options" | rofi -dmenu -i \
+        -name "success_dialog" \
+        -theme "$ROFI_NETWORK_MANAGER_THEME" \
+        -mesg "$full_msg" \
+        -theme-str 'listview { lines: 1; }' \
+        -theme-str 'mainbox { children: [message, listview]; }' \
+        -theme-str 'inputbar { enabled: false; }' \
+        -theme-str 'message { border-color: @success-message; }' \
+        -theme-str 'textbox { text-color: @success-message; }'
+}
+
 # Kills the loading notification Rofi window if it's running.
 kill_loading_notification() {
     if [ -n "$LOADING_ROFI_PID" ] && ps -p "$LOADING_ROFI_PID" > /dev/null; then
@@ -1978,7 +1997,7 @@ create_hotspot() {
         if nmcli connection up id "$ssid" &> /dev/null; then
             kill_loading_notification
             kill_loading_notification
-            show_success_dialog "$tr_hotspot_success\nSSID: $ssid\nPassword: $password" "$tr_hotspot_message"
+            show_success_dialog "$tr_hotspot_message" "$tr_hotspot_success\nSSID: $ssid\nPassword: $password"
             # Optional: Send notification
             send_notification "Hotspot Created" "$tr_hotspot_success\nSSID: $ssid"
         else
