@@ -1312,15 +1312,36 @@ menu_ip_config() {
 				;;
 			*"$tr_autoip_message"*)
 				if [ "$autoip_state" = "$icon_on" ]; then
-					# FIX: When disabling Auto IP, we MUST provide an address immediately,
-					# otherwise 'nmcli' rejects setting method to 'manual'.
-					local new_addrs=$(echo "" | display_menu 5 "$tr_menu_ip_config_addresses_prompt" "")
-					if [ -n "$new_addrs" ]; then
-						# We must set BOTH method and address at the same time
-						nmcli connection modify uuid "$connection_uuid" ipv${ipv}.method manual ipv${ipv}.addresses "$new_addrs"
-						# Also optional: prompt for gateway immediately to be helpful, strictly not required for 'manual' but good practice
-						# keeping it simple for now to just fix the toggle.
-					fi
+					# Switched OFF: Prompt for IP, Gateway, and DNS sequentially
+                    
+                    local ex_ip="192.168.1.10/24"
+                    local ex_gw="192.168.1.1"
+                    if [ "$ipv" = "6" ]; then
+                        ex_ip="2001:db8::1/64"
+                        ex_gw="fe80::1"
+                    fi
+
+					# 1. IP Address (REQUIRED)
+					local new_addrs=$(echo "" | display_menu 5 "Enter IP Address (e.g. $ex_ip)" "")
+					if [ -z "$new_addrs" ]; then continue; fi # Cancellation aborts the toggle
+
+                    # 2. Gateway (OPTIONAL)
+					local new_gw=$(echo "" | display_menu 5 "Enter Gateway (Optional, e.g. $ex_gw)" "")
+                    
+                    # 3. DNS (OPTIONAL)
+					local new_dns=$(echo "" | display_menu 5 "Enter DNS Server (Optional, e.g. 8.8.8.8)" "")
+
+                    # Apply Configuration
+					nmcli connection modify uuid "$connection_uuid" ipv${ipv}.method manual ipv${ipv}.addresses "$new_addrs"
+                    
+                    if [ -n "$new_gw" ]; then
+                        nmcli connection modify uuid "$connection_uuid" ipv${ipv}.gateway "$new_gw"
+                    fi
+                    
+                    if [ -n "$new_dns" ]; then
+                        nmcli connection modify uuid "$connection_uuid" ipv${ipv}.dns "$new_dns"
+                        nmcli connection modify uuid "$connection_uuid" ipv${ipv}.ignore-auto-dns yes
+                    fi
 				else
 					nmcli connection modify uuid "$connection_uuid" ipv${ipv}.method auto
 					nmcli connection modify uuid "$connection_uuid" ipv${ipv}.gateway ''
@@ -1329,7 +1350,16 @@ menu_ip_config() {
 				;;
 			*"$tr_autodns_message"*)
 				if [ "$autodns_state" = "$icon_on" ]; then
-					nmcli connection modify uuid "$connection_uuid" ipv${ipv}.ignore-auto-dns yes
+					# Switched OFF: Prompt for DNS immediately
+					local new_dns=$(echo "" | display_menu 5 "Enter DNS Server (e.g. 8.8.8.8)" "")
+					if [ -n "$new_dns" ]; then
+						# Set the DNS first, then ignore auto
+						nmcli connection modify uuid "$connection_uuid" ipv${ipv}.dns "$new_dns"
+						nmcli connection modify uuid "$connection_uuid" ipv${ipv}.ignore-auto-dns yes
+					else
+						# User cancelled matching -> Do nothing (Keep Auto ON)
+						: 
+					fi
 				else
 					nmcli connection modify uuid "$connection_uuid" ipv${ipv}.ignore-auto-dns no
 				fi
