@@ -233,7 +233,7 @@ If you find this tool helpful, there are many ways to support the project:
 If you'd like to support the development financially:
 
 <a href="https://www.buymeacoffee.com/linuxtechmore"><img src="https://img.shields.io/badge/Fuel%20the%20next%20commit-f1fa8c?style=for-the-badge&logo=buy-me-a-coffee&logoColor=282a36" height="42" /></a>
-<a href="https://github.com/sponsors/sniper1720"><img src="https://img.shields.io/badge/Become%20a%20Sponsor-ff79c6?style=for-the-badge&logo=github&logoColor=282a36" height="42" /></a>
+<a href="https://github.com/sponsors/sniper1720"><img src="https://img.shields.io/badge/Become%20a%20Sponsor-bd93f9?style=for-the-badge&logo=github&logoColor=white" height="42" /></a>
 
 ### 🤝 Contribute & Support
 Financial contributions are not the only way to help! Here are other options:
