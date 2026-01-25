@@ -21,29 +21,29 @@ https://github.com/user-attachments/assets/7da1d5b8-d8a1-47f4-8809-e82efc078ab2
 
 ![Gradient](assets/gradient.svg)
 
-## ✨ Features
+## Features
 
 <table>
 <tr>
 <td width="50%">
 
-### 📶 Wi-Fi Management
+### Wi-Fi Management
 - Scan for nearby networks
 - Connect to new or hidden SSIDs
 - Manage saved connections & passwords
 
-### 🔌 Wired Profiles
+### Wired Profiles
 - Switch between Ethernet configurations
 - View connection status
 
 </td>
 <td width="50%">
 
-### 🔐 VPN Support
+### VPN Support
 - **WireGuard** & **OpenVPN** integration
 - Import `.conf` or `.ovpn` files directly
 
-### ⚙️ Advanced Controls
+### Advanced Controls
 - **Airplane Mode** toggle ![New](https://img.shields.io/badge/✨-NEW-%2350fa7b?style=flat-square&labelColor=282a36)
 - **QR Code Sharing** for Wi-Fi ![New](https://img.shields.io/badge/✨-NEW-%2350fa7b?style=flat-square&labelColor=282a36)
 - **Hotspot Manager** ![New](https://img.shields.io/badge/✨-NEW-%2350fa7b?style=flat-square&labelColor=282a36)
@@ -52,15 +52,15 @@ https://github.com/user-attachments/assets/7da1d5b8-d8a1-47f4-8809-e82efc078ab2
 </tr>
 </table>
 
-### 📦 Smart Installation
+### Smart Installation
 - **Distro Detection**: Auto-installs dependencies (Arch, Fedora, openSUSE, NixOS)
 - **Desktop Entry**: Creates launcher menu entry & icon
 
-### 💬 Robust Feedback
+### Robust Feedback
 `hyprltm-net` includes a complete visual feedback system ensuring you never miss a status update.
-- **🎨 Universal Semantic Styling**: Red (Error), Orange (Warning), Green (Success), and Blue (Info).
-- **🛑 Blocking Dialogs**: Critical errors (e.g. Wrong Password) require user action to proceed.
-- **🔔 Fallback Notification System**: If no notification service (like `dunst`) is running, the script automatically falls back to Rofi dialogs.
+- **Universal Semantic Styling**: Red (Error), Orange (Warning), Green (Success), and Blue (Info).
+- **Blocking Dialogs**: Critical errors (e.g. Wrong Password) require user action to proceed.
+- **Fallback Notification System**: If no notification service (like `dunst`) is running, the script automatically falls back to Rofi dialogs.
 
 #### Feedback Gallery
 <div align="center">
@@ -102,7 +102,7 @@ https://github.com/user-attachments/assets/7da1d5b8-d8a1-47f4-8809-e82efc078ab2
 </div>
 
 
-## 🌳 Menu Structure
+## Menu Structure
 
 ```
 Main Menu
@@ -165,7 +165,7 @@ Main Menu
 └── Airplane Mode (Toggle)
 ```
 
-## 🛠️ Prerequisites
+## Prerequisites
 
 | Package | Purpose |
 | :--- | :--- |
@@ -178,7 +178,7 @@ Main Menu
 
 ![Gradient](assets/gradient.svg)
 
-## 🚀 Installation
+## Installation
 
 ### 1. One-Line Installation
 ```bash
@@ -208,7 +208,7 @@ bind = SUPER, N, exec, hyprltm-net
 
 ![Gradient](assets/gradient.svg)
 
-## 🎨 Theming
+## Theming
 
 HyprLTM-Net uses the **LTMNight** color palette. Customize appearance by editing `~/.config/rofi/themes/ltmnight.rasi`.
 
@@ -229,24 +229,24 @@ HyprLTM-Net uses the **LTMNight** color palette. Customize appearance by editing
 
 If you find this tool helpful, there are many ways to support the project:
 
-### 💰 Financial Support
+### Financial Support
 If you'd like to support the development financially:
 
 <a href="https://www.buymeacoffee.com/linuxtechmore"><img src="https://img.shields.io/badge/Fuel%20the%20next%20commit-f1fa8c?style=for-the-badge&logo=buy-me-a-coffee&logoColor=282a36" height="42" /></a>
 <a href="https://github.com/sponsors/sniper1720"><img src="https://img.shields.io/badge/Become%20a%20Sponsor-bd93f9?style=for-the-badge&logo=github&logoColor=white" height="42" /></a>
 
-### 🤝 Contribute & Support
+### Contribute & Support
 Financial contributions are not the only way to help! Here are other options:
-- **⭐ Star the Repository**: It helps more people find the project!
-- **🩹 Report Bugs**: Found an issue? Open a ticket on GitHub.
-- **💡 Suggest Features**: Have a cool idea? Let me know!
-- **📢 Share**: Tell your friends!
+- **Star the Repository**: It helps more people find the project!
+- **Report Bugs**: Found an issue? Open a ticket on GitHub.
+- **Suggest Features**: Have a cool idea? Let me know!
+- **Share**: Tell your friends!
 
 Every bit of support helps keep the project alive and ensures I can spend more time developing open source tools for the Linux community!
 
 ![Gradient](assets/gradient.svg)
 
-## 📄 License
+## License
 
 **Created by [Djalel Oukid (sniper1720)](https://github.com/sniper1720)** and distributed under the **GPL-3.0 License**.
 
