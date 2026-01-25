@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
 
-# Colors - LTMNight Palette
-GREEN='\033[0;32m'   # 50fa7b
-RED='\033[0;31m'     # ff5555
-YELLOW='\033[1;33m'  # f1fa8c
-PURPLE='\033[0;35m'  # bd93f9
-CYAN='\033[0;36m'    # 8be9fd
+GREEN='\033[0;32m'   # ltmnight7 (#50fa7b)
+RED='\033[0;31m'     # ltmnight4 (#ff5555)
+YELLOW='\033[1;33m'  # ltmnight6 (#f1fa8c)
+PURPLE='\033[0;35m'  # ltmnight9 (#bd93f9)
+CYAN='\033[0;36m'    # ltmnight8 (#8be9fd)
 NC='\033[0m'         # No Color
 
 
-# Check if running from within the repo
 if [ ! -f "hyprltm-net.sh" ]; then
     echo -e "${PURPLE}╔══════════════════════════════════════════╗${NC}"
     echo -e "${PURPLE}║      ${CYAN}HyprLTM-Net Installer${PURPLE}               ║${NC}"
@@ -17,7 +15,7 @@ if [ ! -f "hyprltm-net.sh" ]; then
     echo ""
     echo -e "${YELLOW}Running in bootstrap mode...${NC}"
     
-    # Check for git
+
     if ! command -v git &> /dev/null; then
         echo -e "${RED}Error: 'git' is required to clone the repository.${NC}"
         echo "Please install git and try again."
@@ -36,16 +34,11 @@ if [ ! -f "hyprltm-net.sh" ]; then
     echo -e "${GREEN}Repository cloned.${NC}"
     echo ""
     
-    # Run the setup script from the cloned directory
+
     cd "$TEMP_DIR/hyprltm-net" || exit 1
     chmod +x setup.sh
     ./setup.sh "$@"
-    
-    # Cleanup (Optional, but good practice if we want to leave no trace)
-    # However, user might want to keep the repo? 
-    # The standard 'install' copies files to ~/.local/bin, so we don't strictly need the repo after.
-    # We'll leave it in temp (cleared on reboot) or offer to keep it?
-    # Let's just run it. The user will be prompted inside.
+
     exit $?
 fi
 
@@ -54,7 +47,6 @@ echo -e "${PURPLE}║      ${CYAN}HyprLTM-Net Installer${PURPLE}               �
 echo -e "${PURPLE}╚══════════════════════════════════════════╝${NC}"
 echo ""
 
-# Distro Detection
 DISTRO="unknown"
 if [ -f /etc/os-release ]; then
     . /etc/os-release
@@ -68,20 +60,15 @@ if [ -f /etc/os-release ]; then
 fi
 echo -e "${CYAN}Detected Distribution:${NC} $DISTRO"
 
-# Package Definitions
-# Required
 PKGS_ARCH_REQ="rofi-wayland networkmanager qrencode dnsmasq ttf-jetbrains-mono-nerd"
 PKGS_FEDORA_REQ="rofi-wayland NetworkManager qrencode dnsmasq"
 PKGS_SUSE_REQ="rofi-wayland NetworkManager qrencode dnsmasq"
 
-# Optional (for notifications)
 PKGS_ARCH_OPT="libnotify"
 PKGS_FEDORA_OPT="libnotify"
 PKGS_SUSE_OPT="libnotify"
 
-# Check Dependencies
 DEPENDENCIES=("rofi" "nmcli" "qrencode" "dnsmasq")
-# Note: Font detection is skipped (unreliable). User verification required.
 MISSING_DEPS=()
 
 echo ""
@@ -95,7 +82,6 @@ for dep in "${DEPENDENCIES[@]}"; do
     fi
 done
 
-# Install Missing Dependencies
 if [ ${#MISSING_DEPS[@]} -gt 0 ]; then
     echo ""
     if [ "$DISTRO" = "nixos" ]; then
@@ -135,7 +121,6 @@ if [ ${#MISSING_DEPS[@]} -gt 0 ]; then
     fi
 fi
 
-# Setup Directories
 INSTALL_DIR="$HOME/.local/bin"
 THEME_DIR="$HOME/.config/rofi/themes"
 
@@ -144,7 +129,6 @@ echo "Creating directories..."
 mkdir -p "$INSTALL_DIR"
 mkdir -p "$THEME_DIR"
 
-# Install Files
 echo "Installing script to $INSTALL_DIR..."
 cp hyprltm-net.sh "$INSTALL_DIR/hyprltm-net"
 chmod +x "$INSTALL_DIR/hyprltm-net"
@@ -152,9 +136,7 @@ chmod +x "$INSTALL_DIR/hyprltm-net"
 echo "Installing themes to $THEME_DIR..."
 cp *.rasi "$THEME_DIR/"
 
-# Configuration
 
-# Desktop Entry
 echo ""
 echo -e "${YELLOW}[Desktop Entry]${NC} Adds HyprLTM-Net to your application launcher."
 read -p "Create a Desktop Entry? [Y/n] " choice_desktop
@@ -178,7 +160,6 @@ EOF
     echo -e "${GREEN}Desktop Entry created.${NC}"
 fi
 
-# Hyprland Binding
 echo ""
 echo -e "${YELLOW}[Keybinding]${NC} Allows you to open the menu with SUPER+N."
 read -p "Show instructions? [Y/n] " choice_keybind
@@ -187,7 +168,6 @@ if [[ ! "$choice_keybind" =~ ^[Nn]$ ]]; then
     echo -e "   ${GREEN}bind = SUPER, N, exec, hyprltm-net${NC}"
 fi
 
-# Waybar Integration
 echo ""
 echo -e "${YELLOW}[Waybar]${NC} Makes the network module open this menu on click."
 read -p "Show instructions? [Y/n] " choice_waybar
@@ -196,7 +176,6 @@ if [[ ! "$choice_waybar" =~ ^[Nn]$ ]]; then
     echo -e "   ${GREEN}\"on-click\": \"hyprltm-net\"${NC}"
 fi
 
-# Complete
 echo ""
 echo -e "${PURPLE}╔══════════════════════════════════════════╗${NC}"
 echo -e "${PURPLE}║      ${GREEN}Installation Complete!${PURPLE}              ║${NC}"
