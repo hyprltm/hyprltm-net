@@ -7,7 +7,7 @@
 
 // Copyright © 2025 Djalel Oukid (sniper1720)
 
-@theme "~/.config/rofi/themes/ltmnight.rasi"
+@theme "ltmnight.rasi"
 
 window {
     background-color: @background;
