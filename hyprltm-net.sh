@@ -26,7 +26,28 @@ fi
 #                           CONFIGURATION & THEMING
 # =============================================================================
 
-ROFI_NETWORK_MANAGER_THEME="$HOME/.config/rofi/themes/hyprltm-net.rasi"
+ROFI_THEME_NAME="hyprltm-net"
+ROFI_NETWORK_MANAGER_THEME=""
+
+for _dir in "${XDG_CONFIG_HOME:-$HOME/.config}/rofi/themes" \
+           "/usr/share/rofi/themes" \
+           "/etc/xdg/rofi/themes" \
+           "$HOME/.local/share/rofi/themes"; do
+    if [[ -f "$_dir/${ROFI_THEME_NAME}.rasi" ]]; then
+        ROFI_NETWORK_MANAGER_THEME="$_dir/${ROFI_THEME_NAME}.rasi"
+        break
+    fi
+done
+
+if [[ -z "$ROFI_NETWORK_MANAGER_THEME" ]] && [[ -f "./${ROFI_THEME_NAME}.rasi" ]]; then
+    ROFI_NETWORK_MANAGER_THEME="$(pwd)/${ROFI_THEME_NAME}.rasi"
+fi
+
+if [[ -z "$ROFI_NETWORK_MANAGER_THEME" ]]; then
+    ROFI_NETWORK_MANAGER_THEME="${ROFI_THEME_NAME}"
+fi
+
+unset _dir
 
 icon_search="${icon_search:-""}"
 icon_close="${icon_close:-""}"
@@ -137,6 +158,7 @@ tr_no_configured_vpns='No VPN connections configured.'
 tr_no_active_vpns='No active VPN connections.'
 tr_no_saved_connections='No saved connections found.'
 tr_no_active_connection='No active connection.'
+tr_no_wifi_interface='No Wi-Fi interface detected.'
 tr_no_ethernet_device='No Ethernet device found.'
 tr_no_wifi_networks_found='No Wi-Fi networks found.'
 tr_wired_status_message='Wired Status'
@@ -223,14 +245,26 @@ tr_password_updated_body='Password updated successfully for'
 tr_password_update_failed_summary='Update Failed'
 tr_password_update_failed_body='Failed to update password for'
 
+# --- Global Variables ---
 program_name="$(basename "$0")"
 LOADING_ROFI_PID=""
-mapfile -t interfaces < <(nmcli --colors no -t -f TYPE,DEVICE device status | awk -F ':' '$1 == "wifi" {print $2}')
-if [ -z "${interfaces[0]}" ]; then
-	echo "$program_name: No Wi-Fi interfaces detected." >&2
+
+# Detect interfaces
+mapfile -t wifi_interfaces < <(nmcli --colors no -t -f TYPE,DEVICE device status | awk -F ':' '$1 == "wifi" {print $2}')
+mapfile -t ethernet_interfaces < <(nmcli --colors no -t -f TYPE,DEVICE device status | awk -F ':' '$1 == "ethernet" {print $2}')
+
+if [ -z "${wifi_interfaces[0]}" ] && [ -z "${ethernet_interfaces[0]}" ]; then
+	echo "$program_name: No Wi-Fi or Ethernet interfaces detected." >&2
 	exit 2
 fi
-interface_to_use="${interfaces[0]}"
+
+if [ -n "${wifi_interfaces[0]}" ]; then
+    interfaces=("${wifi_interfaces[@]}")
+    interface_to_use="${wifi_interfaces[0]}"
+else
+    interfaces=("${ethernet_interfaces[@]}")
+    interface_to_use="${ethernet_interfaces[0]}"
+fi
 
 # =============================================================================
 #                               ROFI WRAPPERS
@@ -850,6 +884,12 @@ menu_hotspot() {
 
 menu_wifi() {
 	local connection_state options chosen
+    
+    if [ -z "${wifi_interfaces[0]}" ]; then
+        show_error_message "$tr_no_wifi_interface"
+        return
+    fi
+
 	while true; do
         show_loading_notification "$tr_checking_wifi_status"
 		connection_state=$(nmcli --colors no --get-values WIFI general)
@@ -1689,6 +1729,11 @@ menu_connect_wired_connection() {
 # =============================================================================
 
 menu_wired() {
+    if [ -z "${ethernet_interfaces[0]}" ]; then
+        show_error_message "$tr_no_ethernet_device"
+        return
+    fi
+
     while true; do
         local active_wired_conn=$(nmcli -t -f TYPE,DEVICE connection show --active | grep -vE "(wireless|vpn|wireguard)" | head -n 1)
         local status_line=""
