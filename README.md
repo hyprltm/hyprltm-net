@@ -15,7 +15,7 @@
   <a href="https://github.com/hyprltm/hyprltm-net"><img alt="Repo Size" src="https://img.shields.io/github/repo-size/hyprltm/hyprltm-net?style=for-the-badge&color=8be9fd&labelColor=282a36"/></a>
 </p>
 
-https://github.com/user-attachments/assets/7da1d5b8-d8a1-47f4-8809-e82efc078ab2
+[![HyprLTM-Net Demo](https://img.youtube.com/vi/k2QlRe5Cvls/maxresdefault.jpg)](https://youtu.be/k2QlRe5Cvls)
 
 <p align="center"><em>HyprLTM-Net Demo</em></p>
 
@@ -25,28 +25,44 @@ https://github.com/user-attachments/assets/7da1d5b8-d8a1-47f4-8809-e82efc078ab2
 
 <table>
 <tr>
-<td width="50%">
+<td width="50%" valign="top">
 
 ### Wi-Fi Management
 - Scan for nearby networks
 - Connect to new or hidden SSIDs
 - Manage saved connections & passwords
 
+<img src="assets/wifi_menu.png" width="100%" alt="Wi-Fi Menu"/>
+
+</td>
+<td width="50%" valign="top">
+
 ### Wired Profiles
 - Switch between Ethernet configurations
 - View connection status
 
+<img src="assets/wired_menu.png" width="100%" alt="Wired Menu"/>
+
 </td>
-<td width="50%">
+</tr>
+<tr>
+<td width="50%" valign="top">
 
 ### VPN Support
 - **WireGuard** & **OpenVPN** integration
 - Import `.conf` or `.ovpn` files directly
 
+<img src="assets/vpn_menu.png" width="100%" alt="VPN Menu"/>
+
+</td>
+<td width="50%" valign="top">
+
 ### Advanced Controls
 - **Airplane Mode** toggle
 - **QR Code Sharing** for Wi-Fi
 - **Hotspot Manager**
+
+<img src="assets/hotspot_manager.png" width="100%" alt="Hotspot Manager"/>
 
 </td>
 </tr>
