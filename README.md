@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/hyprltm/hyprltm-net/releases"><img alt="Version" src="https://img.shields.io/github/v/release/hyprltm/hyprltm-net?style=for-the-badge&color=f1fa8c&labelColor=282a36"/></a>
+  <img alt="Version" src="https://img.shields.io/badge/Version-v0.3.0-f1fa8c?style=for-the-badge&labelColor=282a36"/>
   <a href="https://github.com/hyprltm/hyprltm-net/stargazers"><img alt="GitHub Stars" src="https://img.shields.io/github/stars/hyprltm/hyprltm-net?style=for-the-badge&color=bd93f9&labelColor=282a36"/></a>
   <a href="https://github.com/hyprltm/hyprltm-net/commits/main"><img alt="Last Commit" src="https://img.shields.io/github/last-commit/hyprltm/hyprltm-net?style=for-the-badge&color=50fa7b&labelColor=282a36"/></a>
   <a href="https://github.com/hyprltm/hyprltm-net"><img alt="Repo Size" src="https://img.shields.io/github/repo-size/hyprltm/hyprltm-net?style=for-the-badge&color=8be9fd&labelColor=282a36"/></a>
