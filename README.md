@@ -9,15 +9,15 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/hyprltm/hyprltm-net/releases"><img alt="Version" src="https://img.shields.io/github/v/release/hyprltm/hyprltm-net?style=for-the-badge&color=f1fa8c&labelColor=282a36"/></a>
   <a href="https://github.com/hyprltm/hyprltm-net/stargazers"><img alt="GitHub Stars" src="https://img.shields.io/github/stars/hyprltm/hyprltm-net?style=for-the-badge&color=bd93f9&labelColor=282a36"/></a>
   <a href="https://github.com/hyprltm/hyprltm-net/commits/main"><img alt="Last Commit" src="https://img.shields.io/github/last-commit/hyprltm/hyprltm-net?style=for-the-badge&color=50fa7b&labelColor=282a36"/></a>
-  <a href="https://github.com/hyprltm/hyprltm-net/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/hyprltm/hyprltm-net?style=for-the-badge&color=ff79c6&labelColor=282a36"/></a>
   <a href="https://github.com/hyprltm/hyprltm-net"><img alt="Repo Size" src="https://img.shields.io/github/repo-size/hyprltm/hyprltm-net?style=for-the-badge&color=8be9fd&labelColor=282a36"/></a>
 </p>
 
 [![HyprLTM-Net Demo](https://img.youtube.com/vi/k2QlRe5Cvls/maxresdefault.jpg)](https://youtu.be/k2QlRe5Cvls)
 
-<p align="center"><em>HyprLTM-Net Demo</em></p>
+<p align="center"><em>HyprLTM-Net Demo (YouTube)</em></p>
 
 ![Gradient](assets/gradient.svg)
 
