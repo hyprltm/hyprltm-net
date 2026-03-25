@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 ## [v0.3.0] - 2026-01-21
 
 ### Added
+-   **Global Theme Support** ([#6](https://github.com/hyprltm/hyprltm-net/pull/6)): Enabled loading the Rofi theme from global system paths (e.g., `/etc/xdg/rofi/themes`) in addition to local user configs.
+-   **Ethernet-Only Mode** ([#5](https://github.com/hyprltm/hyprltm-net/pull/5)): Added support for starting the application on systems that only have Ethernet interfaces (no Wi-Fi).
 -   **Hotspot Manager**: New full-featured hierarchical menu with **Multi-profile support**. Manage multiple saved hotspots (Create New, Toggle, Edit Password, Rename, Show QR, Delete) from a dedicated sub-menu.
 -   **Tethering Support**: Added dedicated Bluetooth icon for tethering connections.
 -   **Robust Error Handling**: Connection failures (Wi-Fi, VPN, Wired) now trigger blocking Rofi dialogs with "Try Again" / "Edit Password" options, ensuring issues are never silent.
@@ -19,7 +21,7 @@ All notable changes to this project will be documented in this file.
 -   **Documentation Gallery**: Refactored README to include a detailed Vertical Feedback Gallery with descriptive captions.
 
 ### Changed
--   **Code Quality**: Replaced unsafe `\0` delimiters with `;;;` and cleaned code comments.
+-   **Code Quality** ([#2](https://github.com/hyprltm/hyprltm-net/pull/2)): Replaced unsafe `\0` delimiters with `;;;` and cleaned code comments.
 -   **Terminology**: Standardized documentation to use "Notification Service" instead of "Daemon".
 -   **Info Dialogs**: Refactored informational messages (e.g., Airplane Mode status) to use a dedicated visual style (Blue Box) instead of generic lists.
 -   **Airplane Mode**: Now uses specific icons for Enabled and Disabled states.
