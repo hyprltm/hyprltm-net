@@ -5,8 +5,8 @@ All notable changes to this project will be documented in this file.
 ## [v0.3.0] - 2026-01-21
 
 ### Added
+-   **Hotspot Manager**: New full-featured hierarchical menu with **Multi-profile support**. Manage multiple saved hotspots (Create New, Toggle, Edit Password, Rename, Show QR, Delete) from a dedicated sub-menu.
 -   **Tethering Support**: Added dedicated Bluetooth icon for tethering connections.
--   **Granular Control**: Option to Rename, Edit Password, Show QR, and Delete saved hotspot profiles.
 -   **Robust Error Handling**: Connection failures (Wi-Fi, VPN, Wired) now trigger blocking Rofi dialogs with "Try Again" / "Edit Password" options, ensuring issues are never silent.
 -   **One-Line Installer**: New `setup.sh` with bootstrap logic allows installing via a single `curl | bash` command without manual cloning.
 -   **Universal Semantic Styling**: All Rofi dialogs now follow a strict color code:
@@ -27,7 +27,6 @@ All notable changes to this project will be documented in this file.
 -   **Dialog Layout & Polish**: Refined Error/Warning dialogs to remove unused input bars and prompts for a cleaner look. Changed confirmation button from generic "Continue" to "Proceed" for clearer warnings.
 -   **UI Polish & Consistency**: Ensured 1px borders and consistent iconography across all message types. Replaced "Headphones" icon with "Bookmark Check" for saved items.
 -   **Icons**: Fixed missing icons in Error dialogs and added distinct icons for "Network not found".
--   **Hotspot Manager**: Full-featured menu with **Multi-profile support**. Manage multiple saved hotspots (Toggle, Edit, Rename, QR, Delete) from a dedicated sub-menu.
 -   **Status Clarity**: Main Wi-Fi menu now explicitly says "Hotspot Active" instead of "Connected to" when running an Access Point.
 -   **Hotspot Logic**: Completely rewrote creation logic (WPA2/2.4GHz), added "Disconnect Safety Check", and made `dnsmasq` a required dependency.
 
