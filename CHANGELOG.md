@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [v0.3.0] - 2026-01-21
+## [v0.3.0] - 2026-03-22
 
 ### Added
 -   **Global Theme Support** ([#6](https://github.com/hyprltm/hyprltm-net/pull/6)): Enabled loading the Rofi theme from global system paths (e.g., `/etc/xdg/rofi/themes`) in addition to local user configs.
@@ -16,7 +16,7 @@ All notable changes to this project will be documented in this file.
     -   🟧 **Warning**: Orange border/text.
     -   🟦 **Info**: Blue/Cyan border/text.
     -   🟩 **Success**: Green border/text.
--   **Fallback Feedback**: If no system notification daemon (e.g., `dunst`) is running, the script automatically falls back to showing a Green Rofi Success dialog.
+-   **Fallback Feedback**: If no system notification service (e.g., `dunst`) is running, the script automatically falls back to showing a Green Rofi Success dialog.
 -   **Explicit Notification Logic**: Refactored internal notification system to use explicit properties (`type="error"`) instead of fragile text parsing.
 -   **Documentation Gallery**: Refactored README to include a detailed Vertical Feedback Gallery with descriptive captions.
 
