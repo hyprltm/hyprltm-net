@@ -19,6 +19,7 @@ DESKTOP_ENTRY="$HOME/.local/share/applications/hyprltm-net.desktop"
 ICON_PATH="$HOME/.local/share/icons/hicolor/scalable/apps/hyprltm-net.svg"
 THEME_PATH_1="$HOME/.config/rofi/themes/hyprltm-net.rasi"
 THEME_PATH_2="$HOME/.config/rofi/themes/ltmnight.rasi"
+CONFIG_DIR="$HOME/.config/hyprltm"
 
 # Confirmation
 echo -e "${YELLOW}This will remove HyprLTM-Net and its associated files.${NC}"
@@ -68,6 +69,14 @@ if [ -f "$THEME_PATH_2" ]; then
     echo -e "  ${GREEN}✓${NC} Removed $THEME_PATH_2"
 else
     echo -e "  ${YELLOW}!${NC} Theme ltmnight.rasi not found (skipping)"
+fi
+
+# Remove Config Directory
+if [ -d "$CONFIG_DIR" ]; then
+    rm -rf "$CONFIG_DIR"
+    echo -e "  ${GREEN}✓${NC} Removed configuration directory $CONFIG_DIR"
+else
+    echo -e "  ${YELLOW}!${NC} Config directory not found (skipping)"
 fi
 
 # Reminder for manual cleanup

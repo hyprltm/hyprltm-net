@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-#    __  __                 __   ________  ___       _   __    __ 
+#    __  __                 __   ________  ___       _   __    __
 #   / / / /_  ______  _____/ /  /_  __/  |/  /      / | / /___/ /_
 #  / /_/ / / / / __ \/ ___/ /    / / / /|_/ /_____ /  |/ / _  / __/
-# / __  / /_/ / /_/ / /  / /___ / / / /  / /_____ / /|  /  __/ /_  
-#/_/ /_/\__, / .___/_/  /_____//_/ /_/  /_/      /_/ |_/\___/\__/  
-#      /____/_/                                                   
+# / __  / /_/ / /_/ / /  / /___ / / / /  / /_____ / /|  /  __/ /_
+#/_/ /_/\__, / .___/_/  /_____//_/ /_/  /_/      /_/ |_/\___/\__/
+#      /____/_/
 #
 
 # Copyright © 2025-2026 Djalel Oukid (sniper1720)
 
 
-# Version: 0.3.0
+# Version: 0.4.0
 # Description: A Rofi-based Network Manager for Hyprland (and others).
 # --- Dependencies Check ---
 if ! command -v rofi &> /dev/null; then
@@ -26,18 +26,19 @@ fi
 #                           CONFIGURATION & THEMING
 # =============================================================================
 
-ROFI_THEME_NAME="hyprltm-net"
-ROFI_NETWORK_MANAGER_THEME=""
+ROFI_THEME_NAME="${ROFI_THEME_NAME:-hyprltm-net}"
 
-for _dir in "${XDG_CONFIG_HOME:-$HOME/.config}/rofi/themes" \
-           "/usr/share/rofi/themes" \
-           "/etc/xdg/rofi/themes" \
-           "$HOME/.local/share/rofi/themes"; do
-    if [[ -f "$_dir/${ROFI_THEME_NAME}.rasi" ]]; then
-        ROFI_NETWORK_MANAGER_THEME="$_dir/${ROFI_THEME_NAME}.rasi"
-        break
-    fi
-done
+if [[ -z "${ROFI_NETWORK_MANAGER_THEME:-}" ]]; then
+    for _dir in "${XDG_CONFIG_HOME:-$HOME/.config}/rofi/themes" \
+               "/usr/share/rofi/themes" \
+               "/etc/xdg/rofi/themes" \
+               "$HOME/.local/share/rofi/themes"; do
+        if [[ -f "$_dir/${ROFI_THEME_NAME}.rasi" ]]; then
+            ROFI_NETWORK_MANAGER_THEME="$_dir/${ROFI_THEME_NAME}.rasi"
+            break
+        fi
+    done
+fi
 
 if [[ -z "$ROFI_NETWORK_MANAGER_THEME" ]] && [[ -f "./${ROFI_THEME_NAME}.rasi" ]]; then
     ROFI_NETWORK_MANAGER_THEME="$(pwd)/${ROFI_THEME_NAME}.rasi"
@@ -47,7 +48,18 @@ if [[ -z "$ROFI_NETWORK_MANAGER_THEME" ]]; then
     ROFI_NETWORK_MANAGER_THEME="${ROFI_THEME_NAME}"
 fi
 
+if [[ -n "$ROFI_NETWORK_MANAGER_THEME" && "$ROFI_NETWORK_MANAGER_THEME" != "${ROFI_THEME_NAME}" ]]; then
+    theme_dir="$(dirname "$ROFI_NETWORK_MANAGER_THEME")"
+    if [[ ! -f "$theme_dir/ltmnight.rasi" ]]; then
+        echo "Warning: ltmnight.rasi not found next to $ROFI_NETWORK_MANAGER_THEME. Theme fallback might fail." >&2
+    fi
+fi
+
 unset _dir
+
+if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/hyprltm/hyprltm-net.conf" ]]; then
+    source "${XDG_CONFIG_HOME:-$HOME/.config}/hyprltm/hyprltm-net.conf"
+fi
 
 icon_search="${icon_search:-""}"
 icon_close="${icon_close:-""}"
@@ -72,6 +84,7 @@ icon_airplane_off="${icon_airplane_off:-"󱢂"}"
 icon_wifi_full="${icon_wifi_full:-"󰤨"}"
 icon_wifi_good="${icon_wifi_good:-"󰤥"}"
 icon_wifi_medium="${icon_wifi_medium:-"󰤢"}"
+icon_wifi_fair="${icon_wifi_fair:-"󰤟"}"
 icon_wifi_low="${icon_wifi_low:-"󰤯"}"
 icon_wifi_disconnected="${icon_wifi_disconnected:-"󰤫"}"
 icon_wifi_enable="${icon_wifi_enable:-"󰖩"}"
@@ -114,6 +127,15 @@ icon_automatic="${icon_automatic:-"󰑘"}"
 icon_hidden_network="${icon_hidden_network:-"󰲊"}"
 icon_connect_wired="${icon_connect_wired:-"󱂇"}"
 icon_wired_status="${icon_wired_status:-"󰈁"}"
+icon_browser="${icon_browser:-"󰖟"}"
+icon_speedtest="${icon_speedtest:-"󰓅"}"
+
+icon_error="${icon_error:-"󰅖"}"
+icon_warning="${icon_warning:-"󰀦"}"
+icon_cancelled="${icon_cancelled:-"󰍶"}"
+icon_timeout="${icon_timeout:-"󰔟"}"
+icon_download="${icon_download:-"󰁅"}"
+icon_upload="${icon_upload:-"󰁝"}"
 
 # =============================================================================
 #                               TRANSLATIONS
@@ -245,13 +267,21 @@ tr_password_updated_body='Password updated successfully for'
 tr_password_update_failed_summary='Update Failed'
 tr_password_update_failed_body='Failed to update password for'
 
+tr_captive_portal_title='Captive Portal Detected'
+tr_captive_portal_message='You must log in to the network to get internet access.'
+tr_open_browser='Open Login Page'
+
+tr_speedtest_menu='Speed Test'
+tr_speedtest_running='Testing Connection Speed...'
+tr_speedtest_error='Speed Test Failed (Are you online?)'
+
 # --- Global Variables ---
 program_name="$(basename "$0")"
 LOADING_ROFI_PID=""
 
 # Detect interfaces
 mapfile -t wifi_interfaces < <(nmcli --colors no -t -f TYPE,DEVICE device status | awk -F ':' '$1 == "wifi" {print $2}')
-mapfile -t ethernet_interfaces < <(nmcli --colors no -t -f TYPE,DEVICE device status | awk -F ':' '$1 == "ethernet" {print $2}')
+mapfile -t ethernet_interfaces < <(nmcli --colors no -t -f TYPE,DEVICE device status | awk -F ':' '$1 ~ /^(ethernet|802-3-ethernet)/ {print $2}')
 
 if [ -z "${wifi_interfaces[0]}" ] && [ -z "${ethernet_interfaces[0]}" ]; then
 	echo "$program_name: No Wi-Fi or Ethernet interfaces detected." >&2
@@ -330,7 +360,7 @@ show_loading_notification() {
 clean_error_message() {
     local raw_msg="$1"
     local clean_msg=""
-    local icon="❌"
+    local icon="$icon_error"
 
     raw_msg="${raw_msg%%Hint:*}"
 
@@ -348,15 +378,15 @@ clean_error_message() {
             clean_msg="Network not found. It may be out of range."
             ;;
         *"activation failed"*)
-             icon="⚠️"
+             icon="$icon_warning"
              clean_msg="Connection failed. The network refused the connection."
              ;;
         *"Timeout"*)
-             icon="⏳"
+             icon="$icon_timeout"
              clean_msg="Connection timed out. The network is too slow or unreachable."
              ;;
         *"cancelled"*)
-             icon="🚫"
+             icon="$icon_cancelled"
              clean_msg="Operation cancelled."
              ;;
         *)
@@ -373,7 +403,7 @@ show_error_dialog() {
 
     local options="$icon_refresh Try Again\n$icon_password Edit Password\n$icon_close Cancel"
 
-    echo -e "$options" | rofi -dmenu -i -p "⚠️ Connection Failed" \
+    echo -e "$options" | rofi -dmenu -i -p "$icon_warning Connection Failed" \
         -theme "$ROFI_NETWORK_MANAGER_THEME" \
         -mesg "$clean_msg" \
         -theme-str 'listview { lines: 3; }' \
@@ -439,7 +469,7 @@ send_notification() {
     else
 
         if [ "$type" = "error" ]; then
-             show_error_message "❌ $body"
+             show_error_message "$icon_error $body"
         else
 
              show_success_message "$icon_check $body"
@@ -474,10 +504,10 @@ display_info_message() {
         -theme-str 'mainbox { children: [message, listview]; }' \
         -theme-str 'inputbar { enabled: false; }' \
         -theme-str 'message { border-color: @info-message; }' \
-        -theme-str 'textbox { text-color: @info-message; }' 
+        -theme-str 'textbox { text-color: @info-message; }'
 
     return 0
-} 
+}
 
 is_notification_service_running() {
     if busctl --user list | grep -qE "org.freedesktop.Notifications"; then
@@ -632,6 +662,7 @@ perform_wifi_scan() {
         -v icon_wifi_full="$icon_wifi_full" \
         -v icon_wifi_good="$icon_wifi_good" \
         -v icon_wifi_medium="$icon_wifi_medium" \
+        -v icon_wifi_fair="$icon_wifi_fair" \
         -v icon_wifi_low="$icon_wifi_low" \
         -v icon_check="$icon_check" \
         -v icon_unlock="$icon_unlock" \
@@ -641,9 +672,10 @@ perform_wifi_scan() {
     {
 
         wifi_signal_icon = icon_wifi_low;
-        if ($2 > 75) wifi_signal_icon = icon_wifi_full;
-        else if ($2 > 50) wifi_signal_icon = icon_wifi_good;
-        else if ($2 > 25) wifi_signal_icon = icon_wifi_medium;
+        if ($2 > 80) wifi_signal_icon = icon_wifi_full;
+        else if ($2 > 60) wifi_signal_icon = icon_wifi_good;
+        else if ($2 > 40) wifi_signal_icon = icon_wifi_medium;
+        else if ($2 > 20) wifi_signal_icon = icon_wifi_fair;
 
         ssid = $3;
         if (ssid == "") ssid = "<hidden>";
@@ -654,14 +686,15 @@ perform_wifi_scan() {
              status_icon = icon_check;
         } else if ($1 ~ /^WPA/) {
              status_icon = icon_wifi_secure;
-        } 
+        }
 
         formatted_entry = wifi_signal_icon " " status_icon " " ssid " (" $2 "%)";
+        full_entry = formatted_entry ";;;" ssid ";;;" $1 ";;;" status_icon ";;;" $2;
 
         if ($4 == "*") {
-            networks[0] = formatted_entry;
+            networks[0] = full_entry;
         } else {
-            networks[x++] = formatted_entry;
+            networks[x++] = full_entry;
         }
     }
     END {
@@ -686,7 +719,10 @@ menu_available_wifi_networks() {
         if [ -z "$wifi_list" ]; then
             options+="$icon_wifi_disconnected  $tr_no_wifi_networks_found\n"
         else
-            options+="$wifi_list\n"
+            mapfile -t wifi_array <<< "$wifi_list"
+            for item in "${wifi_array[@]}"; do
+                options+="${item%%;;;*}\n"
+            done
         fi
         options+="$icon_close Back"
 
@@ -705,8 +741,8 @@ menu_available_wifi_networks() {
                 continue
                 ;;
             *)
-
-                connect_wifi "$chosen"
+                local full_line=$(grep -F "$chosen;;;" <<< "$wifi_list" | head -n 1)
+                connect_wifi "$full_line"
                 ;;
         esac
     done
@@ -746,7 +782,7 @@ menu_manage_hotspot_profile() {
 
                      local active_wifi=$(nmcli -t -f NAME,TYPE,DEVICE connection show --active | grep ":wifi:${interface_to_use}")
                      if [ -n "$active_wifi" ]; then
-                        if ! show_warning_dialog "⚠️ Wi-Fi Disconnect Required" "Starting Hotspot will disconnect current Wi-Fi.\nProceed?"; then continue; fi
+                        if ! show_warning_dialog "$icon_warning Wi-Fi Disconnect Required" "Starting Hotspot will disconnect current Wi-Fi.\nProceed?"; then continue; fi
                         nmcli device disconnect "$interface_to_use" &> /dev/null
                      fi
 
@@ -807,7 +843,7 @@ menu_saved_hotspots() {
 
         local options=""
         for item in "${hotspot_list[@]}"; do
-             local name=$(echo "$item" | awk -F';;;' '{print $2}')
+             local name="${item#*;;;}"
              options+="$icon_hotspot  $name\n"
         done
         options+="$icon_close Back"
@@ -823,8 +859,8 @@ menu_saved_hotspots() {
         fi
 
         local selected_item="${hotspot_list[$chosen_index]}"
-        local uuid=$(echo "$selected_item" | awk -F';;;' '{print $1}')
-        local name=$(echo "$selected_item" | awk -F';;;' '{print $2}')
+        local uuid="${selected_item%%;;;*}"
+        local name="${selected_item#*;;;}"
 
         menu_manage_hotspot_profile "$uuid" "$name"
     done
@@ -884,7 +920,7 @@ menu_hotspot() {
 
 menu_wifi() {
 	local connection_state options chosen
-    
+
     if [ -z "${wifi_interfaces[0]}" ]; then
         show_error_message "$tr_no_wifi_interface"
         return
@@ -957,7 +993,7 @@ menu_wifi() {
 			*"$tr_known_connections_message"*) menu_known_connections "wifi" ;;
 			*"$tr_hidden_message"*) connect_hidden ;;
             *"Hotspot Manager"*) menu_hotspot ;;
-            *"$tr_status_message"*) 
+            *"$tr_status_message"*)
 
                 if [ -n "$active_uuid" ]; then
                     show_connection_details "$active_ssid" "${interface_to_use}"
@@ -982,6 +1018,30 @@ select_interface() {
 	fi
 }
 
+check_captive_portal() {
+    local ssid="$1"
+    # Sleep extremely briefly so routing settles
+    sleep 2
+    local connectivity=$(nmcli networking connectivity check 2>/dev/null)
+
+    if [ "$connectivity" = "portal" ]; then
+        local options="$icon_browser $tr_open_browser\n$icon_close Dismiss"
+        local chosen=$(echo -e "$options" | display_menu 1 "$tr_captive_portal_title\n$tr_captive_portal_message" "$icon_info")
+
+        if [[ "$chosen" == *"$tr_open_browser"* ]]; then
+            # Dynamically extract native NetworkManager connectivity URI
+            local native_uri=$(NetworkManager --print-config 2>/dev/null | grep -i "^uri=" | cut -d'=' -f2-)
+            if [ -n "$native_uri" ]; then
+                xdg-open "$native_uri" &>/dev/null
+            else
+                xdg-open "http://nmcheck.gnome.org" &>/dev/null
+            fi
+        fi
+        return 0
+    fi
+    return 1
+}
+
 connect_hidden() {
 	local wifi_name=$(echo "" | display_menu 5 "$tr_connect_hidden_prompt" "")
 
@@ -1002,7 +1062,9 @@ connect_hidden() {
 
         if [ $? -eq 0 ]; then
             kill_loading_notification
-            send_notification "$tr_notice_connected_summary" "$tr_notice_connected_body '$wifi_name'"
+            if ! check_captive_portal "$wifi_name"; then
+                send_notification "$tr_notice_connected_summary" "$tr_notice_connected_body '$wifi_name'"
+            fi
             exit 0
         else
             kill_loading_notification
@@ -1015,9 +1077,9 @@ connect_hidden() {
                      if [ -z "$wifi_password" ]; then break; fi
                      continue
                      ;;
-                *) 
+                *)
                      send_notification "$tr_notice_error_summary" "$tr_notice_error_body '$wifi_name'" "error"
-                     break 
+                     break
                      ;;
             esac
         fi
@@ -1027,24 +1089,35 @@ connect_hidden() {
 connect_wifi() {
 	local chosen_entry="$1"
 
-    if [[ "$chosen_entry" == *"$icon_check"* ]]; then
-        local ssid_from_active=$(nmcli -t -f active,ssid dev wifi | grep "^yes" | cut -d':' -f2)
-        local active_uuid=$(nmcli -t -f UUID,TYPE,ACTIVE connection show | grep ":802-11-wireless:yes" | cut -d':' -f1 | head -n1)
+    local wifi_ssid
+    local is_secure="no"
+    local sec_icon
 
-        if [ -n "$active_uuid" ]; then
-             if [ -z "$ssid_from_active" ]; then
-                local temp_ssid=$(echo "$chosen_entry" | sed -E 's/ \([0-9]+%\).*$//')
-                ssid_from_active=$(echo "$temp_ssid" | sed -E 's/^(󰄬 |󰤫 |󰤪 |󰤩 |󰤨 |󰤧 |󰤦 |󰤥 |󰤤 |󰤣 |󰤢 |󰤡 |󰤠 )+//' | xargs)
-             fi
-             menu_connection "$ssid_from_active" "$active_uuid"
-             return
+    if [[ "$chosen_entry" != *";;;"* ]]; then
+        local temp_ssid=$(echo "$chosen_entry" | sed -E 's/ \([0-9]+%\).*$//')
+        wifi_ssid=$(echo "$temp_ssid" | sed -E 's/^(󰤨 |󰤥 |󰤢 |󰤯 |󰤫 |󰤪 | | | )+//' | xargs)
+        is_secure=$(echo "$chosen_entry" | grep -q "$icon_wifi_secure" && echo "yes" || echo "no")
+        sec_icon=$(echo "$chosen_entry" | grep -q "$icon_check" && echo "$icon_check" || echo "")
+    else
+        local temp="${chosen_entry#*;;;}"
+        wifi_ssid="${temp%%;;;*}"
+        temp="${temp#*;;;}"
+        local raw_sec="${temp%%;;;*}"
+        temp="${temp#*;;;}"
+        sec_icon="${temp%%;;;*}"
+
+        if [[ "$raw_sec" == WPA* || "$raw_sec" == WEP* || "$raw_sec" == 802.1X* ]]; then
+            is_secure="yes"
         fi
     fi
 
-    local temp_ssid=$(echo "$chosen_entry" | sed -E 's/ \([0-9]+%\).*$//')
-    local wifi_ssid=$(echo "$temp_ssid" | sed -E 's/^(󰤨 |󰤥 |󰤢 |󰤯 |󰤫 |󰤪 | | | )+//' | xargs)
-
-	local is_secure=$(echo "$chosen_entry" | grep -q "$icon_wifi_secure" && echo "yes" || echo "no")
+    if [ "$sec_icon" = "$icon_check" ]; then
+        local active_uuid=$(nmcli -t -f UUID,TYPE,ACTIVE connection show | grep ":802-11-wireless:yes" | cut -d':' -f1 | head -n1)
+        if [ -n "$active_uuid" ]; then
+             menu_connection "$wifi_ssid" "$active_uuid"
+             return
+        fi
+    fi
 
 	local active_ssid=$(nmcli -t -f active,ssid dev wifi | grep "^yes" | cut -d':' -f2)
 	if [ "$wifi_ssid" = "$active_ssid" ]; then
@@ -1143,7 +1216,9 @@ connect_wifi() {
         kill_loading_notification
 
         if [ $connection_result -eq 0 ]; then
-            send_notification "$tr_notice_connected_summary" "$tr_notice_connected_body '$wifi_ssid'"
+            if ! check_captive_portal "$wifi_ssid"; then
+                send_notification "$tr_notice_connected_summary" "$tr_notice_connected_body '$wifi_ssid'"
+            fi
             exit 0
         else
 
@@ -1165,9 +1240,9 @@ connect_wifi() {
                         continue
                     fi
                     ;;
-                *) 
+                *)
                     send_notification "$tr_notice_error_summary" "$tr_notice_error_body '$wifi_ssid'" "error"
-                    break 
+                    break
                     ;;
             esac
         fi
@@ -1299,7 +1374,7 @@ menu_ip_config() {
 						nmcli connection modify uuid "$connection_uuid" ipv${ipv}.ignore-auto-dns yes
 					else
 
-						: 
+						:
 					fi
 				else
 					nmcli connection modify uuid "$connection_uuid" ipv${ipv}.ignore-auto-dns no
@@ -1422,7 +1497,11 @@ menu_connection() {
 		options+="$icon_pen  $tr_rename_connection_message\n"
         options+="$icon_password  $tr_edit_password_message\n"
 
-        if [ "$(nmcli -g connection.type connection show "$connection_uuid")" = "802-11-wireless" ]; then
+        local conn_type=$(nmcli -g connection.type connection show "$connection_uuid")
+        if [ "$conn_type" = "802-11-wireless" ]; then
+             local mac_rand=$(nmcli --get-values wifi.cloned-mac-address connection show "$connection_uuid" 2>/dev/null)
+             local mac_random_state="$([ "$mac_rand" = "random" ] && echo "$icon_on" || echo "$icon_off")"
+             options+="$icon_devices  MAC Randomization  $mac_random_state\n"
              options+="$icon_qrcode  $tr_qrcode_message\n"
         fi
 		options+="$icon_close Back"
@@ -1455,11 +1534,11 @@ menu_connection() {
                         local choice=$(show_error_dialog "$output")
                         case "$choice" in
                             *"Try Again") continue ;;
-                            *"Edit Password") 
+                            *"Edit Password")
                                 edit_connection_password "$connection_uuid" "$chosen_connection_name"
-                                continue 
+                                continue
                                 ;;
-                            *) 
+                            *)
 
                                 send_notification "$tr_notice_error_summary" "$tr_notice_error_body '$chosen_connection_name'" "error"
                                 break
@@ -1499,6 +1578,16 @@ menu_connection() {
                 local security=$(nmcli -g 802-11-wireless-security.key-mgmt connection show "$connection_uuid" | sed 's/wpa-psk/WPA/; s/None/nopass/')
                 local password=$(nmcli -s -g 802-11-wireless-security.psk connection show "$connection_uuid")
                 show_qrcode "$ssid" "$security" "$password"
+                ;;
+            *"MAC Randomization"*)
+                local cur_mac=$(nmcli --get-values wifi.cloned-mac-address connection show "$connection_uuid" 2>/dev/null)
+                if [ "$cur_mac" = "random" ]; then
+                    nmcli connection modify uuid "$connection_uuid" wifi.cloned-mac-address ""
+                    show_success_message "MAC Randomization Disabled"
+                else
+                    nmcli connection modify uuid "$connection_uuid" wifi.cloned-mac-address random
+                    show_success_message "MAC Randomization Enabled"
+                fi
                 ;;
 		esac
 	done
@@ -1626,7 +1715,7 @@ menu_known_connections() {
                 elif [[ "$type" == "loopback" ]]; then
                     show_item="no"
                 else
-                    icon="$icon_config" 
+                    icon="$icon_config"
                 fi
 
                 if [ "$show_item" = "yes" ]; then
@@ -1657,7 +1746,7 @@ menu_known_connections() {
 
 	while true; do
 
-		local options=$(for i in "${profiles_list[@]}"; do echo "$i" | awk -F';;;' '{print $2}'; done)
+		local options=$(for i in "${profiles_list[@]}"; do temp="${i#*;;;}"; echo "${temp%%;;;*}"; done)
 		options+="\n$icon_close Back"
 
 		chosen_index=$(echo -e "$options" | display_menu 1 "$prompt_to_use" "$icon_saved" "-format i")
@@ -1672,8 +1761,8 @@ menu_known_connections() {
 
         local selected_item="${profiles_list[$chosen_index]}"
 
-        local conn_uuid=$(echo "$selected_item" | awk -F';;;' '{print $1}')
-        local conn_real_name=$(echo "$selected_item" | awk -F';;;' '{print $3}')
+        local conn_uuid="${selected_item%%;;;*}"
+        local conn_real_name="${selected_item##*;;;}"
 
         eval "$menu_type_function \"$(sed 's/"/\\"/g' <<< "$conn_real_name")\" \"$conn_uuid\""
 
@@ -1681,7 +1770,7 @@ menu_known_connections() {
 }
 
 menu_connect_wired_connection() {
-    local profiles_list_raw=$(nmcli --colors no -t -f TYPE,UUID,NAME connection show | awk -F ':' -v icon="$icon_ethernet" '$1 ~ /^(ethernet|802-3-ethernet).*/ {print $2 "\\0" icon "  " " " $3}')
+    local profiles_list_raw=$(nmcli --colors no -t -f TYPE,UUID,NAME connection show | awk -F ':' -v icon="$icon_ethernet" '$1 ~ /^(ethernet|802-3-ethernet).*/ {print $2 ";;;" icon "  " " " $3}')
     mapfile -t profiles_list < <(echo "$profiles_list_raw")
 
     if [ "${#profiles_list[@]}" -eq 0 ] || ([ "${#profiles_list[@]}" -eq 1 ] && [ -z "${profiles_list[0]}" ]); then
@@ -1689,7 +1778,7 @@ menu_connect_wired_connection() {
         return
     fi
 
-    local options=$(for i in "${profiles_list[@]}"; do echo -e "$i" | cut --delimiter $'\0' --fields 2; done)
+    local options=$(for i in "${profiles_list[@]}"; do echo -e "${i#*;;;}"; done)
     options+="\n$icon_close Back"
 
     local chosen=$(echo -e "$options" | display_menu 1 "$tr_connect_wired_connection" "$icon_search")
@@ -1702,9 +1791,10 @@ menu_connect_wired_connection() {
     local conn_name_to_connect=""
 
     for i in "${profiles_list[@]}"; do
-        if [ "$chosen" = "$(echo -e "$i" | cut --delimiter $'\0' --fields 2)" ]; then
-            conn_uuid_to_connect=$(echo -e "$i" | cut --delimiter $'\0' --fields 1)
-            conn_name_to_connect=$(echo -e "$i" | cut --delimiter $'\0' --fields 2 | sed -E 's/^(󰈀) //')
+        local display_name="${i#*;;;}"
+        if [ "$chosen" = "$display_name" ]; then
+            conn_uuid_to_connect="${i%%;;;*}"
+            conn_name_to_connect=$(echo "$display_name" | sed -E 's/^(󰈀) //')
             break
         fi
     done
@@ -1713,7 +1803,9 @@ menu_connect_wired_connection() {
         show_loading_notification "$tr_connecting_to '$conn_name_to_connect'..."
         if nmcli connection up uuid "$conn_uuid_to_connect"; then
             kill_loading_notification
-            send_notification "$tr_notice_connected_summary" "$tr_notice_connected_body '$conn_name_to_connect'"
+            if ! check_captive_portal "$conn_name_to_connect"; then
+                send_notification "$tr_notice_connected_summary" "$tr_notice_connected_body '$conn_name_to_connect'"
+            fi
             exit 0
         else
             kill_loading_notification
@@ -1779,8 +1871,31 @@ show_active_connection_details() {
     echo -e "${details_raw}\n${icon_close} Back" | display_menu 1 "$prompt_text" ""
 }
 
+run_speedtest() {
+    show_loading_notification "$tr_speedtest_running"
+
+    local dl_rate=$(curl -s -w "%{speed_download}" -o /dev/null "https://speed.cloudflare.com/__down?bytes=10000000" 2>/dev/null)
+
+    dd if=/dev/zero of=/tmp/hlnet_up_test.dat bs=1M count=10 &>/dev/null
+    local ul_rate=$(curl -s -w "%{speed_upload}" -o /dev/null -X POST --data-binary @/tmp/hlnet_up_test.dat "https://speed.cloudflare.com/__up" 2>/dev/null)
+    rm -f /tmp/hlnet_up_test.dat
+
+    kill_loading_notification
+
+    if [ -z "$dl_rate" ] || [ "$dl_rate" = "0.000" ] || [ "$dl_rate" = "0" ]; then
+        show_error_message "$tr_speedtest_error"
+        return
+    fi
+
+    local dl_mbps=$(awk -v rate="$dl_rate" 'BEGIN { printf "%.2f", rate / 125000 }')
+    local ul_mbps=$(awk -v rate="$ul_rate" 'BEGIN { printf "%.2f", rate / 125000 }')
+
+    local formatted_result="$icon_download  $dl_mbps Mbps  (Download)\n$icon_upload  $ul_mbps Mbps  (Upload)"
+    display_info_message "$formatted_result" "$tr_speedtest_menu" "$icon_speedtest"
+}
+
 status_menu() {
-    local options="$icon_active_details Active Connection Details\n$icon_devices All Device Status\n$icon_close Back"
+    local options="$icon_active_details Active Connection Details\n$icon_devices All Device Status\n$icon_speedtest $tr_speedtest_menu\n$icon_close Back"
 
     local choice=$(echo -e "$options" | display_menu 1 "$tr_status_menu_prompt" "")
 
@@ -1802,20 +1917,40 @@ status_menu() {
 
             echo -e "$device_status\n$icon_close Back" | display_menu 1 "$tr_status_menu_prompt" ""
             ;;
+        *"$tr_speedtest_menu")
+            run_speedtest
+            ;;
     esac
 }
 
 toggle_airplane_mode() {
     local wifi_state=$(nmcli radio wifi)
     local wwan_state=$(nmcli radio wwan 2>/dev/null || echo "disabled")
+    local bt_blocked="yes"
 
-    if [ "$wifi_state" = "enabled" ] || [ "$wwan_state" = "enabled" ]; then
+    if command -v rfkill &> /dev/null; then
+        if rfkill list bluetooth | grep -q "Soft blocked: no"; then
+            bt_blocked="no"
+        fi
+    fi
 
-        nmcli radio wifi off
-        nmcli radio wwan off 2>/dev/null
-        display_info_message "$tr_airplane_on" "$tr_airplane_mode_message" "$icon_airplane_on"
+    if [ "$wifi_state" = "enabled" ] || [ "$wwan_state" = "enabled" ] || [ "$bt_blocked" = "no" ]; then
+        local options="$icon_airplane_on  Full Airplane Mode\n$icon_wifi_disable  Wi-Fi Only\n$icon_close Back"
+        local choice=$(echo -e "$options" | display_menu 1 "Airplane Mode Options" "$icon_airplane")
+
+        if [[ "$choice" == *"Full Airplane"* ]]; then
+            if command -v rfkill &> /dev/null; then rfkill block all; fi
+            if command -v bluetoothctl &> /dev/null; then bluetoothctl power off &>/dev/null; fi
+            nmcli radio wifi off
+            nmcli radio wwan off 2>/dev/null
+            display_info_message "$tr_airplane_on (Full)" "$tr_airplane_mode_message" "$icon_airplane_on"
+        elif [[ "$choice" == *"Wi-Fi Only"* ]]; then
+            nmcli radio wifi off
+            display_info_message "$tr_airplane_on (Wi-Fi Only)" "$tr_airplane_mode_message" "$icon_airplane_on"
+        fi
     else
-
+        if command -v rfkill &> /dev/null; then rfkill unblock all; fi
+        if command -v bluetoothctl &> /dev/null; then bluetoothctl power on &>/dev/null; fi
         nmcli radio wifi on
         nmcli radio wwan on 2>/dev/null
         display_info_message "$tr_airplane_off" "$tr_airplane_mode_message" "$icon_airplane_off"
@@ -1850,7 +1985,7 @@ show_qrcode() {
         element { orientation: vertical; padding: 20px; children: [ element-icon, element-text ]; }
         element-icon { enabled: true; size: 300px; horizontal-align: 0.5; }
         element-text { horizontal-align: 0.5; }
-        entry { enabled: false; } 
+        entry { enabled: false; }
         inputbar { enabled: false; }
     "
 
@@ -1872,7 +2007,7 @@ get_wifi_password() {
 create_hotspot() {
 
     if ! command -v dnsmasq &> /dev/null; then
-        show_message "❌ Missing dependency: 'dnsmasq'\nRequired to assign IP addresses (DHCP) to connected devices.\nPlease install it: sudo pacman -S dnsmasq (or equivalent)" "$tr_hotspot_message"
+        show_message "$icon_error Missing dependency: 'dnsmasq'\nRequired to assign IP addresses (DHCP) to connected devices.\nPlease install it: sudo pacman -S dnsmasq (or equivalent)" "$tr_hotspot_message"
         return
     fi
 
@@ -1880,7 +2015,7 @@ create_hotspot() {
 
     if [ -n "$active_connection" ]; then
 
-        if ! show_warning_dialog "⚠️ Wi-Fi Disconnect Required" "Starting a Hotspot will disconnect you from the current Wi-Fi network.\nYour card cannot do both simultaneously."; then
+        if ! show_warning_dialog "$icon_warning Wi-Fi Disconnect Required" "Starting a Hotspot will disconnect you from the current Wi-Fi network.\nYour card cannot do both simultaneously."; then
             return
         fi
 
@@ -2001,13 +2136,13 @@ toggle_vpn_connection() {
                 local choice=$(show_error_dialog "$output")
                 case "$choice" in
                     *"Try Again") continue ;;
-                    *"Edit Password") 
+                    *"Edit Password")
                         edit_connection_password "$uuid" "$name"
-                        continue 
+                        continue
                         ;;
-                    *) 
+                    *)
                         send_notification "$tr_notice_error_summary" "$tr_notice_error_body '$name'" "error"
-                        break 
+                        break
                         ;;
                 esac
             fi
@@ -2017,7 +2152,7 @@ toggle_vpn_connection() {
 
 menu_available_vpns() {
     while true; do
-        mapfile -t vpn_list < <(nmcli --colors no -t -f TYPE,UUID,NAME connection show | awk -F ':' '$1 == "vpn" || $1 == "wireguard" {print $2 "\\0" $3}')
+        mapfile -t vpn_list < <(nmcli --colors no -t -f TYPE,UUID,NAME connection show | awk -F ':' '$1 == "vpn" || $1 == "wireguard" {print $2 ";;;" $3}')
 
         if [ "${#vpn_list[@]}" -eq 0 ] || [ -z "${vpn_list[0]}" ]; then
             display_info_message "$tr_no_configured_vpns" "$tr_available_vpn_profiles_message"
@@ -2026,8 +2161,8 @@ menu_available_vpns() {
 
         local options=""
         for i in "${vpn_list[@]}"; do
-            local uuid=$(echo -e "$i" | awk 'BEGIN{FS="\x00"}{print$1}')
-            local name=$(echo -e "$i" | awk 'BEGIN{FS="\x00"}{print$2}')
+            local uuid="${i%%;;;*}"
+            local name="${i#*;;;}"
             local state=$(nmcli --get-values GENERAL.STATE connection show uuid "$uuid")
             local state_icon="$([ "$state" = "activated" ] && echo "$icon_on" || echo "$icon_off")"
             options+="$state_icon  $name\n"
@@ -2042,8 +2177,8 @@ menu_available_vpns() {
 
         local chosen_name=$(echo "$chosen" | sed -E 's/^(|)  //')
         for i in "${vpn_list[@]}"; do
-            local uuid=$(echo -e "$i" | awk 'BEGIN{FS="\x00"}{print$1}')
-            local name=$(echo -e "$i" | awk 'BEGIN{FS="\x00"}{print$2}')
+            local uuid="${i%%;;;*}"
+            local name="${i#*;;;}"
             if [ "$name" = "$chosen_name" ]; then
                 local state=$(nmcli --get-values GENERAL.STATE connection show uuid "$uuid")
                 toggle_vpn_connection "$uuid" "$name" "$state"
@@ -2079,7 +2214,7 @@ vpn_menu() {
 main_menu() {
 
     if ! is_notification_service_running; then
-        show_warning_dialog "⚠️ No Notification Service Found" "You can continue, but you won't receive desktop notifications."
+        show_warning_dialog "$icon_warning No Notification Service Found" "You can continue, but you won't receive desktop notifications."
     fi
 
     local options="$icon_wifi_full  Wi-Fi\n"

@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img alt="Version" src="https://img.shields.io/badge/Version-v0.3.0-f1fa8c?style=for-the-badge&labelColor=282a36"/>
+  <img alt="Version" src="https://img.shields.io/badge/Version-v0.4.0-f1fa8c?style=for-the-badge&labelColor=282a36"/>
   <a href="https://github.com/hyprltm/hyprltm-net/stargazers"><img alt="GitHub Stars" src="https://img.shields.io/github/stars/hyprltm/hyprltm-net?style=for-the-badge&color=bd93f9&labelColor=282a36"/></a>
   <a href="https://github.com/hyprltm/hyprltm-net/commits/main"><img alt="Last Commit" src="https://img.shields.io/github/last-commit/hyprltm/hyprltm-net?style=for-the-badge&color=50fa7b&labelColor=282a36"/></a>
   <a href="https://github.com/hyprltm/hyprltm-net"><img alt="Repo Size" src="https://img.shields.io/github/repo-size/hyprltm/hyprltm-net?style=for-the-badge&color=8be9fd&labelColor=282a36"/></a>
@@ -138,6 +138,7 @@ Main Menu
 │   │       ├── Forget Connection
 │   │       ├── Rename Connection
 │   │       ├── Edit Password
+│   │       ├── MAC Randomization (Toggle)
 │   │       └── Share via QR Code
 │   ├── Hotspot Manager
 │   │   ├── Create New Hotspot
@@ -152,6 +153,7 @@ Main Menu
 │   │       ├── Forget Connection
 │   │       ├── Rename Connection
 │   │       ├── Edit Password
+│   │       ├── MAC Randomization (Toggle)
 │   │       └── Share via QR Code
 │   └── Connect to a hidden network
 ├── Wired
@@ -179,7 +181,9 @@ Main Menu
 ├── Status
 │   ├── Active Connection Details (Popup)
 │   └── All Device Status (List)
-└── Airplane Mode (Toggle)
+└── Airplane Mode
+    ├── Full Airplane Mode (Blocks all RF / Bluetooth)
+    └── Wi-Fi Only
 ```
 
 ![Gradient](assets/gradient.svg)
@@ -224,6 +228,22 @@ bind = SUPER, N, exec, hyprltm-net
 "on-click": "hyprltm-net"
 ```
 </details>
+
+![Gradient](assets/gradient.svg)
+
+## Custom Icons & Configuration
+
+HyprLTM-Net allows you to completely override any icon used in the UI with your own preferred Unicode/Nerd Font characters or Emojis.
+
+1. Copy the example configuration file:
+   ```bash
+   mkdir -p ~/.config/hyprltm
+   cp hyprltm-net.conf.example ~/.config/hyprltm/hyprltm-net.conf
+   ```
+2. Edit `~/.config/hyprltm/hyprltm-net.conf` and uncomment any `icon_...` variables you want to change (e.g., `icon_wifi_full="🚀"`).
+3. Relaunch HyprLTM-Net and your new icons will instantly apply!
+
+*(Note: The default icons used in the script are standard Material Design Icons from the JetBrains Nerd Font family. They map to the Private Use Area (PUA) of Unicode, which is why they may look like generic square characters in text editors that don't have a Nerd Font applied).*
 
 ![Gradient](assets/gradient.svg)
 

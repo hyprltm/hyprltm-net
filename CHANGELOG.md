@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.4.0] - 2026-04-16
+
+### Added
+- **New Airplane Mode Submenu**: Replaced the direct toggle with a submenu offering `rfkill block all` + `bluetoothctl power off` (Full blocking) or `nmcli radio wifi off` (Wi-Fi only).
+- **Custom Icon Config**: Added support for overriding UI icons via `~/.config/hyprltm/hyprltm-net.conf` (template provided as `hyprltm-net.conf.example` in repo).
+- **MAC Randomization Toggle**: Added per-profile toggle for `wifi.cloned-mac-address` (random vs permanent) inside Wi-Fi connection properties.
+- **Speed Test**: Implemented a universally native, zero-dependency Speed Test in the Status menu utilizing Cloudflare's Anycast API with memory buffering.
+- **5-Tier Wi-Fi Signals**: Added `icon_wifi_fair` to support 5 signal strength buckets instead of 4.
+
+### Improved
+- **Ethernet Interfaces Parsing**: Updated `awk` regex to reliably match `802-3-ethernet` alongside `ethernet`.
+- **Theme Fallback Logging**: Added missing `ltmnight.rasi` validation checks when evaluating overriding themes to prevent silent crashes.
+- **Wi-Fi Scan Array Logic**: Replaced regex visual-string stripping in `connect_wifi` with native `;;;` delimited arrays (`Line;;;SSID;;;Security`) to prevent connection parsing errors. 
+- **Sub-shell Optimization**: Replaced `\0` and `awk` string-splitting across Wired/VPN/Hotspot menus with native bash parameter expansion (`${var%%;;;*}`) to heavily reduce menu rendering latency.
+
 ## [v0.3.0] - 2026-03-22
 
 ### Added

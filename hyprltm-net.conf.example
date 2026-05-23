@@ -1,0 +1,86 @@
+# Custom Icons Configuration for HyprLTM-Net
+# Copy this file to ~/.config/hyprltm/hyprltm-net.conf and edit exactly the variables you want to change.
+# Any uncommented line will override the default behavior in the picker menu.
+# NOTE: The default symbols below belong to JetBrains Nerd Fonts. Ensure the new characters exist in the font family you use.
+
+# Basic UI Elements
+# icon_search=""
+# icon_close=""
+# icon_check=""
+# icon_on=""
+# icon_off=""
+# icon_info=""
+# icon_refresh="󰑐"
+# icon_config=""
+
+# Main Categories
+# icon_network="󱂇"
+# icon_wifi_prompt="󱚾"
+# icon_ethernet="󰈀"
+# icon_vpn="󰖃"
+# icon_wireguard="󰖆"
+# icon_bluetooth="󰂯"
+# icon_hotspot="󱄙"
+
+# Airplane Mode
+# icon_airplane="󰀝"
+# icon_airplane_on="󱡻"
+# icon_airplane_off="󱢂"
+
+# Wi-Fi Strengths
+# icon_wifi_full="󰤨"
+# icon_wifi_good="󰤥"
+# icon_wifi_medium="󰤢"
+# icon_wifi_fair="󰤟"
+# icon_wifi_low="󰤯"
+# icon_wifi_disconnected="󰤫"
+# icon_wifi_enable="󰖩"
+# icon_wifi_disable="󰖪"
+# icon_wifi_secure=""
+# icon_wifi_open="󰤠"
+
+# Connectivity
+# icon_unlock=""
+# icon_password=""
+# icon_eye="󰛐"
+# icon_eye_closed="󰛑"
+# icon_bookmark_saved="󰢭"
+# icon_saved="󰢭"
+# icon_connect="󰚫"
+# icon_disconnect="󰚬"
+# icon_vpn_disconnect="󰖂"
+# icon_trash=""
+# icon_pen="󰑕"
+# icon_import="󰋺"
+# icon_qrcode="󰐲"
+
+# Details & Config
+# icon_active_details="󰋼"
+# icon_status_chart="󱖫"
+# icon_interface="󰛨"
+# icon_devices="󰋽"
+# icon_chip="󰢮"
+# icon_ipv4_config="󰒓"
+# icon_ipv4_dns="󰒍"
+# icon_ipv6_config="󰒓"
+# icon_ipv6_dns="󰒍"
+# icon_auto_ip="󰑘"
+# icon_auto_dns="󰒍"
+# icon_address="󰒓"
+# icon_gateway="󰞡"
+# icon_plug="󱘖"
+# icon_wireless="󰑩"
+# icon_automatic="󰑘"
+# icon_hidden_network="󰲊"
+# icon_connect_wired="󱂇"
+# icon_wired_status="󰈁"
+# icon_browser="󰖟"
+# icon_speedtest="󰓅"
+
+# State Icons
+# icon_error="󰅖"
+# icon_warning="󰀦"
+# icon_cancelled="󰍶"
+# icon_timeout="󰔟"
+# icon_download="󰁅"
+# icon_upload="󰁝"

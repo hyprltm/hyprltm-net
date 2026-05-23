@@ -123,11 +123,13 @@ fi
 
 INSTALL_DIR="$HOME/.local/bin"
 THEME_DIR="$HOME/.config/rofi/themes"
+CONFIG_DIR="$HOME/.config/hyprltm"
 
 echo ""
 echo "Creating directories..."
 mkdir -p "$INSTALL_DIR"
 mkdir -p "$THEME_DIR"
+mkdir -p "$CONFIG_DIR"
 
 echo "Installing script to $INSTALL_DIR..."
 cp hyprltm-net.sh "$INSTALL_DIR/hyprltm-net"
@@ -136,6 +138,12 @@ chmod +x "$INSTALL_DIR/hyprltm-net"
 echo "Installing themes to $THEME_DIR..."
 cp *.rasi "$THEME_DIR/"
 
+echo "Installing default configuration..."
+if [ ! -f "$CONFIG_DIR/hyprltm-net.conf" ]; then
+    cp hyprltm-net.conf.example "$CONFIG_DIR/hyprltm-net.conf"
+else
+    echo -e "  ${YELLOW}Config already exists, skipping.${NC}"
+fi
 
 echo ""
 echo -e "${YELLOW}[Desktop Entry]${NC} Adds HyprLTM-Net to your application launcher."
