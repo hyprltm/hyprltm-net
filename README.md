@@ -179,8 +179,9 @@ Main Menu
 │       ├── Edit Password
 │       └── Share via QR Code
 ├── Status
-│   ├── Active Connection Details (Popup)
-│   └── All Device Status (List)
+│   ├── Active Connection Details
+│   ├── All Device Status (List)
+│   └── Speed Test (Download / Upload / Ping)
 └── Airplane Mode
     ├── Full Airplane Mode (Blocks all RF / Bluetooth)
     └── Wi-Fi Only
