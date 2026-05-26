@@ -492,7 +492,7 @@ show_message() {
 
 display_info_message() {
     local icon="${3:-$icon_info}"
-    local msg="$icon $1"
+    local msg=$(printf "%b" "$icon $1")
     local custom_prompt="${2:-Info}"
     local options="$icon_close Back"
 
@@ -1890,7 +1890,8 @@ run_speedtest() {
     local dl_mbps=$(awk -v rate="$dl_rate" 'BEGIN { printf "%.2f", rate / 125000 }')
     local ul_mbps=$(awk -v rate="$ul_rate" 'BEGIN { printf "%.2f", rate / 125000 }')
 
-    local formatted_result="$icon_download  $dl_mbps Mbps  (Download)\n$icon_upload  $ul_mbps Mbps  (Upload)"
+    local formatted_result="$icon_download  $dl_mbps Mbps  (Download)
+$icon_upload  $ul_mbps Mbps  (Upload)"
     display_info_message "$formatted_result" "$tr_speedtest_menu" "$icon_speedtest"
 }
 
