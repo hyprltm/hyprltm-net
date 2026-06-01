@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - **New Airplane Mode Submenu**: Replaced the direct toggle with a submenu offering `rfkill block all` + `bluetoothctl power off` (Full blocking) or `nmcli radio wifi off` (Wi-Fi only).
 - **Custom Icon Config**: Added support for overriding UI icons via `~/.config/hyprltm/hyprltm-net.conf` (template provided as `hyprltm-net.conf.example` in repo).
+- **Custom Theme via Environment Variables** ([#9](https://github.com/hyprltm/hyprltm-net/issues/9)): Theme selection is now overridable via `ROFI_THEME_NAME` or `ROFI_NETWORK_MANAGER_THEME`, enabling dynamic theme switching and easier submodule usage in dotfiles repos.
 - **MAC Randomization Toggle**: Added per-profile toggle for `wifi.cloned-mac-address` (random vs permanent) inside Wi-Fi connection properties.
 - **Speed Test**: Implemented a universally native, zero-dependency Speed Test in the Status menu utilizing Cloudflare's Anycast API with memory buffering.
 - **5-Tier Wi-Fi Signals**: Added `icon_wifi_fair` to support 5 signal strength buckets instead of 4.

@@ -232,7 +232,9 @@ bind = SUPER, N, exec, hyprltm-net
 
 ![Gradient](assets/gradient.svg)
 
-## Custom Icons & Configuration
+## Configuration & Customization
+
+### Custom Icons
 
 HyprLTM-Net allows you to completely override any icon used in the UI with your own preferred Unicode/Nerd Font characters or Emojis.
 
@@ -248,9 +250,29 @@ HyprLTM-Net allows you to completely override any icon used in the UI with your 
 
 ![Gradient](assets/gradient.svg)
 
-## Theming
+### Theming
 
 HyprLTM-Net uses the **LTMNight** color palette. Customize appearance by editing `~/.config/rofi/themes/ltmnight.rasi`.
+
+#### Theme Selection via Environment Variables
+
+You can override the theme at runtime without modifying config files:
+
+| Variable | Purpose | Default |
+| :--- | :--- | :--- |
+| `ROFI_THEME_NAME` | Theme file name (without `.rasi`) | `hyprltm-net` |
+| `ROFI_NETWORK_MANAGER_THEME` | Full path to a `.rasi` theme file | *(auto-detected)* |
+
+Usage:
+```bash
+# Use a custom theme file
+export ROFI_THEME_NAME="my-custom-theme"
+
+# Or point directly to a theme file
+export ROFI_NETWORK_MANAGER_THEME="$HOME/.config/rofi/themes/my-theme.rasi"
+
+./hyprltm-net.sh
+```
 
 | Variable | Description | Default | Usage |
 | :--- | :--- | :--- | :--- |
