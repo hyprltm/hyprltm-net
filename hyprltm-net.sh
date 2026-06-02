@@ -10,7 +10,7 @@
 # Copyright © 2025-2026 Djalel Oukid (sniper1720)
 
 
-# Version: 0.4.0
+# Version: 0.4.1
 # Description: A Rofi-based Network Manager for Hyprland (and others).
 # --- Dependencies Check ---
 if ! command -v rofi &> /dev/null; then
@@ -28,34 +28,39 @@ fi
 
 ROFI_THEME_NAME="${ROFI_THEME_NAME:-hyprltm-net}"
 
+_script_dir="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+
+if [[ -n "${ROFI_NETWORK_MANAGER_THEME:-}" && ! -r "$ROFI_NETWORK_MANAGER_THEME" ]]; then
+    echo "Warning: ROFI_NETWORK_MANAGER_THEME ($ROFI_NETWORK_MANAGER_THEME) not found or not readable. Falling back to auto-detection." >&2
+    unset ROFI_NETWORK_MANAGER_THEME
+fi
+
 if [[ -z "${ROFI_NETWORK_MANAGER_THEME:-}" ]]; then
     for _dir in "${XDG_CONFIG_HOME:-$HOME/.config}/rofi/themes" \
+               "${XDG_CONFIG_HOME:-$HOME/.config}/hyprltm/themes" \
                "/usr/share/rofi/themes" \
                "/etc/xdg/rofi/themes" \
-               "$HOME/.local/share/rofi/themes"; do
-        if [[ -f "$_dir/${ROFI_THEME_NAME}.rasi" ]]; then
+               "$HOME/.local/share/rofi/themes" \
+               "$_script_dir"; do
+        if [[ -r "$_dir/${ROFI_THEME_NAME}.rasi" ]]; then
             ROFI_NETWORK_MANAGER_THEME="$_dir/${ROFI_THEME_NAME}.rasi"
             break
         fi
     done
 fi
 
-if [[ -z "$ROFI_NETWORK_MANAGER_THEME" ]] && [[ -f "./${ROFI_THEME_NAME}.rasi" ]]; then
-    ROFI_NETWORK_MANAGER_THEME="$(pwd)/${ROFI_THEME_NAME}.rasi"
-fi
-
-if [[ -z "$ROFI_NETWORK_MANAGER_THEME" ]]; then
+if [[ -z "${ROFI_NETWORK_MANAGER_THEME:-}" ]]; then
     ROFI_NETWORK_MANAGER_THEME="${ROFI_THEME_NAME}"
 fi
 
-if [[ -n "$ROFI_NETWORK_MANAGER_THEME" && "$ROFI_NETWORK_MANAGER_THEME" != "${ROFI_THEME_NAME}" ]]; then
+if [[ "$ROFI_NETWORK_MANAGER_THEME" != "${ROFI_THEME_NAME}" ]]; then
     theme_dir="$(dirname "$ROFI_NETWORK_MANAGER_THEME")"
-    if [[ ! -f "$theme_dir/ltmnight.rasi" ]]; then
-        echo "Warning: ltmnight.rasi not found next to $ROFI_NETWORK_MANAGER_THEME. Theme fallback might fail." >&2
+    if [[ ! -r "$theme_dir/ltmnight.rasi" ]]; then
+        echo "Warning: ltmnight.rasi not found next to $ROFI_NETWORK_MANAGER_THEME. Colors may not render correctly." >&2
     fi
 fi
 
-unset _dir
+unset _dir _script_dir
 
 if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/hyprltm/hyprltm-net.conf" ]]; then
     source "${XDG_CONFIG_HOME:-$HOME/.config}/hyprltm/hyprltm-net.conf"
@@ -1932,32 +1937,59 @@ toggle_airplane_mode() {
     local wwan_state=$(nmcli radio wwan 2>/dev/null || echo "disabled")
     local bt_blocked="yes"
 
-    if command -v rfkill &> /dev/null; then
-        if rfkill list bluetooth | grep -q "Soft blocked: no"; then
+    if command -v bluetoothctl &> /dev/null; then
+        if bluetoothctl show 2>/dev/null | grep -q "Powered: yes"; then
             bt_blocked="no"
         fi
     fi
 
-    if [ "$wifi_state" = "enabled" ] || [ "$wwan_state" = "enabled" ] || [ "$bt_blocked" = "no" ]; then
-        local options="$icon_airplane_on  Full Airplane Mode\n$icon_wifi_disable  Wi-Fi Only\n$icon_close Back"
-        local choice=$(echo -e "$options" | display_menu 1 "Airplane Mode Options" "$icon_airplane")
+    local any_on=false
+    [ "$wifi_state" = "enabled" ] || [ "$wwan_state" = "enabled" ] || [ "$bt_blocked" = "no" ] && any_on=true
 
-        if [[ "$choice" == *"Full Airplane"* ]]; then
-            if command -v rfkill &> /dev/null; then rfkill block all; fi
-            if command -v bluetoothctl &> /dev/null; then bluetoothctl power off &>/dev/null; fi
-            nmcli radio wifi off
-            nmcli radio wwan off 2>/dev/null
-            display_info_message "$tr_airplane_on (Full)" "$tr_airplane_mode_message" "$icon_airplane_on"
-        elif [[ "$choice" == *"Wi-Fi Only"* ]]; then
-            nmcli radio wifi off
-            display_info_message "$tr_airplane_on (Wi-Fi Only)" "$tr_airplane_mode_message" "$icon_airplane_on"
+    local wifi_icon="$icon_wifi_enable"
+    local wifi_label="Enable Wi-Fi"
+    if [ "$wifi_state" = "enabled" ]; then
+        wifi_icon="$icon_wifi_disable"
+        wifi_label="Disable Wi-Fi Only"
+    fi
+
+    local ap_icon="$icon_airplane_on"
+    $any_on && ap_icon="$icon_airplane_off"
+
+    local options="$ap_icon  Full Airplane Mode\n"
+    options+="$wifi_icon  $wifi_label\n"
+    options+="$icon_close Back"
+    local choice=$(echo -e "$options" | display_menu 1 "Airplane Mode Options" "$icon_airplane")
+
+    if [[ "$choice" == *"Full Airplane"* ]]; then
+        if $any_on; then
+            show_loading_notification "$icon_airplane_on Disabling all radios..."
+            timeout 5 nmcli radio wifi off 2>/dev/null
+            timeout 5 nmcli radio wwan off 2>/dev/null
+            if command -v bluetoothctl &> /dev/null; then timeout 5 bluetoothctl power off &>/dev/null; fi
+            kill_loading_notification
+            display_info_message "$tr_airplane_on" "$tr_airplane_mode_message" "$icon_airplane_on"
+        else
+            show_loading_notification "$icon_airplane_off Enabling all radios..."
+            timeout 5 nmcli radio wifi on 2>/dev/null
+            timeout 5 nmcli radio wwan on 2>/dev/null
+            if command -v bluetoothctl &> /dev/null; then timeout 5 bluetoothctl power on &>/dev/null; fi
+            kill_loading_notification
+            display_info_message "$tr_airplane_off" "$tr_airplane_mode_message" "$icon_airplane_off"
         fi
-    else
-        if command -v rfkill &> /dev/null; then rfkill unblock all; fi
-        if command -v bluetoothctl &> /dev/null; then bluetoothctl power on &>/dev/null; fi
-        nmcli radio wifi on
-        nmcli radio wwan on 2>/dev/null
-        display_info_message "$tr_airplane_off" "$tr_airplane_mode_message" "$icon_airplane_off"
+
+    elif [[ "$choice" == *"Wi-Fi"* ]]; then
+        if [ "$wifi_state" = "enabled" ]; then
+            show_loading_notification "$icon_wifi_disable Disabling Wi-Fi..."
+            timeout 5 nmcli radio wifi off 2>/dev/null
+            kill_loading_notification
+            display_info_message "Wi-Fi Turned Off" "$tr_airplane_mode_message" "$icon_wifi_disable"
+        else
+            show_loading_notification "$icon_wifi_enable Enabling Wi-Fi..."
+            timeout 5 nmcli radio wifi on 2>/dev/null
+            kill_loading_notification
+            display_info_message "Wi-Fi Turned On" "$tr_airplane_mode_message" "$icon_wifi_enable"
+        fi
     fi
 }
 

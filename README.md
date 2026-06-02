@@ -256,16 +256,19 @@ HyprLTM-Net uses the **LTMNight** color palette. Customize appearance by editing
 
 #### Theme Selection via Environment Variables
 
-You can override the theme at runtime without modifying config files:
+Override the theme at runtime without modifying config files:
 
 | Variable | Purpose | Default |
 | :--- | :--- | :--- |
 | `ROFI_THEME_NAME` | Theme file name (without `.rasi`) | `hyprltm-net` |
 | `ROFI_NETWORK_MANAGER_THEME` | Full path to a `.rasi` theme file | *(auto-detected)* |
 
-Usage:
+Search order: env var path → `~/.config/rofi/themes/` → `~/.config/hyprltm/themes/` → `/usr/share/rofi/themes/` → `/etc/xdg/rofi/themes/` → `~/.local/share/rofi/themes/` → script directory → rofi built-in fallback.
+
+If `ROFI_NETWORK_MANAGER_THEME` points to a missing or broken path, the script falls back through the search chain.
+
 ```bash
-# Use a custom theme file
+# Use a custom theme name
 export ROFI_THEME_NAME="my-custom-theme"
 
 # Or point directly to a theme file

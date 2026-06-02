@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.4.1] - 2026-06-02
+
+### Added
+- Ping latency to speedtest results
+
+### Fixed
+- Airplane Mode no longer hangs — removed `rfkill block all` and added 5-second timeout on all radio commands
+- Airplane Mode now shows a loading dialog while disabling radios instead of sitting there silently
+- Theme detection now uses `-r` instead of `-f` (catches permission issues, not just missing files)
+- `ROFI_NETWORK_MANAGER_THEME` pointing to a broken path now logs a warning and falls back gracefully instead of crashing
+
+### Changed
+- Removed `rfkill` dependency entirely — airplane mode uses `nmcli` for Wi-Fi/WWAN and `bluetoothctl` for Bluetooth
+- `ltmnight.rasi` warnings no longer override your custom theme path — self-contained themes work as-is
+- Rasi files can now be installed to `~/.config/hyprltm/themes/` when `~/.config/rofi` is a file instead of a directory (some dotfiles installer add rofi file at that path, blocking mkdir)
+
 ## [v0.4.0] - 2026-04-16
 
 ### Added
@@ -93,4 +109,3 @@ All notable changes to this project will be documented in this file.
 -   **Scanning**: Fixed issue where sometimes only the connected network was visible.
 -   **Active Selection**: Fixed bug where selecting the currently active network (marked with ) showed an error or blinked. It now instantly opens the menu.
 -   **Crashes**: Resolved specific `nmcli` and syntax errors.
-

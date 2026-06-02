@@ -128,6 +128,14 @@ CONFIG_DIR="$HOME/.config/hyprltm"
 echo ""
 echo "Creating directories..."
 mkdir -p "$INSTALL_DIR"
+
+rofi_path="${XDG_CONFIG_HOME:-$HOME/.config}/rofi"
+if [ -f "$rofi_path" ] || [ -L "$rofi_path" ]; then
+    echo -e "${YELLOW}$rofi_path exists as a file — cannot install themes there.${NC}"
+    echo -e "${YELLOW}Installing themes to $CONFIG_DIR/themes/ instead.${NC}"
+    THEME_DIR="$CONFIG_DIR/themes"
+fi
+
 mkdir -p "$THEME_DIR"
 mkdir -p "$CONFIG_DIR"
 
