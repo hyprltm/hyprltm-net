@@ -10,7 +10,7 @@
 # Copyright © 2025-2026 Djalel Oukid (sniper1720)
 
 
-# Version: 0.4.1
+# Version: 0.4.2
 # Description: A Rofi-based Network Manager for Hyprland (and others).
 # --- Dependencies Check ---
 if ! command -v rofi &> /dev/null; then

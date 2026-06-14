@@ -180,8 +180,11 @@ echo ""
 echo -e "${YELLOW}[Keybinding]${NC} Allows you to open the menu with SUPER+N."
 read -p "Show instructions? [Y/n] " choice_keybind
 if [[ ! "$choice_keybind" =~ ^[Nn]$ ]]; then
-    echo -e "${YELLOW}>> Add this line to ${CYAN}~/.config/hypr/hyprland.conf${NC}:"
+    echo -e "${YELLOW}>> Add to Hyprland config (${CYAN}~/.config/hypr/hyprland.conf${YELLOW} or ${CYAN}hyprland.lua${YELLOW}):${NC}"
+    echo -e "   ${GREEN}# hyprlang (legacy):${NC}"
     echo -e "   ${GREEN}bind = SUPER, N, exec, hyprltm-net${NC}"
+    echo -e "   ${GREEN}# Lua (0.55+):${NC}"
+    echo -e "   ${GREEN}hl.bind(\"SUPER + N\", hl.dsp.exec_cmd(\"hyprltm-net\"))${NC}"
 fi
 
 echo ""
