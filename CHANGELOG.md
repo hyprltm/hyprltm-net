@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.5.0] - 2026-06-19
+
+### Added
+- **Modular scripting** — split into smaller modules (`modules/wifi.sh`, `modules/vpn.sh`, etc.)
+- **Bluetooth Tethering**: Added full auto-pair and connect flow from the Wi-Fi menu
+- **Full i18n support** — all user-facing strings translatable via `modules/i18n.sh`
+
 ## [v0.4.2] - 2026-06-14
 
 ### Changed
@@ -114,3 +121,4 @@ All notable changes to this project will be documented in this file.
 -   **Scanning**: Fixed issue where sometimes only the connected network was visible.
 -   **Active Selection**: Fixed bug where selecting the currently active network (marked with ) showed an error or blinked. It now instantly opens the menu.
 -   **Crashes**: Resolved specific `nmcli` and syntax errors.
+

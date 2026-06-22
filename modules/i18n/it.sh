@@ -1,0 +1,274 @@
+# =============================================================================
+#                               TRADUZIONI
+# =============================================================================
+
+tr_checking_wifi_status='Controllo stato Wi-Fi... Attendere prego.'
+tr_checking_radio_states='Controllo stato radio...'
+tr_scanning_networks='Scansione reti... Attendere prego.'
+tr_connecting_to='Connessione a'
+tr_disconnecting_from='Disconnessione da'
+tr_please_wait='... Attendere prego.'
+tr_submenu_message='Altre opzioni'
+tr_disable_message='Disattiva Wi-Fi'
+tr_enable_message='Attiva Wi-Fi'
+tr_interface_message='Interfaccia:'
+tr_known_connections_message='Connessioni note'
+tr_available_networks_message='Reti disponibili'
+tr_available_vpn_profiles_message='Profili VPN disponibili'
+tr_autoconnect_message='Connessione automatica'
+tr_ipv4_config_message='Configurazione IPv4'
+tr_ipv6_config_message='Configurazione IPv6'
+tr_dns4_message='DNS IPv4'
+tr_dns6_message='DNS IPv6'
+tr_connection_details_message='Dettagli connessione'
+tr_ip_addr='Indirizzo IP'
+tr_gateway='Gateway'
+tr_signal_strength='Potenza segnale'
+tr_speed='Velocità collegamento'
+tr_frequency='Frequenza'
+tr_mac_addr='Indirizzo MAC'
+tr_device='Interfaccia'
+tr_autoip_message='IP automatico'
+tr_autodns_message='DNS automatico'
+tr_address_message='Indirizzi'
+tr_dns_config_message='Configurazione DNS'
+tr_gateway_message='Gateway:'
+tr_forget_message='Dimentica connessione'
+tr_wireguard_enable_message='Attiva/Disattiva VPN'
+tr_rename_connection_message='Rinomina connessione'
+tr_hidden_message='Connetti a rete nascosta'
+tr_refresh_scan_message='Aggiorna scansione'
+tr_no_known_wifi_connections='Nessuna connessione Wi-Fi nota.'
+tr_no_configured_vpns='Nessuna connessione VPN configurata.'
+tr_no_active_vpns='Nessuna connessione VPN attiva.'
+tr_no_saved_connections='Nessuna connessione salvata trovata.'
+tr_no_active_connection='Nessuna connessione attiva.'
+tr_no_wifi_interface='Nessuna interfaccia Wi-Fi rilevata.'
+tr_no_ethernet_device='Nessun dispositivo Ethernet trovato.'
+tr_no_wifi_networks_found='Nessuna rete Wi-Fi trovata.'
+tr_wired_status_message='Stato cablato'
+tr_manage_wired_profile='Gestisci profilo cablato attivo'
+tr_hotspot_menu_prompt='Gestione hotspot'
+tr_connect_wired_connection='Connetti a connessione cablata:'
+tr_manage_wired_connections='Gestisci connessioni cablate'
+tr_import_vpn_message='Importa VPN da file'
+tr_import_vpn_prompt='Inserisci percorso completo del file .conf o .ovpn:'
+tr_status_message='Stato:'
+tr_status_connected_to='Connesso a'
+tr_status_connected='Connesso'
+tr_status_disconnected='Disconnesso'
+
+tr_status_disabled='Disabilitato'
+tr_connect_now_message='Connetti ora'
+tr_disconnect_message='Disconnetti ora'
+tr_notice_import_success_summary='VPN importata'
+tr_notice_import_success_body='Connessione VPN importata con successo.'
+tr_notice_import_error_summary='Errore importazione'
+tr_notice_import_error_body='Impossibile importare la connessione VPN.'
+tr_notice_file_not_found_body='File non trovato nel percorso specificato.'
+
+tr_airplane_mode_message='Modalità aereo'
+tr_airplane_on='Modalità aereo attivata'
+tr_airplane_off='Modalità aereo disattivata'
+
+tr_edit_password_message='Modifica password'
+tr_password_prompt='Inserisci password per'
+tr_password_updated='Password aggiornata'
+tr_password_update_failed='Aggiornamento password fallito'
+tr_connection_failed_retry='Connessione fallita. Aggiornare password?'
+tr_qrcode_message='Condividi tramite QR Code'
+tr_qrcode_generating='Generazione QR Code...'
+tr_qrcode_error='Impossibile generare il QR code. qrencode è installato?'
+tr_qrcode_no_password='Impossibile condividere la rete senza password salvata.'
+
+tr_hotspot_message='Crea hotspot'
+tr_hotspot_ssid_prompt='Inserisci SSID hotspot:'
+tr_hotspot_password_prompt='Inserisci password hotspot (min 8 caratteri):'
+tr_hotspot_starting='Avvio hotspot...'
+tr_hotspot_stopping='Arresto hotspot...'
+tr_hotspot_creating='Creazione hotspot...'
+tr_hotspot_success='Hotspot creato con successo!'
+tr_hotspot_error='Creazione hotspot fallita.'
+tr_notice_unknown_vpn_type_body='Tipo file VPN sconosciuto. Usa .conf o .ovpn.'
+
+tr_select_interface_prompt='Seleziona interfaccia:'
+tr_ask_password_prompt='Inserisci password:'
+tr_menu_dns_prompt='Inserisci DNS (es., 8.8.8.8):'
+tr_menu_dns_sure_prompt_1='Rimuovi DNS '
+tr_menu_dns_sure_prompt_2='?'
+tr_menu_ip_config_addresses_prompt='Inserisci indirizzo (es., 192.168.1.10/24):'
+tr_menu_ip_config_gateway_prompt='Inserisci gateway (es., 192.168.1.1):'
+tr_menu_addresses_prompt='Digita o seleziona indirizzo (es., 192.168.1.10/24):'
+tr_menu_addresses_sure_prompt_1='Rimuovi indirizzo '
+tr_menu_addresses_sure_prompt_2='?'
+tr_forget_connection_sure_prompt_1='Dimentica '
+tr_forget_connection_sure_prompt_2='?'
+tr_forget_connection_confirm='Sì, dimentica'
+tr_rename_connection_prompt='Inserisci nuovo nome per la connessione:'
+tr_connect_hidden_prompt='Inserisci nome rete nascosta:'
+
+tr_notice_connected_summary='Connesso'
+tr_notice_disconnected_summary='Disconnesso'
+tr_notice_error_summary='Errore di connessione'
+tr_notice_connected_body='Connesso con successo a'
+tr_notice_disconnected_body='Disconnesso con successo da'
+tr_notice_error_body='Connessione fallita a'
+tr_notice_error_disconnect_body='Disconnessione fallita da'
+
+tr_show_password_message='Mostra password'
+tr_hide_password_message='Nascondi password'
+tr_confirm_password_message='Conferma password'
+tr_edit_password_message='Modifica password'
+tr_edit_password_prompt='Inserisci nuova password:'
+tr_password_updated_summary='Password aggiornata'
+tr_password_updated_body='Password aggiornata con successo per'
+tr_password_update_failed_summary='Aggiornamento fallito'
+tr_password_update_failed_body='Aggiornamento password fallito per'
+
+tr_captive_portal_title='Portale captive rilevato'
+tr_captive_portal_message='Devi accedere alla rete per ottenere accesso a internet.'
+tr_open_browser='Apri pagina di login'
+
+tr_speedtest_menu='Test velocità'
+tr_speedtest_running='Test velocità connessione...'
+tr_speedtest_error='Test velocità fallito (Sei online?)'
+tr_ping='Ping'
+
+# Finestra di dialogo errori
+tr_try_again='Riprova'
+
+# Titoli finestre / dialoghi
+tr_success='Operazione riuscita'
+tr_error='Errore'
+tr_password_actions='Azioni password'
+tr_connection_failed='Connessione fallita'
+
+# Menu stato
+tr_active_connection_details='Dettagli connessione attiva'
+tr_all_device_status='Stato tutti i dispositivi'
+
+# Menu principale
+tr_wifi='Wi-Fi'
+tr_on='ON'
+tr_off='OFF'
+tr_bt_label='Bluetooth'
+tr_mobile_label='Cellulare (WWAN)'
+tr_no_modem='Nessun modem'
+tr_no_adapter='Nessun adattatore'
+
+tr_wired=
+tr_wired='Cablato'
+tr_vpn_short='VPN'
+tr_saved_connections='Connessioni salvate'
+tr_status_short='Stato'
+
+# Profilo connessione
+tr_disconnecting='Disconnessione...'
+tr_disconnected_body='Disconnesso da'
+tr_connection_renamed='Connessione rinominata.'
+tr_failed_rename='Rinomina connessione fallita.'
+tr_failed_disconnect='Disconnessione fallita.'
+tr_mac_randomization='Randomizzazione MAC'
+tr_mac_disabled='Randomizzazione MAC disattivata'
+tr_mac_enabled='Randomizzazione MAC attivata'
+
+# Hotspot
+tr_create_hotspot='Crea nuovo hotspot'
+tr_manage_saved_hotspots='Gestisci hotspot salvati'
+tr_delete_hotspot_profile='Elimina profilo hotspot'
+tr_stop_hotspot='Arresta hotspot'
+tr_enable_hotspot='Attiva hotspot'
+tr_hotspot_started='Hotspot avviato'
+tr_hotspot_active='Attivo:'
+tr_failed_start_hotspot='Avvio hotspot fallito.'
+tr_hotspot_profile_deleted='Profilo hotspot eliminato.'
+tr_disconnecting_wifi='Disconnessione Wi-Fi...'
+tr_hotspot_created='Hotspot creato'
+
+# Cablato
+tr_connect_wired='Connetti a connessione cablata'
+
+# Richieste configurazione IP
+tr_enter_ip='Inserisci indirizzo IP (es.'
+tr_enter_gateway='Inserisci gateway (opzionale, es.'
+tr_enter_dns='Inserisci server DNS (opzionale, es.'
+tr_enter_dns_simple='Inserisci server DNS (es.'
+
+# QR
+tr_scan_to_connect='Scansiona per connetterti'
+
+# Varie
+tr_proceed='Procedi'
+tr_info='Informazioni'
+
+# Modalità aereo
+tr_enable_wifi='Attiva Wi-Fi'
+tr_disable_wifi_only='Disattiva solo Wi-Fi'
+tr_full_airplane='Modalità aereo completa'
+tr_airplane_options='Opzioni modalità aereo'
+tr_disabling_radios='Disattivazione tutte le radio...'
+tr_enabling_radios='Attivazione tutte le radio...'
+tr_disabling_wifi='Disattivazione Wi-Fi...'
+tr_enabling_wifi='Attivazione Wi-Fi...'
+tr_wifi_turned_off='Wi-Fi disattivato'
+tr_wifi_turned_on='Wi-Fi attivato'
+
+# BT Tether
+tr_bt_is_off='Bluetooth è spento'
+tr_cancel='Annulla'
+tr_manage='Gestisci'
+
+# Messaggi connessione
+tr_cancelled_no_password='Connessione annullata. Nessuna password fornita.'
+tr_already_connected='Già connesso a'
+tr_invalid_option='Opzione non valida selezionata:'
+
+# Suggerimento password
+tr_password_min_length='La password deve essere di almeno 8 caratteri.'
+
+# Errori all'avvio (caricati prima del core)
+tr_startup_no_rofi='Errore: rofi non è installato. Installalo per usare questo script.'
+tr_startup_no_nmcli='Errore: nmcli non è installato. Installa NetworkManager e nmcli.'
+tr_startup_bad_theme='Attenzione: ROFI_NETWORK_MANAGER_THEME'
+tr_warn_missing_rasi='Attenzione: ltmnight.rasi non trovato accanto a'
+tr_warn_missing_rasi_colors='. I colori potrebbero non essere visualizzati correttamente.'
+
+# Dettagli errori connessione
+tr_clean_incorrect_pwd='Password errata o credenziali mancanti.'
+tr_clean_network_not_found='Rete non trovata. Potrebbe essere fuori portata.'
+tr_clean_refused='Connessione fallita. La rete ha rifiutato la connessione.'
+tr_clean_timeout='Tempo scaduto. La rete è troppo lenta o irraggiungibile.'
+tr_clean_cancelled='Operazione annullata.'
+
+tr_gathering_details='Raccolta dettagli...'
+tr_bt_power_failed='Accensione Bluetooth fallita'
+
+tr_warn_no_notification='Nessun servizio notifiche trovato'
+tr_warn_no_notification_desc='Puoi continuare, ma non riceverai notifiche desktop.'
+tr_saved_hotspots_title='Hotspot salvati'
+tr_no_saved_hotspots='Nessun profilo hotspot salvato trovato.'
+tr_hotspot_no_dnsmasq="Dipenderza mancante: 'dnsmasq'\nNecessario per assegnare indirizzi IP (DHCP) ai dispositivi connessi.\nInstallalo: sudo pacman -S dnsmasq (o equivalente)"
+tr_btctl_not_found='bluetoothctl non trovato'
+tr_no_connection_profile='Impossibile trovare il profilo di connessione per'
+tr_no_saved_wired='Nessuna connessione cablata salvata a cui connettersi.'
+tr_wifi_disconnect_title='Disconnessione Wi-Fi necessaria'
+tr_hotspot_will_disconnect="L'avvio dell'hotspot disconnetterà il Wi-Fi attuale.\nProcedere?"
+tr_hotspot_disconnect_msg="L'avvio dell'hotspot ti disconnetterà dalla rete Wi-Fi attuale.\nLa scheda non può fare entrambe le cose contemporaneamente."
+
+tr_bt_tether_menu='Connetti tramite Bluetooth'
+tr_bt_scanning='Scansione dispositivi Bluetooth...'
+tr_bt_no_devices='Nessun dispositivo Bluetooth trovato.'
+tr_bt_no_adapter='Nessun adattatore Bluetooth trovato.'
+tr_bt_power_on='Accendi Bluetooth'
+tr_bt_powering='Accensione Bluetooth...'
+tr_bt_creating_profile='Creazione profilo tether Bluetooth...'
+tr_bt_profile_created='Profilo tether Bluetooth creato'
+tr_bt_create_failed='Creazione profilo tether Bluetooth fallita'
+tr_bt_connect='Connetti'
+tr_bt_pair_connect='Associa & Connetti'
+tr_bt_rescan='Riscansiona'
+tr_bt_pairing='Associazione...'
+tr_bt_pair_failed='Associazione fallita'
+tr_bt_connecting='Connessione...'
+tr_bt_select_device='Seleziona dispositivo:'
+

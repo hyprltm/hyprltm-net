@@ -139,9 +139,12 @@ fi
 mkdir -p "$THEME_DIR"
 mkdir -p "$CONFIG_DIR"
 
-echo "Installing script to $INSTALL_DIR..."
+echo "Installing script and modules to $INSTALL_DIR..."
 cp hyprltm-net.sh "$INSTALL_DIR/hyprltm-net"
 chmod +x "$INSTALL_DIR/hyprltm-net"
+mkdir -p "$INSTALL_DIR/modules"
+cp modules/*.sh "$INSTALL_DIR/modules/"
+cp -r modules/i18n "$INSTALL_DIR/modules/"
 
 echo "Installing themes to $THEME_DIR..."
 cp *.rasi "$THEME_DIR/"
@@ -204,3 +207,4 @@ echo -e "${YELLOW}Run from Terminal:${NC} hyprltm-net"
 if [[ ! "$choice_desktop" =~ ^[Nn]$ ]]; then
     echo -e "${YELLOW}Run from Launcher:${NC} Search for 'HyprLTM-Net'"
 fi
+

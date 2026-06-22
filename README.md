@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img alt="Version" src="https://img.shields.io/badge/Version-v0.4.2-f1fa8c?style=for-the-badge&labelColor=282a36"/>
+  <img alt="Version" src="https://img.shields.io/badge/Version-v0.5.0-f1fa8c?style=for-the-badge&labelColor=282a36"/>
   <a href="https://github.com/hyprltm/hyprltm-net/stargazers"><img alt="GitHub Stars" src="https://img.shields.io/github/stars/hyprltm/hyprltm-net?style=for-the-badge&color=bd93f9&labelColor=282a36"/></a>
   <a href="https://github.com/hyprltm/hyprltm-net/commits/main"><img alt="Last Commit" src="https://img.shields.io/github/last-commit/hyprltm/hyprltm-net?style=for-the-badge&color=50fa7b&labelColor=282a36"/></a>
   <a href="https://github.com/hyprltm/hyprltm-net"><img alt="Repo Size" src="https://img.shields.io/github/repo-size/hyprltm/hyprltm-net?style=for-the-badge&color=8be9fd&labelColor=282a36"/></a>
@@ -61,6 +61,7 @@
 - **Airplane Mode** toggle
 - **QR Code Sharing** for Wi-Fi
 - **Hotspot Manager**
+- **Bluetooth Tethering**
 
 <img src="assets/hotspot_manager.png" width="100%" alt="Hotspot Manager"/>
 
@@ -144,6 +145,8 @@ Main Menu
 │   │   ├── Create New Hotspot
 │   │   └── Manage Saved Hotspots
 │   │       └── [Hotspot Profile] -> (Toggle, Edit Password, Rename, Delete)
+│   ├── Connect to Bluetooth Tether
+│   │   └── [Discovered/Paird Device] -> (Auto-pair & connect / Connect)
 │   ├── Known Connections (Saved Profiles)
 │   │   └── [Saved Wi-Fi Profile]
 │   │       ├── Autoconnect (Toggle)
@@ -323,3 +326,4 @@ Every bit of support helps keep the project alive and ensures I can spend more t
 **Created by [Djalel Oukid (sniper1720)](https://github.com/sniper1720)** and distributed under the **GPL-3.0 License**.
 
 *Check out more Linux & Open Source content on my [website!](https://www.linuxtechmore.com)*
+

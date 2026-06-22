@@ -1,0 +1,273 @@
+# =============================================================================
+#                               TRANSLATIONS - Bengali
+# =============================================================================
+
+tr_checking_wifi_status='Wi-Fi অবস্থা পরীক্ষা করা হচ্ছে... দয়া করে অপেক্ষা করুন।'
+tr_checking_radio_states='রেডিও অবস্থা পরীক্ষা করা হচ্ছে...'
+tr_scanning_networks='নেটওয়ার্ক স্ক্যান করা হচ্ছে... দয়া করে অপেক্ষা করুন।'
+tr_connecting_to='সংযোগ করা হচ্ছে'
+tr_disconnecting_from='সংযোগ বিচ্ছিন্ন করা হচ্ছে'
+tr_please_wait='... দয়া করে অপেক্ষা করুন'
+tr_submenu_message='আরও বিকল্প'
+tr_disable_message='Wi-Fi বন্ধ করুন'
+tr_enable_message='Wi-Fi চালু করুন'
+tr_interface_message='ইন্টারফেস:'
+tr_known_connections_message='পরিচিত সংযোগ'
+tr_available_networks_message='উপলব্ধ নেটওয়ার্ক'
+tr_available_vpn_profiles_message='উপলব্ধ VPN প্রোফাইল'
+tr_autoconnect_message='স্বয়ংক্রিয় সংযোগ'
+tr_ipv4_config_message='IPv4 কনফিগারেশন'
+tr_ipv6_config_message='IPv6 কনফিগারেশন'
+tr_dns4_message='DNS IPv4'
+tr_dns6_message='DNS IPv6'
+tr_connection_details_message='সংযোগের বিবরণ'
+tr_ip_addr='IP ঠিকানা'
+tr_gateway='গেটওয়ে'
+tr_signal_strength='সিগন্যাল শক্তি'
+tr_speed='লিঙ্ক গতি'
+tr_frequency='ফ্রিকোয়েন্সি'
+tr_mac_addr='MAC ঠিকানা'
+tr_device='ইন্টারফেস'
+tr_autoip_message='স্বয়ংক্রিয় IP'
+tr_autodns_message='স্বয়ংক্রিয় DNS'
+tr_address_message='ঠিকানাসমূহ'
+tr_dns_config_message='DNS কনফিগারেশন'
+tr_gateway_message='গেটওয়ে:'
+tr_forget_message='সংযোগ ভুলে যান'
+tr_wireguard_enable_message='VPN টগল করুন'
+tr_rename_connection_message='সংযোগের নাম পরিবর্তন'
+tr_hidden_message='লুকানো নেটওয়ার্কে সংযোগ করুন'
+tr_refresh_scan_message='স্ক্যান রিফ্রেশ করুন'
+tr_no_known_wifi_connections='কোনো পরিচিত Wi-Fi সংযোগ নেই।'
+tr_no_configured_vpns='কোনো VPN সংযোগ কনফিগার করা নেই।'
+tr_no_active_vpns='কোনো সক্রিয় VPN সংযোগ নেই।'
+tr_no_saved_connections='কোনো সংরক্ষিত সংযোগ পাওয়া যায়নি।'
+tr_no_active_connection='কোনো সক্রিয় সংযোগ নেই।'
+tr_no_wifi_interface='কোনো Wi-Fi ইন্টারফেস পাওয়া যায়নি।'
+tr_no_ethernet_device='কোনো Ethernet ডিভাইস পাওয়া যায়নি।'
+tr_no_wifi_networks_found='কোনো Wi-Fi নেটওয়ার্ক পাওয়া যায়নি।'
+tr_wired_status_message='তারযুক্ত অবস্থা'
+tr_manage_wired_profile='সক্রিয় তারযুক্ত প্রোফাইল পরিচালনা'
+tr_hotspot_menu_prompt='হটস্পট ব্যবস্থাপক'
+tr_connect_wired_connection='তারযুক্ত সংযোগে সংযোগ করুন:'
+tr_manage_wired_connections='তারযুক্ত সংযোগ পরিচালনা'
+tr_import_vpn_message='ফাইল থেকে VPN আমদানি'
+tr_import_vpn_prompt='.conf বা .ovpn ফাইলের সম্পূর্ণ পথ দিন:'
+tr_status_message='অবস্থা:'
+tr_status_connected_to='সংযুক্ত'
+tr_status_connected='সংযুক্ত'
+tr_status_disconnected='সংযোগ বিচ্ছিন্ন'
+tr_status_disabled='নিষ্ক্রিয়'
+tr_connect_now_message='এখনই সংযোগ করুন'
+tr_disconnect_message='এখনই বিচ্ছিন্ন করুন'
+tr_notice_import_success_summary='VPN আমদানি হয়েছে'
+tr_notice_import_success_body='VPN সংযোগ সফলভাবে আমদানি হয়েছে।'
+tr_notice_import_error_summary='আমদানি ত্রুটি'
+tr_notice_import_error_body='VPN সংযোগ আমদানি করতে ব্যর্থ।'
+tr_notice_file_not_found_body='নির্দিষ্ট পাথে ফাইল পাওয়া যায়নি।'
+
+tr_airplane_mode_message='বিমান মোড'
+tr_airplane_on='বিমান মোড চালু'
+tr_airplane_off='বিমান মোড বন্ধ'
+
+tr_edit_password_message='পাসওয়ার্ড সম্পাদনা'
+tr_password_prompt='এর জন্য পাসওয়ার্ড দিন'
+tr_password_updated='পাসওয়ার্ড আপডেট হয়েছে'
+tr_password_update_failed='পাসওয়ার্ড আপডেট করতে ব্যর্থ'
+tr_connection_failed_retry='সংযোগ ব্যর্থ। পাসওয়ার্ড আপডেট করবেন?'
+tr_qrcode_message='QR কোডের মাধ্যমে শেয়ার'
+tr_qrcode_generating='QR কোড জেনারেট করা হচ্ছে...'
+tr_qrcode_error='QR কোড জেনারেট করা যায়নি। qrencode কি ইনস্টল আছে?'
+tr_qrcode_no_password='সংরক্ষিত পাসওয়ার্ড ছাড়া নেটওয়ার্ক শেয়ার করা যাবে না।'
+
+tr_hotspot_message='হটস্পট তৈরি করুন'
+tr_hotspot_ssid_prompt='হটস্পট SSID দিন:'
+tr_hotspot_password_prompt='হটস্পট পাসওয়ার্ড দিন (সর্বনিম্ন ৮ অক্ষর):'
+tr_hotspot_starting='হটস্পট শুরু করা হচ্ছে...'
+tr_hotspot_stopping='হটস্পট বন্ধ করা হচ্ছে...'
+tr_hotspot_creating='হটস্পট তৈরি করা হচ্ছে...'
+tr_hotspot_success='হটস্পট সফলভাবে তৈরি হয়েছে!'
+tr_hotspot_error='হটস্পট তৈরি করতে ব্যর্থ।'
+tr_notice_unknown_vpn_type_body='অজানা VPN ফাইলের ধরন। .conf বা .ovpn ব্যবহার করুন।'
+
+tr_select_interface_prompt='ইন্টারফেস নির্বাচন করুন:'
+tr_ask_password_prompt='পাসওয়ার্ড দিন:'
+tr_menu_dns_prompt='DNS দিন (যেমন, 8.8.8.8):'
+tr_menu_dns_sure_prompt_1='DNS সরান '
+tr_menu_dns_sure_prompt_2='?'
+tr_menu_ip_config_addresses_prompt='ঠিকানা দিন (যেমন, 192.168.1.10/24):'
+tr_menu_ip_config_gateway_prompt='গেটওয়ে দিন (যেমন, 192.168.1.1):'
+tr_menu_addresses_prompt='ঠিকানা টাইপ বা নির্বাচন করুন (যেমন, 192.168.1.10/24):'
+tr_menu_addresses_sure_prompt_1='ঠিকানা সরান '
+tr_menu_addresses_sure_prompt_2='?'
+tr_forget_connection_sure_prompt_1='ভুলে যান '
+tr_forget_connection_sure_prompt_2='?'
+tr_forget_connection_confirm='হ্যাঁ, ভুলে যান'
+tr_rename_connection_prompt='সংযোগের জন্য নতুন নাম দিন:'
+tr_connect_hidden_prompt='লুকানো নেটওয়ার্কের নাম দিন:'
+
+tr_notice_connected_summary='সংযুক্ত'
+tr_notice_disconnected_summary='বিচ্ছিন্ন'
+tr_notice_error_summary='সংযোগ ত্রুটি'
+tr_notice_connected_body='সফলভাবে সংযুক্ত হয়েছে'
+tr_notice_disconnected_body='সফলভাবে বিচ্ছিন্ন হয়েছে'
+tr_notice_error_body='সংযোগ করতে ব্যর্থ'
+tr_notice_error_disconnect_body='বিচ্ছিন্ন করতে ব্যর্থ'
+
+tr_show_password_message='পাসওয়ার্ড দেখান'
+tr_hide_password_message='পাসওয়ার্ড লুকান'
+tr_confirm_password_message='পাসওয়ার্ড নিশ্চিত করুন'
+tr_edit_password_message='পাসওয়ার্ড সম্পাদনা'
+tr_edit_password_prompt='নতুন পাসওয়ার্ড দিন:'
+tr_password_updated_summary='পাসওয়ার্ড আপডেট হয়েছে'
+tr_password_updated_body='এর জন্য পাসওয়ার্ড সফলভাবে আপডেট হয়েছে'
+tr_password_update_failed_summary='আপডেট ব্যর্থ'
+tr_password_update_failed_body='এর জন্য পাসওয়ার্ড আপডেট করতে ব্যর্থ'
+
+tr_captive_portal_title='ক্যাপটিভ পোর্টাল সনাক্ত'
+tr_captive_portal_message='ইন্টারনেট অ্যাক্সেস পেতে নেটওয়ার্কে লগইন করতে হবে।'
+tr_open_browser='লগইন পৃষ্ঠা খুলুন'
+
+tr_speedtest_menu='গতি পরীক্ষা'
+tr_speedtest_running='সংযোগের গতি পরীক্ষা করা হচ্ছে...'
+tr_speedtest_error='গতি পরীক্ষা ব্যর্থ (আপনি কি অনলাইনে?)'
+tr_ping='পিং'
+
+# Error dialog
+tr_try_again='পুনরায় চেষ্টা'
+
+# Dialog / window titles
+tr_success='সফল'
+tr_error='ত্রুটি'
+tr_password_actions='পাসওয়ার্ড ক্রিয়া'
+tr_connection_failed='সংযোগ ব্যর্থ'
+
+# Status menu
+tr_active_connection_details='সক্রিয় সংযোগের বিবরণ'
+tr_all_device_status='সব ডিভাইসের অবস্থা'
+
+# Main menu
+tr_wifi='ওয়াই-ফাই'
+tr_on='চালু'
+tr_off='বন্ধ'
+tr_bt_label='ব্লুটুথ'
+tr_mobile_label='সেলুলার (WWAN)'
+tr_no_modem='কোনো মডেম নেই'
+tr_no_adapter='কোনো অ্যাডাপ্টার নেই'
+
+tr_wired=
+tr_wired='তারযুক্ত'
+tr_vpn_short='ভিপিএন'
+tr_saved_connections='সংরক্ষিত সংযোগ'
+tr_status_short='স্থিতি'
+
+# Connection profile
+tr_disconnecting='সংযোগ বিচ্ছিন্ন হচ্ছে...'
+tr_disconnected_body='থেকে বিচ্ছিন্ন হয়েছে'
+tr_connection_renamed='সংযোগের নাম পরিবর্তন করা হয়েছে।'
+tr_failed_rename='সংযোগের নাম পরিবর্তন করতে ব্যর্থ।'
+tr_failed_disconnect='বিচ্ছিন্ন করতে ব্যর্থ।'
+tr_mac_randomization='MAC র্যান্ডমাইজেশন'
+tr_mac_disabled='MAC র্যান্ডমাইজেশন নিষ্ক্রিয়'
+tr_mac_enabled='MAC র্যান্ডমাইজেশন সক্রিয়'
+
+# Hotspot
+tr_create_hotspot='নতুন হটস্পট তৈরি'
+tr_manage_saved_hotspots='সংরক্ষিত হটস্পট পরিচালনা'
+tr_delete_hotspot_profile='হটস্পট প্রোফাইল মুছুন'
+tr_stop_hotspot='হটস্পট বন্ধ করুন'
+tr_enable_hotspot='হটস্পট সক্রিয় করুন'
+tr_hotspot_started='হটস্পট শুরু হয়েছে'
+tr_hotspot_active='সক্রিয়:'
+tr_failed_start_hotspot='হটস্পট শুরু করতে ব্যর্থ।'
+tr_hotspot_profile_deleted='হটস্পট প্রোফাইল মুছে ফেলা হয়েছে।'
+tr_disconnecting_wifi='Wi-Fi সংযোগ বিচ্ছিন্ন করা হচ্ছে...'
+tr_hotspot_created='হটস্পট তৈরি হয়েছে'
+
+# Wired
+tr_connect_wired='তারযুক্ত সংযোগে সংযোগ'
+
+# IP config prompts
+tr_enter_ip='IP ঠিকানা দিন (যেমন,'
+tr_enter_gateway='গেটওয়ে দিন (ঐচ্ছিক, যেমন,'
+tr_enter_dns='DNS সার্ভার দিন (ঐচ্ছিক, যেমন,'
+tr_enter_dns_simple='DNS সার্ভার দিন (যেমন,'
+
+# QR
+tr_scan_to_connect='স্ক্যান করে সংযোগ করুন'
+
+# Misc
+tr_proceed='এগিয়ে যান'
+tr_info='তথ্য'
+
+# Airplane mode
+tr_enable_wifi='Wi-Fi চালু করুন'
+tr_disable_wifi_only='শুধু Wi-Fi বন্ধ করুন'
+tr_full_airplane='পূর্ণ বিমান মোড'
+tr_airplane_options='বিমান মোড বিকল্প'
+tr_disabling_radios='সব রেডিও বন্ধ করা হচ্ছে...'
+tr_enabling_radios='সব রেডিও চালু করা হচ্ছে...'
+tr_disabling_wifi='Wi-Fi বন্ধ করা হচ্ছে...'
+tr_enabling_wifi='Wi-Fi চালু করা হচ্ছে...'
+tr_wifi_turned_off='Wi-Fi বন্ধ হয়েছে'
+tr_wifi_turned_on='Wi-Fi চালু হয়েছে'
+
+# BT Tether
+tr_bt_is_off='ব্লুটুথ বন্ধ'
+tr_cancel='বাতিল'
+tr_manage='পরিচালনা'
+
+# Connection messages
+tr_cancelled_no_password='সংযোগ বাতিল। কোনো পাসওয়ার্ড দেওয়া হয়নি।'
+tr_already_connected='ইতিমধ্যে সংযুক্ত'
+tr_invalid_option='অবৈধ বিকল্প:'
+
+# Password hint
+tr_password_min_length='পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে।'
+
+# Startup errors (sourced before core)
+tr_startup_no_rofi='ত্রুটি: rofi ইনস্টল করা নেই। এই স্ক্রিপ্ট ব্যবহার করতে দয়া করে এটি ইনস্টল করুন।'
+tr_startup_no_nmcli='ত্রুটি: nmcli ইনস্টল করা নেই। দয়া করে NetworkManager এবং nmcli ইনস্টল করুন।'
+tr_startup_bad_theme='সতর্কতা: ROFI_NETWORK_MANAGER_THEME'
+tr_warn_missing_rasi='সতর্কতা: ltmnight.rasi এর পাশে পাওয়া যায়নি'
+tr_warn_missing_rasi_colors='। রং সঠিকভাবে প্রদর্শিত নাও হতে পারে।'
+
+# Connection error details
+tr_clean_incorrect_pwd='ভুল পাসওয়ার্ড বা অনুপস্থিত পরিচয়পত্র।'
+tr_clean_network_not_found='নেটওয়ার্ক পাওয়া যায়নি। এটি সীমার বাইরে থাকতে পারে।'
+tr_clean_refused='সংযোগ ব্যর্থ। নেটওয়ার্ক সংযোগ প্রত্যাখ্যান করেছে।'
+tr_clean_timeout='সংযোগের সময় শেষ। নেটওয়ার্ক খুব ধীর বা অপ্রাপ্য।'
+tr_clean_cancelled='কার্যক্রম বাতিল করা হয়েছে।'
+
+tr_gathering_details='বিবরণ সংগ্রহ করা হচ্ছে...'
+tr_bt_power_failed='ব্লুটুথ চালু করতে ব্যর্থ'
+
+tr_warn_no_notification='কোনো বিজ্ঞপ্তি পরিষেবা পাওয়া যায়নি'
+tr_warn_no_notification_desc='আপনি চালিয়ে যেতে পারেন, তবে আপনি ডেস্কটপ বিজ্ঞপ্তি পাবেন না।'
+tr_saved_hotspots_title='সংরক্ষিত হটস্পট'
+tr_no_saved_hotspots='কোনো সংরক্ষিত হটস্পট প্রোফাইল পাওয়া যায়নি।'
+tr_hotspot_no_dnsmasq="অনুপস্থিত নির্ভরতা: 'dnsmasq'\nসংযুক্ত ডিভাইসে IP ঠিকানা (DHCP) বরাদ্দ করতে প্রয়োজন।\nদয়া করে ইনস্টল করুন: sudo pacman -S dnsmasq (বা সমতুল্য)"
+tr_btctl_not_found='bluetoothctl পাওয়া যায়নি'
+tr_no_connection_profile='এর জন্য সংযোগ প্রোফাইল পাওয়া যায়নি'
+tr_no_saved_wired='সংযোগ করার জন্য কোনো সংরক্ষিত তারযুক্ত সংযোগ নেই।'
+tr_wifi_disconnect_title='Wi-Fi বিচ্ছিন্ন প্রয়োজন'
+tr_hotspot_will_disconnect="হটস্পট শুরু করলে বর্তমান Wi-Fi সংযোগ বিচ্ছিন্ন হবে।\nএগিয়ে যাবেন?"
+tr_hotspot_disconnect_msg="হটস্পট শুরু করলে আপনি বর্তমান Wi-Fi নেটওয়ার্ক থেকে বিচ্ছিন্ন হবেন।\nআপনার কার্ড একসঙ্গে উভয় কাজ করতে পারে না।"
+
+tr_bt_tether_menu='ব্লুটুথ টেদারিংয়ে সংযোগ'
+tr_bt_scanning='ব্লুটুথ ডিভাইস স্ক্যান করা হচ্ছে...'
+tr_bt_no_devices='কোনো ব্লুটুথ ডিভাইস পাওয়া যায়নি।'
+tr_bt_no_adapter='কোনো ব্লুটুথ অ্যাডাপ্টার পাওয়া যায়নি।'
+tr_bt_power_on='ব্লুটুথ চালু করুন'
+tr_bt_powering='ব্লুটুথ চালু করা হচ্ছে...'
+tr_bt_creating_profile='ব্লুটুথ টেদার প্রোফাইল তৈরি করা হচ্ছে...'
+tr_bt_profile_created='ব্লুটুথ টেদার প্রোফাইল তৈরি হয়েছে'
+tr_bt_create_failed='ব্লুটুথ টেদার প্রোফাইল তৈরি করতে ব্যর্থ'
+tr_bt_connect='সংযোগ'
+tr_bt_pair_connect='পেয়ার ও সংযোগ'
+tr_bt_rescan='পুনরায় স্ক্যান'
+tr_bt_pairing='পেয়ার করা হচ্ছে...'
+tr_bt_pair_failed='পেয়ারিং ব্যর্থ'
+tr_bt_connecting='সংযোগ করা হচ্ছে...'
+tr_bt_select_device='ডিভাইস নির্বাচন করুন:'
+

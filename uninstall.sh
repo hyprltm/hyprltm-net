@@ -40,6 +40,12 @@ else
     echo -e "  ${YELLOW}!${NC} Script not found at $SCRIPT_PATH (already removed?)"
 fi
 
+MOD_DIR="$HOME/.local/bin/modules"
+if [ -d "$MOD_DIR" ]; then
+    rm -rf "$MOD_DIR"
+    echo -e "  ${GREEN}✓${NC} Removed modules directory $MOD_DIR"
+fi
+
 # Remove Desktop Entry
 if [ -f "$DESKTOP_ENTRY" ]; then
     rm "$DESKTOP_ENTRY"
@@ -96,3 +102,4 @@ echo -e "  2. Remove on-click from ${CYAN}~/.config/waybar/config.jsonc${NC}:"
 echo -e "     ${RED}\"on-click\": \"hyprltm-net\"${NC}"
 echo ""
 echo -e "${CYAN}Thank you for using HyprLTM-Net!${NC}"
+
