@@ -95,6 +95,7 @@ menu_available_wifi_networks() {
             *)
                 local full_line=$(grep -F "$chosen;;;" <<< "$wifi_list" | head -n 1)
                 connect_wifi "$full_line"
+                $DO_EXIT && return
                 ;;
         esac
     done
@@ -135,7 +136,8 @@ connect_hidden() {
             if ! check_captive_portal "$wifi_name"; then
                 send_notification "$tr_notice_connected_summary" "$tr_notice_connected_body '$wifi_name'"
             fi
-            exit 0
+            DO_EXIT=true
+            return
         else
             kill_loading_notification
 
@@ -276,7 +278,8 @@ connect_wifi() {
             if ! check_captive_portal "$wifi_ssid"; then
                 send_notification "$tr_notice_connected_summary" "$tr_notice_connected_body '$wifi_ssid'"
             fi
-            exit 0
+            DO_EXIT=true
+            return
         else
             local choice=$(show_error_dialog "$output")
             case "$choice" in
@@ -373,11 +376,26 @@ menu_wifi() {
 				nmcli radio wifi off
 				;;
 			*"$tr_interface_message"*) select_interface ;;
-            "$icon_wireless  $tr_available_networks_message") menu_available_wifi_networks ;;
-			*"$tr_known_connections_message"*) menu_known_connections "wifi" ;;
-			*"$tr_hidden_message"*) connect_hidden ;;
-            *"$tr_hotspot_menu_prompt"*) menu_hotspot ;;
-            *"$tr_bt_tether_menu"*) menu_bt_tether ;;
+            "$icon_wireless  $tr_available_networks_message")
+                menu_available_wifi_networks
+                $DO_EXIT && return
+                ;;
+			*"$tr_known_connections_message"*)
+                menu_known_connections "wifi"
+                $DO_EXIT && return
+                ;;
+			*"$tr_hidden_message"*)
+                connect_hidden
+                $DO_EXIT && return
+                ;;
+            *"$tr_hotspot_menu_prompt"*)
+                menu_hotspot
+                $DO_EXIT && return
+                ;;
+            *"$tr_bt_tether_menu"*)
+                menu_bt_tether
+                $DO_EXIT && return
+                ;;
             *"$tr_status_message"*)
                 if [ -n "$active_uuid" ]; then
                     show_connection_details "$active_ssid" "${interface_to_use}"

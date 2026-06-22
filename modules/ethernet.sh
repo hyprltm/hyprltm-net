@@ -32,9 +32,11 @@ menu_wired() {
         case "$choice" in
             *"$tr_connect_wired"*)
                 menu_connect_wired_connection
+                $DO_EXIT && return
                 ;;
             *"$tr_manage_wired_connections"*)
                 menu_known_connections "ethernet"
+                $DO_EXIT && return
                 ;;
             *"$tr_status_message"*)
                 ;;

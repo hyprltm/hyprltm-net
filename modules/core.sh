@@ -144,6 +144,7 @@ tr_status_menu_prompt="$icon_status_chart Status: $icon_search"
 # --- Global Variables ---
 program_name="$(basename "$0")"
 LOADING_ROFI_PID=""
+DO_EXIT=false
 
 # Detect interfaces
 mapfile -t wifi_interfaces < <(nmcli --colors no -t -f TYPE,DEVICE device status | awk -F ':' '$1 == "wifi" {print $2}')
@@ -796,12 +797,11 @@ main_menu() {
     while true; do
         local choice=$(echo -e "$options" | display_menu 1 "$tr_main_menu_prompt" "")
 
-        if [ -z "$choice" ]; then
+        if [ -z "$choice" ] || [[ "$choice" =~ ^"$icon_close Exit" ]]; then
             exit 0
         fi
 
         case "$choice" in
-            "$icon_close Exit") exit 0 ;;
             *"$tr_wifi")
                 menu_wifi
                 ;;
@@ -821,6 +821,8 @@ main_menu() {
                 toggle_airplane_mode
                 ;;
         esac
+        $DO_EXIT && break
     done
+    exit 0
 }
 

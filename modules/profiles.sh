@@ -106,7 +106,6 @@ menu_ip_config() {
 		else
 			options+="$icon_address  $tr_address_message: ${current_addresses:-N/A}\n"
 			options+="$icon_gateway  $tr_gateway_message ${current_gateway:-N/A}\n"
-			options+="$icon_gateway  $tr_gateway_message ${current_gateway:-N/A}\n"
 		fi
 		options+="$icon_ipv4_dns  $tr_dns_config_message\n"
 		options+="$icon_close Back"
@@ -275,7 +274,8 @@ menu_connection() {
                     if [ $? -eq 0 ]; then
                         kill_loading_notification
                         send_notification "$tr_notice_connected_summary" "$tr_notice_connected_body '$chosen_connection_name'"
-                        exit 0
+                        DO_EXIT=true
+                        return
                     else
                         kill_loading_notification
                         local choice=$(show_error_dialog "$output")
@@ -504,7 +504,15 @@ menu_known_connections() {
         local conn_uuid="${selected_item%%;;;*}"
         local conn_real_name="${selected_item##*;;;}"
 
-        eval "$menu_type_function \"$(sed 's/"/\\"/g' <<< "$conn_real_name")\" \"$conn_uuid\""
+        case "$menu_type_function" in
+            menu_connection)
+                menu_connection "$conn_real_name" "$conn_uuid"
+                ;;
+            menu_wireguard_connection)
+                menu_wireguard_connection "$conn_real_name" "$conn_uuid"
+                ;;
+        esac
+        $DO_EXIT && return
 	done
 }
 
@@ -545,7 +553,8 @@ menu_connect_wired_connection() {
             if ! check_captive_portal "$conn_name_to_connect"; then
                 send_notification "$tr_notice_connected_summary" "$tr_notice_connected_body '$conn_name_to_connect'"
             fi
-            exit 0
+            DO_EXIT=true
+            return
         else
             kill_loading_notification
             send_notification "$tr_notice_error_summary" "$tr_notice_error_body '$conn_name_to_connect'" "error"

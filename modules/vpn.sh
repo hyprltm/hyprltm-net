@@ -50,7 +50,8 @@ toggle_vpn_connection() {
         if nmcli connection down uuid "$uuid"; then
             kill_loading_notification
             send_notification "$tr_notice_disconnected_summary" "$tr_notice_disconnected_body '$name'"
-            exit 0
+            DO_EXIT=true
+            return
         else
             kill_loading_notification
             send_notification "$tr_notice_error_summary" "$tr_notice_error_disconnect_body '$name'" "error"
@@ -62,7 +63,8 @@ toggle_vpn_connection() {
             if [ $? -eq 0 ]; then
                 kill_loading_notification
                 send_notification "$tr_notice_connected_summary" "$tr_notice_connected_body '$name'"
-                exit 0
+                DO_EXIT=true
+                return
             else
                 kill_loading_notification
 
@@ -115,6 +117,7 @@ menu_available_vpns() {
             if [ "$name" = "$chosen_name" ]; then
                 local state=$(nmcli --get-values GENERAL.STATE connection show uuid "$uuid")
                 toggle_vpn_connection "$uuid" "$name" "$state"
+                $DO_EXIT && return
                 break
             fi
         done
@@ -136,6 +139,7 @@ vpn_menu() {
         case "$choice" in
             *"$tr_available_vpn_profiles_message"*)
                 menu_available_vpns
+                $DO_EXIT && return
                 ;;
             *"$tr_import_vpn_message"*)
                 import_vpn
