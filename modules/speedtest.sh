@@ -7,9 +7,10 @@ run_speedtest() {
 
     local dl_rate=$(curl -s -w "%{speed_download}" -o /dev/null "https://speed.cloudflare.com/__down?bytes=10000000" 2>/dev/null)
 
-    dd if=/dev/zero of=/tmp/hlnet_up_test.dat bs=1M count=10 &>/dev/null
-    local ul_rate=$(curl -s -w "%{speed_upload}" -o /dev/null -X POST --data-binary @/tmp/hlnet_up_test.dat "https://speed.cloudflare.com/__up" 2>/dev/null)
-    rm -f /tmp/hlnet_up_test.dat
+    local up_test_file="$TEMP_DIR/up_test.dat"
+    dd if=/dev/zero of="$up_test_file" bs=1M count=10 &>/dev/null
+    local ul_rate=$(curl -s -w "%{speed_upload}" -o /dev/null -X POST --data-binary @"$up_test_file" "https://speed.cloudflare.com/__up" 2>/dev/null)
+    rm -f "$up_test_file"
 
     local dl_mbps=$(awk -v rate="$dl_rate" 'BEGIN { printf "%.2f", rate / 125000 }')
     local ul_mbps=$(awk -v rate="$ul_rate" 'BEGIN { printf "%.2f", rate / 125000 }')

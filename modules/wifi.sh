@@ -234,21 +234,16 @@ connect_wifi() {
     while true; do
         local existing_uuid=""
 
-        nmcli -t -f UUID,NAME,802-11-wireless.ssid connection show | while IFS=: read -r uuid name ssid; do
+        while IFS=: read -r uuid name ssid; do
             if [ "$ssid" = "$wifi_ssid" ]; then
-                echo "$uuid" > /tmp/hyprltm_uuid_found
+                existing_uuid="$uuid"
                 break
             fi
             if [ "$name" = "$wifi_ssid" ]; then
-                echo "$uuid" > /tmp/hyprltm_uuid_found
+                existing_uuid="$uuid"
                 break
             fi
-        done
-
-        if [ -f /tmp/hyprltm_uuid_found ]; then
-            existing_uuid=$(cat /tmp/hyprltm_uuid_found)
-            rm /tmp/hyprltm_uuid_found
-        fi
+        done < <(nmcli -t -f UUID,NAME,802-11-wireless.ssid connection show)
 
         show_loading_notification "$tr_connecting_to '$wifi_ssid'$tr_please_wait"
 

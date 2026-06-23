@@ -145,6 +145,13 @@ tr_status_menu_prompt="$icon_status_chart Status: $icon_search"
 program_name="$(basename "$0")"
 LOADING_ROFI_PID=""
 DO_EXIT=false
+TEMP_DIR=""
+cleanup() {
+    [ -n "$TEMP_DIR" ] && rm -rf "$TEMP_DIR"
+    [ -n "$LOADING_ROFI_PID" ] && kill "$LOADING_ROFI_PID" 2>/dev/null
+}
+trap cleanup EXIT INT TERM
+TEMP_DIR=$(mktemp -d)
 
 # Detect interfaces
 mapfile -t wifi_interfaces < <(nmcli --colors no -t -f TYPE,DEVICE device status | awk -F ':' '$1 == "wifi" {print $2}')
@@ -598,7 +605,7 @@ show_qrcode() {
     fi
 
     local qr_string="WIFI:T:${security};S:${ssid};P:${password};;"
-    local qr_file="/tmp/hyprltm-net-qr-${ssid}.png"
+    local qr_file="$TEMP_DIR/qr.png"
 
     show_loading_notification "$tr_qrcode_generating"
     qrencode -o "$qr_file" -s 10 -m 2 "$qr_string"
