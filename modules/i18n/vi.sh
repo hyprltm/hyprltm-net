@@ -132,6 +132,8 @@ tr_open_browser='Mở trang đăng nhập'
 tr_speedtest_menu='Kiểm tra tốc độ'
 tr_speedtest_running='Đang kiểm tra tốc độ kết nối...'
 tr_speedtest_error='Kiểm tra tốc độ thất bại (Bạn có đang trực tuyến?)'
+tr_speedtest_no_curl='Kiểm tra tốc độ yêu cầu curl. Vui lòng cài đặt curl.'
+tr_speedtest_no_ping='Kiểm tra tốc độ yêu cầu ping. Vui lòng cài đặt iputils/ping.'
 tr_ping='Ping'
 
 # Error dialog

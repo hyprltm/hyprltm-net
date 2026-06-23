@@ -132,6 +132,8 @@ tr_open_browser='Inlogpagina openen'
 tr_speedtest_menu='Snelheidstest'
 tr_speedtest_running='Verbindingssnelheid testen...'
 tr_speedtest_error='Snelheidstest mislukt (Bent u online?)'
+tr_speedtest_no_curl='Snelheidstest heeft curl nodig. Installeer curl.'
+tr_speedtest_no_ping='Snelheidstest heeft ping nodig. Installeer iputils/ping.'
 tr_ping='Ping'
 
 # Error dialog

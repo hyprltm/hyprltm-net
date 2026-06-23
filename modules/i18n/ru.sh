@@ -132,6 +132,8 @@ tr_open_browser='Открыть страницу входа'
 tr_speedtest_menu='Тест скорости'
 tr_speedtest_running='Тестирование скорости соединения...'
 tr_speedtest_error='Ошибка теста скорости (Вы в сети?)'
+tr_speedtest_no_curl='Тест скорости требует curl. Установите curl.'
+tr_speedtest_no_ping='Тест скорости требует ping. Установите iputils/ping.'
 tr_ping='Пинг'
 
 # Error dialog

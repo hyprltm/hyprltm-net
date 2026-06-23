@@ -102,30 +102,30 @@ menu_available_wifi_networks() {
 }
 
 select_interface() {
-	local chosen_interface=$( (for (( i = 0; i < ${#interfaces[@]}; i++ )); do echo "$icon_interface  ${interfaces[$i]}" ; done; echo "$icon_close Back") | display_menu 1 "$tr_select_interface_prompt" "")
+    local chosen_interface=$( (for (( i = 0; i < ${#interfaces[@]}; i++ )); do echo "$icon_interface  ${interfaces[$i]}" ; done; echo "$icon_close Back") | display_menu 1 "$tr_select_interface_prompt" "")
 
-	if [ -z "$chosen_interface" ]; then
-		return
-	elif [[ "$chosen_interface" =~ ^"$icon_close Back" ]]; then
-		return
-	else
-		interface_to_use="${chosen_interface:3}"
-	fi
+    if [ -z "$chosen_interface" ]; then
+        return
+    elif [[ "$chosen_interface" =~ ^"$icon_close Back" ]]; then
+        return
+    else
+        interface_to_use="${chosen_interface:3}"
+    fi
 }
 
 connect_hidden() {
-	local wifi_name=$(echo "" | display_menu 5 "$tr_connect_hidden_prompt" "")
+    local wifi_name=$(echo "" | display_menu 5 "$tr_connect_hidden_prompt" "")
 
-	if [ -z "$wifi_name" ]; then
-		return
-	fi
+    if [ -z "$wifi_name" ]; then
+        return
+    fi
 
-	local wifi_password=$(ask_password)
+    local wifi_password=$(ask_password)
 
-	if [ -z "$wifi_password" ]; then
-		show_message "$tr_cancelled_no_password"
-		return
-	fi
+    if [ -z "$wifi_password" ]; then
+        show_message "$tr_cancelled_no_password"
+        return
+    fi
 
     while true; do
         show_loading_notification "$tr_connecting_to '$wifi_name'$tr_please_wait"
@@ -159,7 +159,7 @@ connect_hidden() {
 }
 
 connect_wifi() {
-	local chosen_entry="$1"
+    local chosen_entry="$1"
 
     local wifi_ssid
     local is_secure="no"
@@ -191,16 +191,16 @@ connect_wifi() {
         fi
     fi
 
-	local active_ssid=$(nmcli -t -f active,ssid dev wifi | grep "^yes" | cut -d':' -f2)
-	if [ "$wifi_ssid" = "$active_ssid" ]; then
+    local active_ssid=$(nmcli -t -f active,ssid dev wifi | grep "^yes" | cut -d':' -f2)
+    if [ "$wifi_ssid" = "$active_ssid" ]; then
         local active_uuid=$(nmcli -t -f UUID,TYPE,ACTIVE connection show | grep ":802-11-wireless:yes" | cut -d':' -f1 | head -n1)
         if [ -n "$active_uuid" ]; then
              menu_connection "$wifi_ssid" "$active_uuid"
              return
         fi
-		show_message "$tr_already_connected $wifi_ssid."
-		return
-	fi
+        show_message "$tr_already_connected $wifi_ssid."
+        return
+    fi
 
     local saved_uuid=""
 
@@ -223,12 +223,12 @@ connect_wifi() {
     fi
 
     local connection_result
-	if [ "$is_secure" = "yes" ]; then
-		local wifi_password=$(ask_password)
-		if [ -z "$wifi_password" ]; then
-			show_message "$tr_cancelled_no_password"
-			return
-		fi
+    if [ "$is_secure" = "yes" ]; then
+        local wifi_password=$(ask_password)
+        if [ -z "$wifi_password" ]; then
+            show_message "$tr_cancelled_no_password"
+            return
+        fi
     fi
 
     while true; do
@@ -303,16 +303,16 @@ connect_wifi() {
 }
 
 menu_wifi() {
-	local connection_state options chosen
+    local connection_state options chosen
 
     if [ -z "${wifi_interfaces[0]}" ]; then
         show_error_message "$tr_no_wifi_interface"
         return
     fi
 
-	while true; do
+    while true; do
         show_loading_notification "$tr_checking_wifi_status"
-		connection_state=$(nmcli --colors no --get-values WIFI general)
+        connection_state=$(nmcli --colors no --get-values WIFI general)
 
         local active_uuid=$(nmcli -t -f UUID,DEVICE connection show --active | grep ":${interface_to_use}$" | cut -d':' -f1 | head -n 1)
 
@@ -330,10 +330,10 @@ menu_wifi() {
         kill_loading_notification
 
         local status_line=""
-		if [ "$connection_state" = "disabled" ]; then
+        if [ "$connection_state" = "disabled" ]; then
             status_line="$icon_wifi_disable $tr_status_message $tr_status_disabled"
-			options="$icon_wifi_enable  $tr_enable_message\n"
-		else
+            options="$icon_wifi_enable  $tr_enable_message\n"
+        else
             if [ -n "$active_uuid" ]; then
                 if [ "$is_ap_mode" = "yes" ]; then
                      status_line="$icon_hotspot $tr_status_message Hotspot Active: '$active_ssid' (${interface_to_use})"
@@ -343,11 +343,11 @@ menu_wifi() {
             else
                 status_line="$icon_wifi_disconnected $tr_status_message $tr_status_disconnected"
             fi
-			options="$icon_wifi_disable  $tr_disable_message\n"
-			${interfaces[1]:+options+="$icon_interface  $tr_interface_message ${interface_to_use}\n"}
+            options="$icon_wifi_disable  $tr_disable_message\n"
+            ${interfaces[1]:+options+="$icon_interface  $tr_interface_message ${interface_to_use}\n"}
 
             options+="$icon_wireless  $tr_available_networks_message\n"
-		fi
+        fi
 
         local full_options="$status_line\n"
         full_options+="$options"
@@ -357,29 +357,29 @@ menu_wifi() {
         full_options+="$icon_hidden_network  $tr_hidden_message\n"
         full_options+="$icon_close Back"
 
-		chosen=$(echo -e "$full_options" | display_menu 1 "$tr_wifi_menu_prompt" "")
+        chosen=$(echo -e "$full_options" | display_menu 1 "$tr_wifi_menu_prompt" "")
 
-		if [ -z "$chosen" ] || [[ "$chosen" =~ ^"$icon_close Back" ]]; then
+        if [ -z "$chosen" ] || [[ "$chosen" =~ ^"$icon_close Back" ]]; then
             return
         fi
 
-		case "$chosen" in
+        case "$chosen" in
             "$icon_wifi_enable  $tr_enable_message")
-				nmcli radio wifi on
-				;;
-			"$icon_wifi_disable  $tr_disable_message")
-				nmcli radio wifi off
-				;;
-			*"$tr_interface_message"*) select_interface ;;
+                nmcli radio wifi on
+                ;;
+            "$icon_wifi_disable  $tr_disable_message")
+                nmcli radio wifi off
+                ;;
+            *"$tr_interface_message"*) select_interface ;;
             "$icon_wireless  $tr_available_networks_message")
                 menu_available_wifi_networks
                 $DO_EXIT && return
                 ;;
-			*"$tr_known_connections_message"*)
+            *"$tr_known_connections_message"*)
                 menu_known_connections "wifi"
                 $DO_EXIT && return
                 ;;
-			*"$tr_hidden_message"*)
+            *"$tr_hidden_message"*)
                 connect_hidden
                 $DO_EXIT && return
                 ;;
@@ -396,10 +396,10 @@ menu_wifi() {
                     show_connection_details "$active_ssid" "${interface_to_use}"
                 fi
                 ;;
-			*)
+            *)
                 show_message "$tr_invalid_option $chosen"
                 ;;
-		esac
-	done
+        esac
+    done
 }
 

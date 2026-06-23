@@ -132,6 +132,8 @@ tr_open_browser='Buka halaman masuk'
 tr_speedtest_menu='Uji kecepatan'
 tr_speedtest_running='Menguji kecepatan koneksi...'
 tr_speedtest_error='Uji kecepatan gagal (Apakah Anda daring?)'
+tr_speedtest_no_curl='Tes kecepatan memerlukan curl. Silakan instal curl.'
+tr_speedtest_no_ping='Tes kecepatan memerlukan ping. Silakan instal iputils/ping.'
 tr_ping='Ping'
 
 # Error dialog

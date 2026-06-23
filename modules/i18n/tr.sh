@@ -132,6 +132,8 @@ tr_open_browser='Giriş Sayfasını Aç'
 tr_speedtest_menu='Hız Testi'
 tr_speedtest_running='Bağlantı Hızı Test Ediliyor...'
 tr_speedtest_error='Hız Testi Başarısız (Çevrimiçi misiniz?)'
+tr_speedtest_no_curl='Hız testi curl gerektirir. Lütfen curl yükleyin.'
+tr_speedtest_no_ping='Hız testi ping gerektirir. Lütfen iputils/ping yükleyin.'
 tr_ping='Ping'
 
 # Error dialog

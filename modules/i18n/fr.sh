@@ -132,6 +132,8 @@ tr_open_browser='Ouvrir la page de connexion'
 tr_speedtest_menu='Test de débit'
 tr_speedtest_running='Test de vitesse en cours...'
 tr_speedtest_error='Échec du test de débit (Êtes-vous en ligne ?)'
+tr_speedtest_no_curl='Le test de débit nécessite curl. Veuillez installer curl.'
+tr_speedtest_no_ping='Le test de débit nécessite ping. Veuillez installer iputils/ping.'
 tr_ping='Ping'
 
 # Boîte de dialogue d'erreur

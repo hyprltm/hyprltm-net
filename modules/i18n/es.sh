@@ -131,6 +131,8 @@ tr_open_browser='Abrir página de inicio de sesión'
 tr_speedtest_menu='Prueba de velocidad'
 tr_speedtest_running='Probando velocidad de conexión...'
 tr_speedtest_error='Prueba de velocidad fallida (¿Está en línea?)'
+tr_speedtest_no_curl='La prueba de velocidad requiere curl. Por favor, instale curl.'
+tr_speedtest_no_ping='La prueba de velocidad requiere ping. Por favor, instale iputils/ping.'
 tr_ping='Ping'
 
 # Error dialog

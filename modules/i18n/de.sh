@@ -132,6 +132,8 @@ tr_open_browser='Anmeldeseite öffnen'
 tr_speedtest_menu='Geschwindigkeitstest'
 tr_speedtest_running='Teste Verbindungsgeschwindigkeit...'
 tr_speedtest_error='Geschwindigkeitstest fehlgeschlagen (Sind Sie online?)'
+tr_speedtest_no_curl='Geschwindigkeitstest benötigt curl. Bitte curl installieren.'
+tr_speedtest_no_ping='Geschwindigkeitstest benötigt ping. Bitte iputils/ping installieren.'
 tr_ping='Ping'
 
 # Error dialog

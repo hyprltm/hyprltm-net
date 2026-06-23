@@ -3,6 +3,16 @@
 # =============================================================================
 
 run_speedtest() {
+    if ! command -v curl &> /dev/null; then
+        show_error_message "$tr_speedtest_no_curl"
+        return
+    fi
+
+    if ! command -v ping &> /dev/null; then
+        show_error_message "$tr_speedtest_no_ping"
+        return
+    fi
+
     show_loading_notification "$tr_speedtest_running"
 
     local dl_rate=$(curl -s -w "%{speed_download}" -o /dev/null "https://speed.cloudflare.com/__down?bytes=10000000" 2>/dev/null)
@@ -15,7 +25,8 @@ run_speedtest() {
     local dl_mbps=$(awk -v rate="$dl_rate" 'BEGIN { printf "%.2f", rate / 125000 }')
     local ul_mbps=$(awk -v rate="$ul_rate" 'BEGIN { printf "%.2f", rate / 125000 }')
 
-    local ping_result=$(ping -c 4 -W 2 1.1.1.1 2>/dev/null | awk -F'/' '/rtt/ { printf "%.1f", $5 }')
+    local ping_target="${SPEEDTEST_PING_HOST:-1.1.1.1}"
+    local ping_result=$(ping -c 4 -W 2 "$ping_target" 2>/dev/null | awk -F'/' '/rtt/ { printf "%.1f", $5 }')
 
     kill_loading_notification
 

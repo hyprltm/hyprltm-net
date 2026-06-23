@@ -132,6 +132,8 @@ tr_open_browser='Open Login Page'
 tr_speedtest_menu='Speed Test'
 tr_speedtest_running='Testing Connection Speed...'
 tr_speedtest_error='Speed Test Failed (Are you online?)'
+tr_speedtest_no_curl='Speed Test requires curl. Please install curl.'
+tr_speedtest_no_ping='Speed Test requires ping. Please install iputils/ping.'
 tr_ping='Ping'
 
 # Error dialog

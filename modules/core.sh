@@ -158,8 +158,8 @@ mapfile -t wifi_interfaces < <(nmcli --colors no -t -f TYPE,DEVICE device status
 mapfile -t ethernet_interfaces < <(nmcli --colors no -t -f TYPE,DEVICE device status | awk -F ':' '$1 ~ /^(ethernet|802-3-ethernet)/ {print $2}')
 
 if [ -z "${wifi_interfaces[0]}" ] && [ -z "${ethernet_interfaces[0]}" ]; then
-	echo "$program_name: No Wi-Fi or Ethernet interfaces detected." >&2
-	exit 2
+    echo "$program_name: No Wi-Fi or Ethernet interfaces detected." >&2
+    exit 2
 fi
 
 if [ -n "${wifi_interfaces[0]}" ]; then
@@ -175,39 +175,39 @@ fi
 # =============================================================================
 
 display_menu() {
-	local form="$1"
-	local prompt_text="$2"
-	local prompt_icon="${3:-}"
+    local form="$1"
+    local prompt_text="$2"
+    local prompt_icon="${3:-}"
     local extra_flags="${4:-}"
     local mesg_text="${5:-}"
     local rofi_prompt rofi_flags options_list mesg_processed
     local -a rofi_base_args=()
 
-	if [ -n "$prompt_icon" ] && ! echo "$prompt_text" | grep -qE "^$prompt_icon"; then
-		rofi_prompt="$prompt_icon $prompt_text"
-	else
-		rofi_prompt="$prompt_text"
-	fi
+    if [ -n "$prompt_icon" ] && ! echo "$prompt_text" | grep -qE "^$prompt_icon"; then
+        rofi_prompt="$prompt_icon $prompt_text"
+    else
+        rofi_prompt="$prompt_text"
+    fi
 
     if [ -n "$mesg_text" ]; then
         printf -v mesg_processed "%b" "$mesg_text"
         rofi_base_args=(-mesg "$mesg_processed")
     fi
 
-	local result
+    local result
 
-	case $form in
-		1)
+    case $form in
+        1)
             rofi_flags="-dmenu -i"
             options_list=$(cat)
             result=$(echo -e "$options_list" | rofi $rofi_flags "${rofi_base_args[@]}" $extra_flags -p "$rofi_prompt" -theme "$ROFI_NETWORK_MANAGER_THEME")
             ;;
-		2)
+        2)
             rofi_flags="-dmenu"
             options_list=$(cat)
             result=$(echo -e "$options_list" | rofi $rofi_flags "${rofi_base_args[@]}" $extra_flags -p "$rofi_prompt" -theme "$ROFI_NETWORK_MANAGER_THEME")
             ;;
-		3)
+        3)
             rofi_flags="-dmenu -password"
             result=$(rofi $rofi_flags $extra_flags -p "$rofi_prompt" -theme "$ROFI_NETWORK_MANAGER_THEME" -theme-str '#listview { enabled: false; }')
             ;;
@@ -220,8 +220,8 @@ display_menu() {
             rofi_flags="-dmenu"
             result=$(rofi $rofi_flags $extra_flags -p "$rofi_prompt" -theme "$ROFI_NETWORK_MANAGER_THEME" -theme-str '#listview { enabled: false; }')
             ;;
-	esac
-	echo "$result"
+    esac
+    echo "$result"
 }
 
 show_loading_notification() {
@@ -315,18 +315,32 @@ show_success_dialog() {
     local title="$1"
     local message="$2"
     local options="$icon_check OK"
+    local full_msg
 
-    local full_msg=$(echo -e "$title: $message")
+    printf -v full_msg "%b" "$title: $message"
+
+    local theme_file="$TEMP_DIR/success_dialog.rasi"
+
+    if [[ -f "$ROFI_NETWORK_MANAGER_THEME" ]]; then
+        printf '@import "%s"\n' "$ROFI_NETWORK_MANAGER_THEME" > "$theme_file"
+    fi
+
+    cat >> "$theme_file" << ROFI_THEME_EOF
+#message {
+    border-color: @success-message;
+    textbox {
+        text-color: @success-message;
+        str: "$full_msg";
+    }
+}
+#listview { lines: 1; }
+#mainbox { children: [message, listview]; }
+#inputbar { enabled: false; }
+ROFI_THEME_EOF
 
     echo -e "$options" | rofi -dmenu -i \
         -name "success_dialog" \
-        -theme "$ROFI_NETWORK_MANAGER_THEME" \
-        -mesg "$full_msg" \
-        -theme-str 'listview { lines: 1; }' \
-        -theme-str 'mainbox { children: [message, listview]; }' \
-        -theme-str 'inputbar { enabled: false; }' \
-        -theme-str 'message { border-color: @success-message; }' \
-        -theme-str 'textbox { text-color: @success-message; }'
+        -theme "$theme_file"
 }
 
 kill_loading_notification() {
@@ -534,7 +548,10 @@ check_captive_portal() {
     local connectivity=$(nmcli networking connectivity check 2>/dev/null)
 
     if [ "$connectivity" = "portal" ]; then
-        local options="$icon_browser $tr_open_browser\n$icon_close Dismiss"
+        local options="$icon_close Dismiss"
+        if command -v xdg-open &> /dev/null; then
+            options="$icon_browser $tr_open_browser\n$options"
+        fi
         local chosen=$(echo -e "$options" | display_menu 1 "$tr_captive_portal_title\n$tr_captive_portal_message" "$icon_info")
 
         if [[ "$chosen" == *"$tr_open_browser"* ]]; then
@@ -606,9 +623,12 @@ show_qrcode() {
 
     local qr_string="WIFI:T:${security};S:${ssid};P:${password};;"
     local qr_file="$TEMP_DIR/qr.png"
+    local qr_data="$TEMP_DIR/qr_data"
+
+    printf '%s' "$qr_string" > "$qr_data"
 
     show_loading_notification "$tr_qrcode_generating"
-    qrencode -o "$qr_file" -s 10 -m 2 "$qr_string"
+    qrencode -o "$qr_file" -s 10 -m 2 < "$qr_data"
     kill_loading_notification
 
     local rofi_override="

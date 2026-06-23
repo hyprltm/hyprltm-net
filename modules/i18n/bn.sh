@@ -131,6 +131,8 @@ tr_open_browser='লগইন পৃষ্ঠা খুলুন'
 tr_speedtest_menu='গতি পরীক্ষা'
 tr_speedtest_running='সংযোগের গতি পরীক্ষা করা হচ্ছে...'
 tr_speedtest_error='গতি পরীক্ষা ব্যর্থ (আপনি কি অনলাইনে?)'
+tr_speedtest_no_curl='স্পীড টেস্টের জন্য curl প্রয়োজন। দয়া করে curl ইনস্টল করুন।'
+tr_speedtest_no_ping='স্পীড টেস্টের জন্য ping প্রয়োজন। দয়া করে iputils/ping ইনস্টল করুন।'
 tr_ping='পিং'
 
 # Error dialog

@@ -132,6 +132,8 @@ tr_open_browser='فتح المتصفح'
 tr_speedtest_menu='اختبار السرعة'
 tr_speedtest_running='جارٍ اختبار السرعة...'
 tr_speedtest_error='فشل اختبار السرعة.'
+tr_speedtest_no_curl='اختبار السرعة يتطلب curl. الرجاء تثبيت curl.'
+tr_speedtest_no_ping='اختبار السرعة يتطلب ping. الرجاء تثبيت iputils/ping.'
 tr_ping='اختبار الاتصال'
 
 # Error dialog

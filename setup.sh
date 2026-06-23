@@ -55,6 +55,7 @@ if [ -f /etc/os-release ]; then
         fedora) DISTRO="fedora" ;;
         opensuse-tumbleweed|opensuse-leap) DISTRO="suse" ;;
         nixos) DISTRO="nixos" ;;
+        debian|ubuntu|pop|linuxmint|elementary) DISTRO="debian" ;;
         *) DISTRO="unknown" ;;
     esac
 fi
@@ -63,10 +64,12 @@ echo -e "${CYAN}Detected Distribution:${NC} $DISTRO"
 PKGS_ARCH_REQ="rofi-wayland networkmanager qrencode dnsmasq ttf-jetbrains-mono-nerd"
 PKGS_FEDORA_REQ="rofi-wayland NetworkManager qrencode dnsmasq"
 PKGS_SUSE_REQ="rofi-wayland NetworkManager qrencode dnsmasq"
+PKGS_DEBIAN_REQ="rofi network-manager qrencode dnsmasq"
 
 PKGS_ARCH_OPT="libnotify"
 PKGS_FEDORA_OPT="libnotify"
 PKGS_SUSE_OPT="libnotify"
+PKGS_DEBIAN_OPT="libnotify-bin"
 
 DEPENDENCIES=("rofi" "nmcli" "qrencode" "dnsmasq")
 MISSING_DEPS=()
@@ -104,15 +107,20 @@ if [ ${#MISSING_DEPS[@]} -gt 0 ]; then
                     fi
                     echo -e "${YELLOW}Note: For Nerd Fonts on Fedora, you may need to enable a COPR repo or install manually.${NC}"
                     ;;
-                suse)
-                    echo -e "${CYAN}Running: sudo zypper install $PKGS_SUSE_REQ $PKGS_SUSE_OPT${NC}"
-                    if [ -n "$PKGS_SUSE_OPT" ]; then
-                        sudo zypper install $PKGS_SUSE_REQ $PKGS_SUSE_OPT
-                    else
-                        sudo zypper install $PKGS_SUSE_REQ
-                    fi
-                    echo -e "${YELLOW}Note: For Nerd Fonts on openSUSE, you may need to add a community repo or install manually.${NC}"
-                    ;;
+                    suse)
+                        echo -e "${CYAN}Running: sudo zypper install $PKGS_SUSE_REQ $PKGS_SUSE_OPT${NC}"
+                        if [ -n "$PKGS_SUSE_OPT" ]; then
+                            sudo zypper install $PKGS_SUSE_REQ $PKGS_SUSE_OPT
+                        else
+                            sudo zypper install $PKGS_SUSE_REQ
+                        fi
+                        echo -e "${YELLOW}Note: For Nerd Fonts on openSUSE, you may need to add a community repo or install manually.${NC}"
+                        ;;
+                    debian)
+                        echo -e "${CYAN}Running: sudo apt install $PKGS_DEBIAN_REQ $PKGS_DEBIAN_OPT${NC}"
+                        sudo apt install $PKGS_DEBIAN_REQ $PKGS_DEBIAN_OPT
+                        echo -e "${YELLOW}Note: For Nerd Fonts on Debian/Ubuntu, install manually from https://www.nerdfonts.com${NC}"
+                        ;;
             esac
         fi
     else

@@ -132,6 +132,8 @@ tr_open_browser='Otwórz stronę logowania'
 tr_speedtest_menu='Test prędkości'
 tr_speedtest_running='Testowanie prędkości połączenia...'
 tr_speedtest_error='Test prędkości nieudany (Czy jesteś online?)'
+tr_speedtest_no_curl='Test prędkości wymaga curl. Zainstaluj curl.'
+tr_speedtest_no_ping='Test prędkości wymaga ping. Zainstaluj iputils/ping.'
 tr_ping='Ping'
 
 # Error dialog

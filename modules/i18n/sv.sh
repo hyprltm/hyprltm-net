@@ -132,6 +132,8 @@ tr_open_browser='Öppna inloggningssida'
 tr_speedtest_menu='Hastighetstest'
 tr_speedtest_running='Testar anslutningshastighet...'
 tr_speedtest_error='Hastighetstest misslyckades (Är du online?)'
+tr_speedtest_no_curl='Hastighetstest kräver curl. Installera curl.'
+tr_speedtest_no_ping='Hastighetstest kräver ping. Installera iputils/ping.'
 tr_ping='Ping'
 
 # Error dialog

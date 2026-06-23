@@ -131,6 +131,8 @@ tr_open_browser='लॉगिन पेज खोलें'
 tr_speedtest_menu='स्पीड टेस्ट'
 tr_speedtest_running='कनेक्शन गति का परीक्षण हो रहा है...'
 tr_speedtest_error='स्पीड टेस्ट विफल (क्या आप ऑनलाइन हैं?)'
+tr_speedtest_no_curl='स्पीड टेस्ट के लिए curl आवश्यक है। कृपया curl इंस्टॉल करें।'
+tr_speedtest_no_ping='स्पीड टेस्ट के लिए ping आवश्यक है। कृपया iputils/ping इंस्टॉल करें।'
 tr_ping='पिंग'
 
 # Error dialog
